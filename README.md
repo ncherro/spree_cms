@@ -1,7 +1,7 @@
 Spree CMS
 =========
 
-Under development. Do not install!
+## Under development. Do not install!
 
 Installation
 ------------
