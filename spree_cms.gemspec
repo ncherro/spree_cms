@@ -3,8 +3,9 @@ Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.name        = 'spree_cms'
   s.version     = '2.0.4'
-  s.summary     = 'TODO: Add gem summary here'
-  s.description = 'TODO: Add (optional) gem description here'
+  s.summary     = 'Content Management System for Spree 2.0'
+  s.description = 'Adds functionality for custom Pages, Menus, Menu Items, Templates and Blocks'
+  s.authors = 'ncherro'
   s.required_ruby_version = '>= 1.9.3'
 
   # s.author    = 'You'
@@ -17,6 +18,8 @@ Gem::Specification.new do |s|
   s.requirements << 'none'
 
   s.add_dependency 'spree_core', '~> 2.0.4'
+  s.add_dependency 'ancestry', '~> 2.0.0'
+  s.add_dependency 'nested_form', '~> 0.3.2'
 
   s.add_development_dependency 'capybara', '~> 2.1'
   s.add_development_dependency 'coffee-rails'
