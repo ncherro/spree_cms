@@ -1,7 +1,7 @@
-SpreeCms
-========
+Spree CMS
+=========
 
-Introduction goes here.
+Under development. Do not install!
 
 Installation
 ------------
@@ -37,4 +37,4 @@ Simply add this require statement to your spec_helper:
 require 'spree_cms/factories'
 ```
 
-Copyright (c) 2013 [name of extension creator], released under the New BSD License
+Copyright (c) 2013 ncherro, released under the New BSD License
