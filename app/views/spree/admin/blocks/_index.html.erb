@@ -2,6 +2,8 @@
   <%= render 'table_head' %>
   <tbody>
     <%# # NOTE: for some reason, render(@collection) doesn't pull from the admin namespace. this is a workaround %>
-    <%= render partial: "spree/admin/#{controller.controller_name}/object", collection: @collection, as: :object, context: :table_row %>
+    <% @collection.each do |obj| %>
+      <%= render partial: "spree/admin/#{obj.class.name.split('::').last.underscore.pluralize}/object", object: obj, context: :table_row %>
+    <% end %>
   </tbody>
 </table>

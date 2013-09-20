@@ -1,4 +1,11 @@
 <%= field_set_tag "Region" do %>
-  <%= f.label :name, Spree.t(:name) %> <span class="required">*</span><br />
-  <%= f.text_field :name, class: 'fullwidth name' %>
+  <%= f.input :name %>
+  <%= f.input :template %>
+
+  <%= field_set_tag "Blocks" do %>
+    <%= f.fields_for :blocks_regions %>
+    <p><%= f.link_to_add "Add a block", :blocks_regions %></p>
+  <% end %>
+
+  <p><%= f.link_to_remove "Remove this region" %></p>
 <% end %>

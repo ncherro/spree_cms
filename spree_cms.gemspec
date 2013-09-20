@@ -20,6 +20,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'spree_core', '~> 2.0.4'
   s.add_dependency 'ancestry', '~> 2.0.0'
   s.add_dependency 'nested_form', '~> 0.3.2'
+  s.add_dependency 'simple_form', '~> 2.1.0'
 
   s.add_development_dependency 'capybara', '~> 2.1'
   s.add_development_dependency 'coffee-rails'

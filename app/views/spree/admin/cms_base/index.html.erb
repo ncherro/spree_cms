@@ -1,8 +1,10 @@
+<% skip_new_link ||= false %>
+
 <%= render 'page_head' %>
 
 <% content_for :page_actions do %>
   <li><%= button_link_to Spree.t("cms.new_#{@controller_singular}"), new_object_url, icon: 'icon-plus' %></li>
-<% end %>
+<% end unless content_for?(:page_actions)%>
 
 <% content_for :page_title do %>
   <%= controller.controller_name.capitalize %>
@@ -17,7 +19,7 @@
 <% else %>
   <div class="alpha twelve columns no-objects-found">
     <%= Spree.t(:no_resource_found, resource: I18n.t(@controller_singular, scope: "spree.cms")) %>
-    <%= link_to Spree.t(:add_one), new_object_url %>!
+    <% unless skip_new_link %><%= link_to Spree.t(:add_one), new_object_url %>!<% end %>
   </div>
 <% end %>
 

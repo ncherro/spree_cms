@@ -1,0 +1,24 @@
+<%
+# NOTE: link_to_edit object doesn't work - seems to be a problem with the fact
+# that we're using STI with these models
+#
+# object_url returns the wrong path (e.g. admin_block_url instead of admin_html_block_url)
+#
+# TODO: fix it and submit a pull request to spree
+
+context ||= :table_row
+
+case context
+when :table_row
+%>
+<tr>
+  <td class="align-center"><%= object.name %> - <em><%= object.type.split('::').last.underscore.humanize %></em></td>
+  <td class="actions" data-hook="admin_<%= controller_name %>_index_row_actions">
+    <%= link_to '', edit_admin_html_block_path(object), class: "edit icon_link with-tip icon-edit no-text", data: { action: 'edit' } %>
+    &nbsp;
+    <%= link_to '', admin_html_block_path(object), class: "delete-resource icon_link with-tip icon-trash no-text", data: { action: 'remove', confirm: 'Are you sure?' } %>
+  </td>
+</tr>
+<%
+end
+%>

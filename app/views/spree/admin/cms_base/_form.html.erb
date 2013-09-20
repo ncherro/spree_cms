@@ -1,7 +1,7 @@
 <%
 singular = object.class.name.underscore.singularize.split('/').last
 %>
-<%= nested_form_for [:admin, object], html: { multipart: true } do |f| %>
+<%= simple_nested_form_for [:admin, object], html: { multipart: true } do |f| %>
   <fieldset data-hook="<%= params[:action] %>_<%= singular %>">
     <legend align="center"><%= Spree.t("#{params[:action]}_#{singular}".to_s) %></legend>
     <%= render 'fields', object: object, f: f %>

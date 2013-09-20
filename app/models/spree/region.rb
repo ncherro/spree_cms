@@ -7,9 +7,10 @@ class Spree::Region < ActiveRecord::Base
   has_many :blocks, class_name: "Spree::Block", through: :blocks_regions,
     dependent: :destroy
 
-  attr_accessible :name, :template, :blocks_attributes
+  attr_accessible :name, :template, :blocks_regions_attributes
 
-  accepts_nested_attributes_for :blocks
-  validates_associated :blocks
+  accepts_nested_attributes_for :blocks_regions, reject_if: :all_blank,
+    allow_destroy: true
+  validates_associated :blocks_regions
 
 end
