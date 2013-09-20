@@ -6,6 +6,14 @@ class CreateSpreeBlocks < ActiveRecord::Migration
       t.string :template
       t.text :content
 
+      # stuff specific to menu blocks
+      t.integer :menu_block_type
+      t.references :menu
+      t.references :menu_item
+      t.integer :max_levels
+      t.integer :menu_wrap
+      t.integer :menu_item_wrap
+
       t.timestamps
     end
   end
