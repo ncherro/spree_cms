@@ -1,7 +1,9 @@
 class Spree::Menu < ActiveRecord::Base
 
- attr_accessible :title
+  has_many :menu_blocks, class_name: "Spree::MenuBlock", dependent: :destroy
 
- validates :title, uniqueness: true, presence: true
+  attr_accessible :title
+
+  validates :title, uniqueness: true, presence: true
 
 end
