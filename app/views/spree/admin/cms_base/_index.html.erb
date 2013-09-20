@@ -1,0 +1,6 @@
+<table class="index" id="listing_<%= controller.controller_name %>">
+  <%= render 'table_head' %>
+  <tbody>
+    <%= render partial: "spree/admin/#{controller.controller_name}/object", collection: @collection, as: :object, context: :table_row %>
+  </tbody>
+</table>

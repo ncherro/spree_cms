@@ -1,0 +1,10 @@
+<% @controller_singular = controller.controller_name.singularize %>
+
+<% content_for :sub_menu do %>
+  <ul id="sub_nav" data-hook="admin_cms_sub_tabs" class="inline-menu">
+    <li><%= tab :menus, route: 'admin_menus', match_path: '/menus' %></li>
+    <li><%= tab :pages, route: 'admin_pages', match_path: '/pages' %></li>
+    <li><%= tab :layouts, route: 'admin_layouts', match_path: '/layouts' %></li>
+    <li><%= tab :blocks, route: 'admin_blocks', match_path: '/blocks' %></li>
+  </ul>
+<% end %>

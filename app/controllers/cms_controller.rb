@@ -12,9 +12,7 @@ class Spree::CmsController < Spree::StoreController
            when nil
              request.path
            end
-    unless @page = Spree::MenuItem.visible.by_slug(path).first
-      render_404
-    end
+    render_404 unless @page = Spree::MenuItem.visible.by_slug(path).first
   end
 
   private

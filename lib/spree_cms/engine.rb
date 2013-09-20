@@ -1,3 +1,5 @@
+require "nested_form"
+
 module SpreeCms
   class Engine < Rails::Engine
     require 'spree/core'

@@ -16,10 +16,8 @@ end
 Spree::Core::Engine.routes.prepend do
 
   namespace :admin do
-    get '/cms', to: redirect('/admin/cms/menus'), as: 'cms'
-    namespace :cms do
-      resources :menus, :menu_items, :layouts, :blocks
-    end
+    get '/cms', to: redirect('/admin/menus'), as: 'cms'
+    resources :menus, :pages, :layouts, :blocks
   end
 
   constraints(Spree::Cms) do
