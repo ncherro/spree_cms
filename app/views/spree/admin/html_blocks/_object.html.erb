@@ -12,7 +12,8 @@ case context
 when :table_row
 %>
 <tr>
-  <td class="align-center"><%= object.name %> - <em><%= object.type.split('::').last.underscore.humanize %></em></td>
+  <td class="align-center"><%= object.type.split('::').last.underscore.humanize %></td>
+  <td class="align-center"><%= object.name %></td>
   <td class="actions" data-hook="admin_<%= controller_name %>_index_row_actions">
     <%= link_to '', edit_admin_html_block_path(object), class: "edit icon_link with-tip icon-edit no-text", data: { action: 'edit' } %>
     &nbsp;

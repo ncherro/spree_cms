@@ -1,2 +1,6 @@
 <%= f.input :name %>
 <%= f.input :template %>
+<%= f.association :menu_item %>
+<%= f.input :menu_block_type, collection: Spree::MenuBlock::TYPES %>
+<%= f.input :menu_wrap, collection: Spree::MenuBlock::MENU_WRAP_OPTIONS %>
+<%= f.input :menu_item_wrap, collection: Spree::MenuBlock::MENU_ITEM_WRAP_OPTIONS %>
