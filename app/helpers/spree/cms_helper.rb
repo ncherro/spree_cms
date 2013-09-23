@@ -1,6 +1,6 @@
 module Spree::CmsHelper
 
-  def render_menu_tree(menu, *args, &link)
+  def render_menu_tree(menu, *args, &link_func)
     defaults = {
       follow_current: false,
       root_id: nil,
@@ -25,8 +25,8 @@ module Spree::CmsHelper
     func = lambda do |nodes|
       return "" if nodes.empty?
       return '<ul>' + nodes.inject("") do |string, (node, children)|
-        if link
-          link_html = link.call(node)
+        if link_func
+          link_html = link_func.call(node)
         else
           link_html = link_to(node.title, node.url)
         end
@@ -35,8 +35,8 @@ module Spree::CmsHelper
     end
 
     items.each do |item|
-      if link
-        link_html = link.call(item)
+      if link_func
+        link_html = link_func.call(item)
       else
         link_html = link_to(item.title, item.url)
       end

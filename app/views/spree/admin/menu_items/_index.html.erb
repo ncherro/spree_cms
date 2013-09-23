@@ -4,7 +4,15 @@
 
 <ul class="cms-menu">
   <%= render_menu_tree(@menu) do |node|
-    link_to("hey!", '/')
+    actions = []
+    actions << link_to("+ Add child", new_admin_menu_item_url(menu_id: params[:menu_id], parent_id: node.id))
+    actions << link_to("/ Edit", edit_admin_menu_item_url(node))
+    actions << link_to("x Delete", admin_menu_item_url(node), method: "delete")
+    r = %(<div class="wrap">#{link_to(node.title, node.url)})
+    r << " - #{node.url}"
+    r << %(<div class="actions">).html_safe
+    r << actions.join(' | ')
+    r << %(</div></div>).html_safe
   end
   %>
 </ul>

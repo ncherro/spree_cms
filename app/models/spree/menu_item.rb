@@ -72,7 +72,7 @@ class Spree::MenuItem < ActiveRecord::Base
     # NOTE: spree_menu_id may be blank. in this case, we will return an empty
     # array
     parents = self.class.where(spree_menu_id: self.spree_menu_id).arrange_as_array(order: 'slug')
-    return new_record? ? parents : parents - subtree
+    return self.new_record? ? parents : parents - self.subtree
   end
 
   def cache_ancestry

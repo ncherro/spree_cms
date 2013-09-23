@@ -29,6 +29,5 @@ $(function() {
   };
 
   setMenus();
-  $(document).on('nested:fieldAdded', setMenus)
 
 });

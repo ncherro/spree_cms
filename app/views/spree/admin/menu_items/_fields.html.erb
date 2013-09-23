@@ -1,7 +1,9 @@
 <%= f.association :menu, input_html: { data: { menu_item_id: f.object.spree_menu_id || 0 } } %>
 
 <%= f.input :parent_id,
-  collection: Spree::MenuItem.where(menu_id: f.object.spree_menu_id).arrange_as_array({order: 'slug'}, f.object.possible_parents),
+  collection: Spree::MenuItem.where(spree_menu_id: f.object.spree_menu_id).arrange_as_array({order: 'slug'}, f.object.possible_parents),
+  label_method: :name_for_selects,
+  value_method: :id,
   include_blank: '- None (root) -'
 %>
 
