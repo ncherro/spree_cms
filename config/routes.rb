@@ -7,9 +7,10 @@ end
 
 class Spree::Cms
   def self.matches?(request)
-    slug = Cms::remove_spree_mount_point(request.fullpath)
-    menu_items = Spree::MenuItem.arel_table
-    Spree::MenuItem.visible.by_slug(slug).exists?
+    full_slug = Cms::remove_spree_mount_point(request.fullpath)
+    Rails.cache.fetch("#{Spree::MenuItem::CACHE_PREFIX}#{full_slug}-exists") do
+      Spree::MenuItem.published.by_slug(slug).exists?
+    end
   end
 end
 

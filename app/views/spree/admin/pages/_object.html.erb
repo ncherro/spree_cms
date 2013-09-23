@@ -1,0 +1,17 @@
+<%
+context ||= :table_row
+case context
+when :table_row
+%>
+<tr>
+  <td class="align-center"><%= object.title %></td>
+  <td class="actions" data-hook="admin_<%= controller_name %>_index_row_actions">
+    <%= link_to_edit object, no_text: true, class: 'edit' %>
+    &nbsp;
+    <%= link_to_delete object, no_text: true %>
+  </td>
+</tr>
+<%
+end
+%>
+

@@ -1,9 +1,10 @@
-require "nested_form"
-require "simple_form"
-
 module SpreeCms
   class Engine < Rails::Engine
     require 'spree/core'
+    require "nested_form"
+    require "simple_form"
+    require "ancestry"
+
     isolate_namespace Spree
     engine_name 'spree_cms'
 

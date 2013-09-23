@@ -1,4 +1,7 @@
+<%= f.association :menu %>
 <%= f.input :title %>
+<%= f.input :is_published %>
+<%= f.input :is_visible_in_menu %>
 
 <%= field_set_tag "CSS" do %>
   <%= f.input :css_class %>

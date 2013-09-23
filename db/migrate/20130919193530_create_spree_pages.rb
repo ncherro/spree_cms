@@ -4,8 +4,6 @@ class CreateSpreePages < ActiveRecord::Migration
       t.belongs_to :spree_layout
       t.belongs_to :spree_menu_item
 
-      t.boolean :is_published
-
       t.string :title
       t.text :body
 
