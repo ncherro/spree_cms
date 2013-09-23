@@ -1,10 +1,18 @@
 class Spree::Page < ActiveRecord::Base
 
-  belongs_to :layout, class_name: "Spree::Layout"
-  belongs_to :menu_item, class_name: "Spree::Page"
+  belongs_to :layout, class_name: "Spree::Layout",
+    foreign_key: "spree_layout_id"
+
+  belongs_to :menu_item, class_name: "Spree::MenuItem",
+    foreign_key: "spree_menu_item_id"
+
 
   attr_accessible :body, :meta_description, :meta_keywords, :meta_title,
-    :is_published, :title
+    :is_published, :title, :menu_item_attributes
+
+  accepts_nested_attributes_for :menu_item, allow_destroy: true,
+    reject_if: :all_blank, update_only: true
+  validates_associated :menu_item
 
   delegate :template, to: :layout, allow_nil: true
 

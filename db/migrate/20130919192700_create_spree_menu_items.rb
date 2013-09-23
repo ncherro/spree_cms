@@ -6,11 +6,13 @@ class CreateSpreeMenuItems < ActiveRecord::Migration
       t.string :title
       t.string :css_id
       t.string :css_class
-      t.integer :position
       t.string :slug
+
+      t.string :ancestry
 
       t.timestamps
     end
     add_index :spree_menu_items, :spree_menu_id
+    add_index :spree_menu_items, :ancestry
   end
 end

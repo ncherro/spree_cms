@@ -1,11 +1,13 @@
 class Spree::MenuItem < ActiveRecord::Base
 
+  has_ancestry
+
   has_many :menu_blocks, class_name: "Spree::MenuBlock", dependent: :destroy
 
-  has_one :page, class_name: "Spree::Page"
-  belongs_to :menu, class_name: "Spree::Menu"
+  has_one :page, class_name: "Spree::Page", foreign_key: "spree_menu_item_id"
+  belongs_to :menu, class_name: "Spree::Menu", foreign_key: "spree_menu_id"
 
-  attr_accessible :css_class, :css_id, :position, :slug, :title
+  attr_accessible :ancestry, :css_class, :css_id, :slug, :title
 
   class << self
 
