@@ -9,7 +9,7 @@ class Spree::Cms
   def self.matches?(request)
     full_slug = Cms::remove_spree_mount_point(request.fullpath)
     Rails.cache.fetch("#{Spree::MenuItem::CACHE_PREFIX}#{full_slug}-exists") do
-      Spree::MenuItem.published.by_slug(slug).exists?
+      Spree::MenuItem.published.by_cached_slug(full_slug).exists?
     end
   end
 end
@@ -26,7 +26,12 @@ Spree::Core::Engine.routes.prepend do
 
     resources :blocks, only: [:index]
     resources :menu_blocks, :static_blocks, :html_blocks, except: [:index]
-    resources :menus, :pages, :layouts
+    resources :pages, :layouts
+    resources :menus do
+      member do
+        get 'menu_item_options(/:menu_item_id)'
+      end
+    end
   end
 
   constraints(Spree::Cms) do

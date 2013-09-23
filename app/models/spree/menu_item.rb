@@ -4,7 +4,8 @@ class Spree::MenuItem < ActiveRecord::Base
 
   CACHE_PREFIX = 'spree_menu_items_'
 
-  before_validation :set_cached_slug
+  before_validation :set_slug
+  before_validation :cache_ancestry
   after_save :drop_cached_slug
 
   has_many :menu_blocks, class_name: "Spree::MenuBlock", dependent: :destroy
@@ -13,10 +14,11 @@ class Spree::MenuItem < ActiveRecord::Base
   belongs_to :menu, class_name: "Spree::Menu", foreign_key: "spree_menu_id"
 
   attr_accessible :ancestry, :css_class, :css_id, :slug, :title,
-    :spree_menu_id, :is_published, :is_visible_in_menu
+    :spree_menu_id, :is_published, :is_visible_in_menu, :parent_id
 
-  def slug
-  end
+  validates :slug, presence: true,
+    format: { with: /\A[\w-]+\z/, message: "only allows letters, numbers and hyphens" }
+  validates :cached_slug, uniqueness: true, presence: true
 
   class << self
 
@@ -24,27 +26,58 @@ class Spree::MenuItem < ActiveRecord::Base
       where(is_published: true)
     end
 
-    def id_by_cached_slug(cached_slug)
+    def by_cached_slug(cached_slug)
+      slug = Cms.remove_spree_mount_point(cached_slug)
+      where(cached_slug: slug)
+    end
+
+    def id_from_cached_slug(cached_slug)
       Rails.cache.fetch("#{CACHE_PREFIX}#{cached_slug}") do
-        slug = Cms.remove_spree_mount_point(cached_slug)
-        menu_item = self.published.select('is_published, id').where(cached_slug: slug).first
+        menu_item = published.by_cached_slug(cached_slug).first
         return menu_item ? menu_item.id : nil
       end
     end
 
+    def arrange_as_array(options={}, hash=nil)
+      hash ||= arrange(options)
+      arr = []
+      hash.each do |node, children|
+        arr << node
+        arr += arrange_as_array(options, children) unless children.nil?
+      end
+      arr
+    end
+  end
+
+  def name_for_selects
+    "#{'-' * depth} #{title}"
+  end
+
+  def possible_parents
+    # NOTE: spree_menu_id may be blank. in this case, we will return an empty
+    # array
+    parents = self.class.where(spree_menu_id: self.spree_menu_id).arrange_as_array(order: 'slug')
+    return new_record? ? parents : parents - subtree
   end
 
   private
-  def set_cached_slug
-    o_s = [self.parents.slugs, self.slug].join('/')
-    s = o_s
-    # if exists, then add -0
+  def set_slug
+    self.slug = self.slug.present? ? self.slug : self.title.parameterize
+    true
+  end
+
+  def cache_ancestry
+    o_s = path.map(&:slug).join('/')
+    n_s = o_s
     i = 0
-    while self.class.find_by_cached_slug(s)
+    q = self.class.where(cached_slug: n_s)
+    q = q.where('id != ?', self.id) unless self.new_record?
+    while q.exists?
       i += 1
-      s = "#{o_s}-#{i}"
+      n_s = "#{o_s}-#{i}"
     end
-    self.cached_slug = s
+    self.cached_slug = "/" + n_s
+    true
   end
 
   def drop_cached_slug

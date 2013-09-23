@@ -12,7 +12,7 @@ class Spree::CmsController < Spree::StoreController
            when nil
              request.path
            end
-    render_404 unless @page = Spree::MenuItem.find(Spree::MenuItem.id_by_cached_slug(path))
+    render_404 unless @page = Spree::MenuItem.find(Spree::MenuItem.id_from_cached_slug(path))
   end
 
   private

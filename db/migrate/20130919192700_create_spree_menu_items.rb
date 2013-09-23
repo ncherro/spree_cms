@@ -13,6 +13,7 @@ class CreateSpreeMenuItems < ActiveRecord::Migration
       t.boolean :is_visible_in_menu
 
       t.string :ancestry
+      t.integer :ancestry_depth, null: false, default: 0
 
       t.timestamps
     end
