@@ -1,5 +1,6 @@
 //= require admin/spree_backend
 //= require jquery_nested_form
+//= require admin/libs/jquery.mjs.nestedSortable
 
 $(function() {
 
@@ -27,6 +28,24 @@ $(function() {
 
     });
   };
+
+  $('.cms-menu').nestedSortable({
+    handle: 'div',
+    listType: 'ul',
+    items: 'li',
+    toleranceElement: '> div',
+    update: function(event, obj) {
+      var $list = $(event.target), $item = $(obj.item), id = $item.attr('rel'),
+        parent_id = ($item.parent().parent().attr('rel') || null);
+
+      $list.nestedSortable('disable');
+
+      // update the database
+      $.post('/admin/menu_items/' + id + '/update_position', { parent_id: parent_id }, function() {
+        $list.nestedSortable('enable');
+      }, 'json')
+    }
+  });
 
   setMenus();
 

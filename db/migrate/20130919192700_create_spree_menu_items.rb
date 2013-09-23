@@ -7,6 +7,7 @@ class CreateSpreeMenuItems < ActiveRecord::Migration
       t.string :css_id
       t.string :css_class
       t.string :slug
+      t.string :url
       t.string :cached_slug # full path to this page
 
       t.boolean :is_published
@@ -14,13 +15,17 @@ class CreateSpreeMenuItems < ActiveRecord::Migration
 
       t.string :ancestry
       t.integer :ancestry_depth, null: false, default: 0
+      t.integer :position, null: false, default: 0
 
       t.timestamps
     end
     add_index :spree_menu_items, :spree_menu_id
     add_index :spree_menu_items, :cached_slug
+
     add_index :spree_menu_items, :is_published
     add_index :spree_menu_items, :is_visible_in_menu
+
     add_index :spree_menu_items, :ancestry
+    add_index :spree_menu_items, :position
   end
 end

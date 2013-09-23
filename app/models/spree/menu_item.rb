@@ -13,8 +13,9 @@ class Spree::MenuItem < ActiveRecord::Base
   has_one :page, class_name: "Spree::Page", foreign_key: "spree_menu_item_id"
   belongs_to :menu, class_name: "Spree::Menu", foreign_key: "spree_menu_id"
 
-  attr_accessible :ancestry, :css_class, :css_id, :slug, :title,
-    :spree_menu_id, :is_published, :is_visible_in_menu, :parent_id, :page_attributes
+  attr_accessible :ancestry, :css_class, :css_id, :slug, :title, :position,
+    :spree_menu_id, :is_published, :is_visible_in_menu, :parent_id,
+    :page_attributes
 
   attr_accessor :skip_ancestry_callbacks
 
