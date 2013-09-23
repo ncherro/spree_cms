@@ -29,7 +29,7 @@ Spree::Core::Engine.routes.prepend do
     resources :pages, :layouts
     resources :menus do
       member do
-        get 'menu_item_options(/:menu_item_id)'
+        get 'menu_item_options'
       end
     end
   end

@@ -16,7 +16,7 @@ $(function() {
       $el.change(function() {
         var $el = $(this), val = $el.val();
         if (val) {
-          $.getJSON("/admin/menus/" + val + "/menu_item_options/" + $el.data('menuItemId' || ''), function(data, b, c) {
+          $.getJSON("/admin/menus/" + val + "/menu_item_options?menu_item_id=" + $el.data('menuItemId' || ''), function(data, b, c) {
             $el.data('menu_item_select').removeAttr('disabled').html("<option value=\"\">- None (root) -</option>\n" + data.items_html).parent().show();
           });
         } else {
