@@ -6,16 +6,31 @@
   display: block;
 }
 
+.cms-menu {
+  border-left: 1px solid #eee;
+  padding-left: 1px;
+}
+
 .cms-menu li {
   list-style: none;
   padding-left: 20px;
 }
+
+.cms-menu > li {
+  padding-left: 0;
+}
+
+.cms-menu li.unpublished .wrap {
+  background: #aaa;
+}
+
 .cms-menu .wrap {
   background: #ddd;
   padding: 10px;
   cursor: pointer;
+  margin-bottom: 1px;
 }
-.cms-menu .wrap:hover {
+.cms-menu .wrap:hover, .cms-menu li.unpublished .wrap:hover {
   background: #ff9;
 }
 .cms-menu .actions {

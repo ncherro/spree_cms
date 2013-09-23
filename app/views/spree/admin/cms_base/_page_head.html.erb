@@ -1,7 +1,7 @@
 <% @controller_singular = controller.controller_name.singularize %>
 <% content_for :sub_menu do %>
   <ul id="sub_nav" data-hook="admin_cms_sub_tabs" class="inline-menu">
-    <li><%= tab 'Content', route: 'admin_menus', match_path: '/menus' %></li>
+    <li><%= tab 'Content', route: 'admin_menus', match_path: '/menu' %></li>
     <li><%= tab :layouts, route: 'admin_layouts', match_path: '/layouts' %></li>
     <li><%= tab :blocks, route: 'admin_blocks', css_class: ('selected' if /#{spree.root_path.gsub("/", "\/")}admin\/[\w-]*blocks/ === request.fullpath) %></li>
   </ul>

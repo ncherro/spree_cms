@@ -9,8 +9,8 @@
     actions << link_to("/ Edit", edit_admin_menu_item_url(node))
     actions << link_to("x Delete", admin_menu_item_url(node), method: "delete")
     r = %(<div class="wrap">#{link_to(node.title, node.url)})
-    r << " - #{node.url}"
-    r << %(<div class="actions">).html_safe
+    r << " - #{node.url}#{' - unpublished' unless node.is_published?}#{' - not visible' unless node.is_visible_in_menu?}"
+    r << %(<div class="actions">)
     r << actions.join(' | ')
     r << %(</div></div>).html_safe
   end

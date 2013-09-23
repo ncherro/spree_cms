@@ -6,9 +6,11 @@ class Spree::Admin::MenuItemsController < Spree::Admin::CmsBaseController
   def new
     invoke_callbacks(:new_action, :before)
 
-    # overriding to set these
+    # overriding to set defaults
     @object.spree_menu_id = params[:menu_id] if params[:menu_id]
     @object.parent_id = params[:parent_id] if params[:parent_id]
+    @object.is_published = true
+    @object.is_visible_in_menu = true
 
     respond_with(@object) do |format|
       format.html { render layout: !request.xhr? }

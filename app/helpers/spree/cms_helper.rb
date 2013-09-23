@@ -30,7 +30,9 @@ module Spree::CmsHelper
         else
           link_html = link_to(node.title, node.url)
         end
-        %(#{string}<li rel="#{node.id}">#{link_html}#{func.call(children)}</li>)
+        li_classes = []
+        li_classes << 'unpublished' unless node.is_published?
+        %(#{string}<li#{' class="' + li_classes.join(' ') + '"' if li_classes.any?} rel="#{node.id}">#{link_html}#{func.call(children)}</li>)
       end + '</ul>'
     end
 
@@ -40,7 +42,9 @@ module Spree::CmsHelper
       else
         link_html = link_to(item.title, item.url)
       end
-      r << %(<li rel="#{item.id}">#{link_html})
+      li_classes = []
+      li_classes << 'unpublished' unless item.is_published?
+      r << %(<li#{' class="' + li_classes.join(' ') + '"' if li_classes.any?} rel="#{item.id}">#{link_html})
       r << func.call(item.descendants.arrange)
       r << %(</li>)
     end
