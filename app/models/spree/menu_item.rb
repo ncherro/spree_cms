@@ -13,11 +13,13 @@ class Spree::MenuItem < ActiveRecord::Base
   has_one :page, class_name: "Spree::Page", foreign_key: "spree_menu_item_id"
   belongs_to :menu, class_name: "Spree::Menu", foreign_key: "spree_menu_id"
 
+
   attr_accessible :ancestry, :css_class, :css_id, :slug, :title, :position,
     :spree_menu_id, :is_published, :is_visible_in_menu, :parent_id,
     :page_attributes
 
   attr_accessor :skip_ancestry_callbacks
+
 
   accepts_nested_attributes_for :page, allow_destroy: true,
     reject_if: :all_blank, update_only: true
@@ -76,10 +78,12 @@ class Spree::MenuItem < ActiveRecord::Base
     return self.new_record? ? parents : parents - self.subtree
   end
 
-  def cache_ancestry
-    logger.info "\n\ncache_ancestry for #{self.id}\n\n\n"
-
-    o_s = self.parent ? "#{self.parent.cached_slug[1..-1]}/#{self.slug}" : self.slug
+  def cache_ancestry(immediately=false)
+    if self.parent
+      o_s = "#{self.parent.cached_slug[1..-1]}/#{self.slug}"
+    else
+      o_s = self.slug
+    end
     n_s = o_s
     i = 0
     q = self.class.where(cached_slug: "/#{n_s}")
@@ -90,24 +94,31 @@ class Spree::MenuItem < ActiveRecord::Base
       q = self.class.where(cached_slug: "/#{n_s}")
       q = q.where("id <> ?", self.id) unless self.new_record?
     end
-    self.cached_slug = "/#{n_s}"
+    if (immediately)
+      logger.info("updating cached_slug column to /#{n_s} for ##{self.id}")
+      self.update_column(:cached_slug, "/#{n_s}")
+    else
+      self.cached_slug = "/#{n_s}"
+    end
+    logger.info "\n\n"
     true
   end
 
   def drop_cached_slug
-    logger.info "\n\ndrop_cached_slug for #{self.id}\n\n\n"
+    logger.info "drop_cached_slug for #{self.id}\n\n"
 
     if self.cached_slug_changed? || self.ancestry_changed? || self.is_published_changed?
-      # remove the old value from our cache table
-      Rails.cache.delete("#{CACHE_PREFIX}#{self.cached_slug_was}-exists")
-      Rails.cache.delete("#{CACHE_PREFIX}#{self.cached_slug_was}")
-      # loop through all children and do the same thing, skipping callbacks
-      self.descendants.each do |a|
-        a.cache_ancestry
-        a.skip_ancestry_callbacks = true
-        a.save
+
+      self.reload
+
+      # loop through the entire tree and do the same thing, skipping callbacks
+      self.root.subtree.order(:position).each do |c|
+        Rails.cache.delete("#{CACHE_PREFIX}#{c.cached_slug}-exists")
+        Rails.cache.delete("#{CACHE_PREFIX}#{c.cached_slug}")
+        c.cache_ancestry(true)
       end
     end
+    logger.info "\n\n"
     true
   end
 

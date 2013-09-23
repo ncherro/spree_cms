@@ -1,5 +1,20 @@
 module Spree::CmsHelper
 
+  def render_admin_menu_tree(menu)
+    render_menu_tree(@menu) do |node|
+      actions = []
+      actions << link_to("+ Add child", new_admin_menu_item_url(menu_id: params[:menu_id], parent_id: node.id))
+      actions << link_to("/ Edit", edit_admin_menu_item_url(node))
+      actions << link_to("x Delete", admin_menu_item_url(node), method: "delete")
+      r = %(<div class="wrap">#{link_to(node.title, node.url)})
+      r << " id = #{node.id}, pos = #{node.position}, ancestry = #{node.ancestry} " if params[:debug]
+      r << " - #{node.url}#{' - unpublished' unless node.is_published?}#{' - not visible' unless node.is_visible_in_menu?}"
+      r << %(<div class="actions">)
+      r << actions.join(' | ')
+      r << %(</div></div>).html_safe
+    end
+  end
+
   def render_menu_tree(menu, *args, &link_func)
     defaults = {
       follow_current: false,
@@ -17,9 +32,9 @@ module Spree::CmsHelper
     r << %(<ul class="#{options[:wrapper_class]}">) if options[:wrapped]
 
     if options[:root_id]
-      items = menu.menu_items.where(id: options[:root_id])
+      items = menu.menu_items.order(:position).where(id: options[:root_id])
     else
-      items = menu.menu_items.where(ancestry_depth: 0)
+      items = menu.menu_items.order(:position).where(ancestry_depth: 0)
     end
 
     func = lambda do |nodes|

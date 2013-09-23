@@ -5,13 +5,15 @@ class Spree::Admin::MenuItemsController < Spree::Admin::CmsBaseController
   helper "spree/cms"
 
   def update_parent
-    raise @object.to_yaml
+    @object.parent_id = params[:parent_id]
+    @success = @object.save
+    @menu = @object.menu
   end
 
   def update_positions
-    params[:positions].each do |id, pos|
+    params[:positions].each do |k, h|
       # just update, no callbacks
-      Spree::MenuItem.update_all("position = #{pos}", "id = #{id}")
+      Spree::MenuItem.update_all("position = #{h['position']}", "id = #{h['id']}")
     end
     render json: { success: true }
   end

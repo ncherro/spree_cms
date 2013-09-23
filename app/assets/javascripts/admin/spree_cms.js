@@ -36,20 +36,23 @@ $(function() {
     toleranceElement: '> div',
     update: function(event, obj) {
       var $list = $(event.target), $item = $(obj.item), id = $item.attr('rel'),
-        parent_id = ($item.parent().parent().attr('rel') || null), positions = {};
+        parent_id = ($item.parent().parent().attr('rel') || null), positions = [];
 
       $list.nestedSortable('disable');
 
       $list.find('li').each(function(idx) {
-        positions[$(this).attr('rel')] = idx;
+        positions.push({
+          id: $(this).attr('rel'),
+          position: idx
+        });
       });
 
       // update positions
       $.post('/admin/menu_items/update_positions', { positions: positions }, function(a, b, c) {
         console.log(a, b, c);
         // update the parent of the thing that moved
-        $.post('/admin/menu_items/' + id + '/update_parent', { parent_id: parent_id }, function(a, b, c) {
-          console.log(a, b, c);
+        $.post('/admin/menu_items/' + id + '/update_parent', { parent_id: parent_id }, function(data, b, c) {
+          $list.html(data.items_html);
           // re-enable
           $list.nestedSortable('enable');
         }, 'json')
