@@ -26,11 +26,13 @@ Spree::Core::Engine.routes.prepend do
 
     resources :blocks, only: [:index]
     resources :menu_blocks, :static_blocks, :html_blocks, except: [:index]
-    resources :layouts, :menu_items
+    resources :layouts
+    resources :menu_items do
+      post 'update_positions', on: :collection
+      post 'update_parent', on: :member
+    end
     resources :menus do
-      member do
-        get 'menu_item_options'
-      end
+      get 'menu_item_options', on: :member
     end
   end
 

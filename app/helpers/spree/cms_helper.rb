@@ -44,7 +44,7 @@ module Spree::CmsHelper
       end
       li_classes = []
       li_classes << 'unpublished' unless item.is_published?
-      r << %(<li#{' class="' + li_classes.join(' ') + '"' if li_classes.any?} rel="#{item.id}">#{link_html})
+      r << %(<li#{' class="' + li_classes.join(' ') + '"' if li_classes.any?} id="#{item.id}" rel="#{item.id}">#{link_html})
       r << func.call(item.descendants.arrange)
       r << %(</li>)
     end

@@ -1,7 +1,20 @@
 class Spree::Admin::MenuItemsController < Spree::Admin::CmsBaseController
-  before_filter :set_menu
+
+  before_filter :set_menu, except: [:update_positions, :update_parent]
 
   helper "spree/cms"
+
+  def update_parent
+    raise @object.to_yaml
+  end
+
+  def update_positions
+    params[:positions].each do |id, pos|
+      # just update, no callbacks
+      Spree::MenuItem.update_all("position = #{pos}", "id = #{id}")
+    end
+    render json: { success: true }
+  end
 
   def new
     invoke_callbacks(:new_action, :before)
