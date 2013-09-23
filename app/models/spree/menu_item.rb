@@ -56,6 +56,14 @@ class Spree::MenuItem < ActiveRecord::Base
     end
   end
 
+  def url
+    if /^(\/|http:\/\/|https:\/\/)/ =~ self.slug
+      self.slug
+    else
+      self.cached_slug
+    end
+  end
+
   def name_for_selects
     "#{'-' * depth} #{title}"
   end

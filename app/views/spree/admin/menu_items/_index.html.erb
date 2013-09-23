@@ -3,5 +3,8 @@
 <% end %>
 
 <ul class="cms-menu">
-  <%= render_menu_tree(@menu) %>
+  <%= render_menu_tree(@menu) do |node|
+    link_to("hey!", '/')
+  end
+  %>
 </ul>
