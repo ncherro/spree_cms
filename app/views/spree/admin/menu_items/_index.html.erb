@@ -1,0 +1,7 @@
+<% content_for :page_title do %>
+  <%= "for &ldquo;#{@menu.title}&rdquo;".html_safe if @menu %>
+<% end %>
+
+<ul class="cms-menu">
+  <%= render_menu_tree(@menu) %>
+</ul>

@@ -26,12 +26,11 @@ Spree::Core::Engine.routes.prepend do
 
     resources :blocks, only: [:index]
     resources :menu_blocks, :static_blocks, :html_blocks, except: [:index]
-    resources :layouts
+    resources :layouts, :menu_items
     resources :menus do
       member do
         get 'menu_item_options'
       end
-      resources :menu_items
     end
   end
 

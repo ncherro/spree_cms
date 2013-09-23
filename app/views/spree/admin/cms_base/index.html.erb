@@ -3,12 +3,12 @@
 <%= render 'page_head' %>
 
 <% content_for :page_actions do %>
-  <li><%= button_link_to Spree.t("cms.new_#{@controller_singular}"), new_object_url, icon: 'icon-plus' %></li>
+  <li><%# button_link_to Spree.t("cms.new_#{@controller_singular}"), new_object_url, icon: 'icon-plus' %></li>
 <% end unless content_for?(:page_actions)%>
 
 <% content_for :page_title do %>
   <%= controller.controller_name.capitalize.split('_').join(' ') %>
-<% end %>
+<% end unless content_for?(:page_title) %>
 
 <%= paginate @collection %>
 
