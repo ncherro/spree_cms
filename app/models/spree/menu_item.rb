@@ -78,16 +78,16 @@ class Spree::MenuItem < ActiveRecord::Base
   def cache_ancestry
     logger.info "\n\ncache_ancestry for #{self.id}\n\n\n"
 
-    # get the full path, replacing the last element with our slug
-    o_s = (path.map(&:slug)[0..-2] + [self.slug]).join('/')
+    o_s = self.parent ? "#{self.parent.cached_slug[1..-1]}/#{self.slug}" : self.slug
     n_s = o_s
     i = 0
-    q = self.class.where(cached_slug: n_s)
-    q = q.where('id != ?', self.id) unless self.new_record?
+    q = self.class.where(cached_slug: "/#{n_s}")
+    q = q.where("id <> ?", self.id) unless self.new_record?
     while q.exists?
-      # add -1 to the cached_slug
       i += 1
       n_s = "#{o_s}-#{i}"
+      q = self.class.where(cached_slug: "/#{n_s}")
+      q = q.where("id <> ?", self.id) unless self.new_record?
     end
     self.cached_slug = "/#{n_s}"
     true

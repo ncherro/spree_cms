@@ -10,8 +10,6 @@
   <%= controller.controller_name.capitalize.split('_').join(' ') %>
 <% end unless content_for?(:page_title) %>
 
-<%= paginate @collection %>
-
 <% if @collection.any? %>
 
 <%= render 'index' %>
@@ -22,5 +20,3 @@
     <% unless skip_new_link %><%= link_to Spree.t(:add_one), new_object_url %>!<% end %>
   </div>
 <% end %>
-
-<%= paginate @collection %>

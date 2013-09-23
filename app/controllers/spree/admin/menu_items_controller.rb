@@ -16,6 +16,17 @@ class Spree::Admin::MenuItemsController < Spree::Admin::CmsBaseController
     end
   end
 
+  protected
+  def location_after_save
+    collection_url(menu_id: @object.spree_menu_id)
+  end
+
+  def collection
+    return @collection if @collection.present?
+    # no pagination (!)
+    @collection = super
+  end
+
   private
   def set_menu
     @menu = Spree::Menu.find(params[:menu_id]) if params[:menu_id]
