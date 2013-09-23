@@ -7,7 +7,7 @@
 <% end unless content_for?(:page_actions)%>
 
 <% content_for :page_title do %>
-  <%= controller.controller_name.capitalize %>
+  <%= controller.controller_name.capitalize.split('_').join(' ') %>
 <% end %>
 
 <%= paginate @collection %>

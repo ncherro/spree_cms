@@ -1,3 +1,7 @@
+<% content_for :page_title do %>
+  <%= "for &ldquo;#{@menu.title}&rdquo;".html_safe if @menu %>
+<% end %>
+
 <colgroup>
   <col style="width: 83%;">
   <col style="width: 17%;">
@@ -6,4 +10,3 @@
   <th><%= Spree.t(:title) %></th>
   <th data-hook="admin_<%= controller_name %>_index_header_actions" class="actions"></th>
 </thead>
-
