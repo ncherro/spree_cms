@@ -14,11 +14,16 @@ class Spree::MenuItem < ActiveRecord::Base
   belongs_to :menu, class_name: "Spree::Menu", foreign_key: "spree_menu_id"
 
   attr_accessible :ancestry, :css_class, :css_id, :slug, :title,
-    :spree_menu_id, :is_published, :is_visible_in_menu, :parent_id
+    :spree_menu_id, :is_published, :is_visible_in_menu, :parent_id, :page_attributes
+
+  accepts_nested_attributes_for :page, allow_destroy: true,
+    reject_if: :all_blank, update_only: true
+  validates_associated :page
 
   validates :slug, presence: true,
     format: { with: /\A[\w-]+\z/, message: "only allows letters, numbers and hyphens" }
   validates :cached_slug, uniqueness: true, presence: true
+  validates :menu, presence: true
 
   class << self
 

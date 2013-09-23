@@ -14,9 +14,10 @@ $(function() {
       // form. pretty fragile
       $el.data('menu_item_select', $el.parent().next().find('select'));
       $el.change(function() {
-        var $el = $(this), val = $el.val();
+        var $el = $(this), val = $el.val(), menu_item_id;
         if (val) {
-          $.getJSON("/admin/menus/" + val + "/menu_item_options?menu_item_id=" + $el.data('menuItemId' || ''), function(data, b, c) {
+          menu_item_id = parseInt($el.data('menuItemId'), 10) ? '?menu_item_id=' + $el.data('menuItemId') : ''
+          $.getJSON('/admin/menus/' + val + '/menu_item_options' + menu_item_id, function(data) {
             $el.data('menu_item_select').removeAttr('disabled').html("<option value=\"\">- None (root) -</option>\n" + data.items_html).parent().show();
           });
         } else {

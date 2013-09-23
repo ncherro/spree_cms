@@ -1,0 +1,24 @@
+<%= f.association :menu, input_html: { data: { menu_item_id: f.object.spree_menu_id || 0 } } %>
+
+<%= f.input :parent_id,
+  collection: Spree::MenuItem.where(menu_id: f.object.spree_menu_id).arrange_as_array({order: 'slug'}, f.object.possible_parents),
+  include_blank: '- None (root) -'
+%>
+
+<%= f.input :title %>
+<%= f.input :slug, hint: 'leave blank to auto-populate from title<br />to link out, set manually and begin with "http://" or "https://"<br />to link internally, set manually and begin with "/"' %>
+<%= f.input :is_published, label: "Published?", hint: "uncheck to prevent users from seeing this content" %>
+<%= f.input :is_visible_in_menu, label: "Visible in Menu?", hint: "uncheck to hide this from the menu. the content will still be accessible by direct link" %>
+
+<%= field_set_tag "CSS" do %>
+  <%= f.input :css_class %>
+  <%= f.input :css_id %>
+<% end %>
+
+<%= field_set_tag "Page" do %>
+  <p class="hint">leave this section empty if the menu item is used to link to other content</p>
+  <%= f.fields_for :page %>
+  <% if f.object.page.nil? %>
+    <p><%= f.link_to_add "Create a Page", :page %></p>
+  <% end %>
+<% end %>
