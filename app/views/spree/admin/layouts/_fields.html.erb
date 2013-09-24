@@ -1,4 +1,5 @@
 <%= f.input :name %>
+<%= f.input :template, hint: 'leave blank to use the default CMS template, which will loop through regions and apply' %>
 
 <%= field_set_tag "Regions" do %>
   <%= f.fields_for :regions %>

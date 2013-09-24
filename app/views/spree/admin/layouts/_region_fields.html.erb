@@ -2,6 +2,11 @@
   <%= f.input :name %>
   <%= f.input :template %>
 
+  <%= field_set_tag "CSS styles" do %>
+    <%= f.input :css_id %>
+    <%= f.input :css_class %>
+  <% end %>
+
   <%= field_set_tag "Blocks" do %>
     <%= f.fields_for :blocks_regions %>
     <p><%= f.link_to_add "Add a block", :blocks_regions %></p>

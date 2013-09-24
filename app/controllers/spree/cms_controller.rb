@@ -12,12 +12,15 @@ class Spree::CmsController < Spree::StoreController
            when nil
              request.path
            end
-    render_404 unless @page = Spree::MenuItem.find(Spree::MenuItem.id_from_cached_slug(path))
+
+    render_404 unless @menu_item = Spree::MenuItem.find(Spree::MenuItem.id_from_cached_slug(path))
+    @page = @menu_item.page
   end
 
   private
   def determine_layout
-    return @page.template if @page && @page.template.present?
+    return @menu_item.template if @menu_item && @menu_item.template.present?
+    Spree::Config.layout
   end
 
 end

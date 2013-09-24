@@ -6,6 +6,9 @@ class CreateSpreeRegions < ActiveRecord::Migration
       t.string :name
       t.string :template
 
+      t.string :css_id
+      t.string :css_class
+
       t.timestamps
     end
     add_index :spree_regions, :spree_layout_id

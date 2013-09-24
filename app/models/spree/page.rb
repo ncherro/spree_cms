@@ -9,7 +9,7 @@ class Spree::Page < ActiveRecord::Base
   attr_accessible :body, :meta_description, :meta_keywords, :meta_title,
     :is_published, :title, :spree_layout_id
 
-  delegate :template, to: :layout, allow_nil: true
+  delegate :template, :regoins, to: :layout, allow_nil: true
   delegate :slug, to: :menu_item, allow_nil: true
 
   validates :title, presence: true

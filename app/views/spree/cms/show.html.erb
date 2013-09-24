@@ -1,0 +1,6 @@
+<%# set the page title %>
+
+<% @page.regions.each do |region| %>
+  <% content_for region.name do %>
+  <% end %>
+<% end %>

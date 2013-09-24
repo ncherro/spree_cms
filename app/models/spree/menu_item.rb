@@ -13,6 +13,7 @@ class Spree::MenuItem < ActiveRecord::Base
   has_one :page, class_name: "Spree::Page", foreign_key: "spree_menu_item_id"
   belongs_to :menu, class_name: "Spree::Menu", foreign_key: "spree_menu_id"
 
+  delegate :template, to: :page, allow_nil: true
 
   attr_accessible :ancestry, :css_class, :css_id, :slug, :title, :position,
     :spree_menu_id, :is_published, :is_visible_in_menu, :parent_id,
@@ -87,25 +88,26 @@ class Spree::MenuItem < ActiveRecord::Base
 
   def cache_ancestry(immediately=false)
     if self.parent
-      o_s = "#{self.parent.cached_slug[1..-1]}/#{self.slug}"
+      o_s = "#{self.parent.cached_slug}/#{self.slug}"
     else
       o_s = self.slug
     end
     n_s = o_s
+    # TODO: clean this up
     i = 0
-    q = self.class.where(cached_slug: "/#{n_s}")
+    q = self.class.where(cached_slug: n_s)
     q = q.where("id <> ?", self.id) unless self.new_record?
     while q.exists?
       i += 1
       n_s = "#{o_s}-#{i}"
-      q = self.class.where(cached_slug: "/#{n_s}")
+      q = self.class.where(cached_slug: n_s)
       q = q.where("id <> ?", self.id) unless self.new_record?
     end
     if (immediately)
       logger.info("updating cached_slug column to /#{n_s} for ##{self.id}")
-      self.update_column(:cached_slug, "/#{n_s}")
+      self.update_column(:cached_slug, n_s)
     else
-      self.cached_slug = "/#{n_s}"
+      self.cached_slug = n_s
     end
     logger.info "\n\n"
     true
