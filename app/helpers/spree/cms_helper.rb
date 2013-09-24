@@ -1,5 +1,20 @@
 module Spree::CmsHelper
 
+  def cms_wrapper(obj, *args, &renderer)
+    defaults = {
+      content_method: 'content',
+    }
+    options = defaults.merge(args.extract_options!)
+
+    classes = []
+    classes << 'cms-' + obj.class.name.demodulize.underscore.dasherize
+    classes << obj.css_class if obj.respond_to?('css_class') && obj.css_class.present?
+
+    id = obj.css_id if obj.respond_to?('css_id') && obj.css_id.present?
+
+    content_tag(:div, renderer.call(obj), class: classes.join(' '), id: id)
+  end
+
   def render_admin_menu_tree(menu)
     render_menu_tree(@menu) do |node|
       actions = []
@@ -23,7 +38,6 @@ module Spree::CmsHelper
       wrapped: false,
       wrapper_class: "cms-menu",
     }
-
     options = defaults.merge(args.extract_options!)
 
     req = request.fullpath

@@ -1,0 +1,7 @@
+<%= cms_wrapper(region) do |obj|
+  r = ""
+  obj.blocks.each do |block|
+    r << render("spree/cms/#{block.class.name.demodulize.tableize}/#{block.class.name.demodulize.underscore}", block: block)
+  end
+  r.html_safe
+end %>

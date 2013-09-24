@@ -1,10 +1,10 @@
 <%= field_set_tag "Region" do %>
-  <%= f.input :name %>
+  <%= f.input :name, hint: 'used by the actual <strong>Layout</strong> in the <strong>content_for</strong> method, the name will be converted<br />e.g. "Left sidebar" will render into <code>content(:left_sidebar)</code>' %>
   <%= f.input :template, hint: 'leave blank to use the default template: <strong>app/views/spree/cms/_region</strong>' %>
 
   <%= field_set_tag "CSS styles" do %>
-    <%= f.input :css_id %>
-    <%= f.input :css_class %>
+    <%= f.input :css_id, label: "CSS Id" %>
+    <%= f.input :css_class, label: "CSS Class" %>
   <% end %>
 
   <%= field_set_tag "Blocks" do %>

@@ -1,6 +1,7 @@
 class Spree::CmsController < Spree::StoreController
 
   helper "spree/products"
+
   layout :determine_layout
 
   def show
@@ -14,11 +15,11 @@ class Spree::CmsController < Spree::StoreController
            end
 
     if @menu_item = Spree::MenuItem.find(Spree::MenuItem.id_from_cached_slug(path))
-      if @menu_item.url
+      if @menu_item.url.blank?
+        @page = @menu_item.page
+      else
         # since menu items with urls will link directly, but just in case...
         redirect_to @menu_item.url and return
-      else
-        @page = @menu_item.page
       end
     else
       render_404
@@ -27,7 +28,7 @@ class Spree::CmsController < Spree::StoreController
 
   private
   def determine_layout
-    return @menu_item.template if @menu_item && @menu_item.template.present?
+    return "spree/cms/layouts/#{@menu_item.template}" if @menu_item && @menu_item.template.present?
     Spree::Config.layout
   end
 
