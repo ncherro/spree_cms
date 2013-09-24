@@ -21,7 +21,7 @@ module SpreeCms
       def run_simple_form_generator
         run 'bundle exec rails g simple_form:install'
         gsub_file 'config/initializers/simple_form.rb', /:class => :hint/, ':class => :info'
-        gsub_file 'config/initializers/simple_form.rb', /# config.default_input_size = 50/, 'config.default_input_size = nil'
+        gsub_file 'config/initializers/simple_form.rb', /# config.default_input_size = 50/, 'config.default_input_size = 0'
       end
 
       def run_migrations

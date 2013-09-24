@@ -1,8 +1,12 @@
 <%= f.association :layout %>
+<%= f.input :partial_override, hint: "enter the name of the partial template here to override the <strong>Layout</strong>'s <strong>partial</strong> property" %>
+
+<%= field_set_tag 'Meta Tags' do %>
+  <%= f.input :meta_title %>
+  <%= f.input :meta_keywords %>
+  <%= f.input :meta_description %>
+<% end %>
+
 
 <%= f.input :title %>
-
-<%= f.input :meta_title %>
-<%= f.input :meta_description %>
-
 <%= f.input :body %>

@@ -7,14 +7,20 @@ class Spree::Page < ActiveRecord::Base
     foreign_key: "spree_menu_item_id"
 
 
-  attr_accessible :body, :meta_description, :partial, :meta_keywords,
-    :meta_title, :is_published, :title, :spree_layout_id
+  attr_accessible :title, :body, :meta_description, :partial_override,
+    :meta_title, :meta_keywords, :spree_layout_id
 
 
-  delegate :template, :regoins, to: :layout, allow_nil: true
+  delegate :template, :regions, to: :layout, allow_nil: true
+  delegate :partial, to: :layout, prefix: true, allow_nil: true
   delegate :slug, to: :menu_item, allow_nil: true
 
 
   validates :title, presence: true
+
+
+  def partial
+    self.partial_override.present? ? self.partial_override : self.template_partial
+  end
 
 end

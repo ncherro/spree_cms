@@ -13,8 +13,16 @@ class Spree::CmsController < Spree::StoreController
              request.path
            end
 
-    render_404 unless @menu_item = Spree::MenuItem.find(Spree::MenuItem.id_from_cached_slug(path))
-    @page = @menu_item.page
+    if @menu_item = Spree::MenuItem.find(Spree::MenuItem.id_from_cached_slug(path))
+      if @menu_item.url
+        # since menu items with urls will link directly, but just in case...
+        redirect_to @menu_item.url and return
+      else
+        @page = @menu_item.page
+      end
+    else
+      render_404
+    end
   end
 
   private

@@ -8,6 +8,9 @@ end
 class Spree::Cms
   def self.matches?(request)
     full_slug = Cms::remove_spree_mount_point(request.fullpath)
+
+    Rails.logger.info("\n\n\nlooking for #{full_slug}\n\n\n")
+
     Rails.cache.fetch("#{Spree::MenuItem::CACHE_PREFIX}#{full_slug}-exists") do
       Spree::MenuItem.published.by_cached_slug(full_slug).exists?
     end
