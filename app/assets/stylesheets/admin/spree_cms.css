@@ -6,6 +6,17 @@
   display: block;
 }
 
+.input.withError input {
+  border-color: #fabcbd;
+}
+.input.withError label {
+  color: #f57e80;
+}
+.input.withError .formError {
+  display: block;
+}
+
+
 .cms-menu {
   border-left: 1px solid #eee;
   padding-left: 1px;

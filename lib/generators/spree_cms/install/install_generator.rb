@@ -22,6 +22,9 @@ module SpreeCms
         run 'bundle exec rails g simple_form:install'
         gsub_file 'config/initializers/simple_form.rb', /:class => :hint/, ':class => :info'
         gsub_file 'config/initializers/simple_form.rb', /# config.default_input_size = 50/, 'config.default_input_size = 0'
+        gsub_file 'config/initializers/simple_form.rb', /b.use :error, :wrap_with => { :tag => :span, :class => :error }/, 'b.use :error, :wrap_with => { :tag => :span, :class => :formError }'
+        gsub_file 'config/initializers/simple_form.rb', /:error_class => :field_with_errors/, ':error_class => :withError'
+        gsub_file 'config/initializers/simple_form.rb', /config.wrappers :default, :class => :input,/, 'config.wrappers :default, :class => "input field",'
       end
 
       def run_migrations

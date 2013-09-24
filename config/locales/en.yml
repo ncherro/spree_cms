@@ -5,10 +5,12 @@ en:
   spree:
     cms:
       menu: Menu
+      menu_item: Menu Item
       layout: Layout
       block: Block
       page: Page
       menus: Menus
+      menu_items: Menu Items
       layouts: Layouts
       blocks: Blocks
       pages: Pages
