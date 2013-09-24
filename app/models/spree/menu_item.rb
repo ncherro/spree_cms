@@ -16,7 +16,7 @@ class Spree::MenuItem < ActiveRecord::Base
 
   attr_accessible :ancestry, :css_class, :css_id, :slug, :title, :position,
     :spree_menu_id, :is_published, :is_visible_in_menu, :parent_id,
-    :page_attributes
+    :page_attributes, :url
 
   attr_accessor :skip_ancestry_callbacks
 
@@ -29,6 +29,13 @@ class Spree::MenuItem < ActiveRecord::Base
     format: { with: /\A[\w-]+\z/, message: "only allows letters, numbers and hyphens" }
   validates :cached_slug, uniqueness: true, presence: true
   validates :menu, presence: true
+  validate :page_or_url
+
+  def page_or_url
+    if self.url.blank? && self.page.nil?
+      errors.add(:base, "A URL or Page content is required")
+    end
+  end
 
   class << self
 
@@ -59,9 +66,9 @@ class Spree::MenuItem < ActiveRecord::Base
     end
   end
 
-  def url
-    if /^(\/|http:\/\/|https:\/\/)/ =~ self.slug
-      self.slug
+  def href
+    if self.url.present?
+      self.url
     else
       self.cached_slug
     end

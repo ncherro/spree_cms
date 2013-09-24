@@ -6,14 +6,13 @@ Gem::Specification.new do |s|
   s.summary     = 'Content Management System for Spree 2.0'
   s.description = 'Adds functionality for custom Pages, Menus, Menu Items, Templates and Blocks'
   s.authors = 'ncherro'
+  s.email = 'ncherro@gmail.com'
+  s.email = 'http://ncherro.com'
   s.required_ruby_version = '>= 1.9.3'
-
-  # s.author    = 'You'
-  # s.email     = 'you@example.com'
-  # s.homepage  = 'http://www.spreecommerce.com'
 
   #s.files       = `git ls-files`.split("\n")
   #s.test_files  = `git ls-files -- {test,spec,features}/*`.split("\n")
+
   s.require_path = 'lib'
   s.requirements << 'none'
 
