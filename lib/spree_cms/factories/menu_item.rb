@@ -3,4 +3,3 @@ FactoryGirl.define do
     title Faker::Lorem.word
   end
 end
-

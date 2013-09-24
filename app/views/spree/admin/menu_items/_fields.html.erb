@@ -1,26 +1,33 @@
-<%= f.association :menu, input_html: { data: { menu_item_id: f.object.spree_menu_id || 0 } } %>
+<div class="columns twelve alpha">
+  <%= f.association :menu, input_html: { data: { menu_item_id: f.object.spree_menu_id || 0 } } %>
 
-<%= f.input :parent_id,
-  collection: Spree::MenuItem.where(spree_menu_id: f.object.spree_menu_id).arrange_as_array({order: 'slug'}, f.object.possible_parents),
-  label_method: :name_for_selects,
-  value_method: :id,
-  include_blank: '- None (root) -'
-%>
+  <%= f.input :parent_id,
+    collection: Spree::MenuItem.where(spree_menu_id: f.object.spree_menu_id).arrange_as_array({order: 'slug'}, f.object.possible_parents),
+    label_method: :name_for_selects,
+    value_method: :id,
+    include_blank: '- None (root) -'
+  %>
 
-<%= f.input :title %>
-<%= f.input :slug, hint: 'leave blank to auto-populate from title<br />to link out, set manually and begin with "http://" or "https://"<br />to link internally, set manually and begin with "/"' %>
-<%= f.input :is_published, label: "Published?", hint: "uncheck to prevent users from seeing this content" %>
-<%= f.input :is_visible_in_menu, label: "Visible in Menu?", hint: "uncheck to hide this from the menu. the content will still be accessible by direct link" %>
+  <%= f.input :title %>
+  <%= f.input :slug, hint: 'leave blank to auto-populate from title' %>
+  <%= f.input :url, hint: 'to link out, add text beginning with "http://" or "https://"<br />for an internal link, begin with "/"<br />if set, <strong>Page</strong> content will not be displayed' %>
+</div>
 
-<%= field_set_tag "CSS" do %>
-  <%= f.input :css_class %>
-  <%= f.input :css_id %>
-<% end %>
+<div class="columns four omega">
+  <%= f.input :is_published, label: "Published?", hint: "uncheck to prevent users from seeing this content" %>
+  <%= f.input :is_visible_in_menu, label: "Visible in Menu?", hint: "uncheck to hide this from the menu. the content will still be accessible by direct link" %>
 
-<%= field_set_tag "Page" do %>
-  <p class="hint">leave this section empty if the menu item is used to link to other content</p>
-  <%= f.fields_for :page %>
-  <% if f.object.page.nil? %>
-    <p><%= f.link_to_add "Create a Page", :page %></p>
+  <%= field_set_tag "CSS" do %>
+    <%= f.input :css_class %>
+    <%= f.input :css_id %>
   <% end %>
-<% end %>
+</div>
+
+<div class="columns sixteen alpha omega">
+  <%= field_set_tag "Page content", id: "page-fields" do %>
+    <%= f.fields_for :page %>
+    <% if f.object.page.nil? %>
+      <p><%= f.link_to_add "Create a Page", :page %></p>
+    <% end %>
+  <% end %>
+</div>
