@@ -4,6 +4,7 @@ class CreateSpreePages < ActiveRecord::Migration
       t.belongs_to :spree_layout
       t.belongs_to :spree_menu_item
 
+      t.string :partial
       t.string :title
       t.text :body
 

@@ -1,6 +1,6 @@
 class Spree::Layout < ActiveRecord::Base
 
-  attr_accessible :name, :template, :regions_attributes
+  attr_accessible :name, :template, :partial, :regions_attributes
 
   validates :name, presence: true, uniqueness: true
 

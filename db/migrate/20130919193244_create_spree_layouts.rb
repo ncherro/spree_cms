@@ -4,6 +4,7 @@ class CreateSpreeLayouts < ActiveRecord::Migration
 
       t.string :name
       t.string :template
+      t.string :partial
 
       t.timestamps
     end
