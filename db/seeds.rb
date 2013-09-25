@@ -1,9 +1,7 @@
 require 'factory_girl'
 require 'spree_cms/factories'
 
-
 reset_cms = true
-
 
 if reset_cms
   Spree::Menu.delete_all
@@ -39,14 +37,15 @@ if Spree::MenuItem.count.zero?
   main_menu_items = []
   utility_menu_items = []
   footer_menu_items = []
+
   # add root menu items
-  5.times do
+  6.times do
     main_menu_items << FactoryGirl.create(:menu_item_with_page, menu: main_menu)
     utility_menu_items << FactoryGirl.create(:menu_item_with_page, menu: utility_menu)
     footer_menu_items << FactoryGirl.create(:menu_item_with_page, menu: footer_menu)
   end
 
-  # nest
+  # nested menu items
   3.times do
     parent = FactoryGirl.create(:menu_item_with_page, menu: main_menu, parent: main_menu_items.first)
     parent = FactoryGirl.create(:menu_item_with_page, menu: main_menu, parent: parent)

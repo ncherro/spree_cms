@@ -1,6 +1,8 @@
 <%= f.input :name %>
-<%= f.input :template %>
-<%= f.association :menu_item %>
-<%= f.input :menu_block_type, collection: Spree::MenuBlock::TYPES %>
-<%= f.input :menu_wrap, collection: Spree::MenuBlock::MENU_WRAP_OPTIONS %>
-<%= f.input :menu_item_wrap, collection: Spree::MenuBlock::MENU_ITEM_WRAP_OPTIONS %>
+<%= f.input :template, hint: "leave blank to use the default template: <strong>app/views/spree/cms/menu_blocks/_menu_block</strong>" %>
+<%= f.input :menu_block_type, label: 'Type', collection: Spree::MenuBlock::TYPES %>
+<%= f.association :menu, required: true %>
+<%= f.association :menu_item, required: true %>
+<%= f.input :max_levels, label: "Levels", required: true, input_html: { min: 0 }, hint: "'0' will display all descendents" %>
+<%= f.input :menu_wrap, collection: Spree::MenuBlock::MENU_WRAP_OPTIONS, hint: "if appending menu items to an existing Spree menu, select '- None -'" %>
+<%= f.input :menu_item_wrap, collection: Spree::MenuBlock::MENU_ITEM_WRAP_OPTIONS, hint: "if appending menu items to an existing Spree menu, select '&lt;li&gt;'" %>

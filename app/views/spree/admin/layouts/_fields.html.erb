@@ -1,5 +1,5 @@
 <%= f.input :name %>
-<%= f.input :template, hint: 'leave blank to use the default Spree layout template (probably <strong>application.html.erb</strong>)' %>
+<%= f.input :template, hint: 'leave blank to use the default Spree layout template (probably <strong>spree_application.html.erb</strong>)' %>
 <%= f.input :partial, hint: "leave blank to use the default CMS partial, <strong>app/views/spree/cms/show.html.erb</strong>, which will loop through the <strong>Regions</strong> below, rendering their blocks" %>
 
 <%= field_set_tag "Regions" do %>

@@ -21,6 +21,13 @@ module SpreeCms
       end
     end
 
+    # load our helpers - DOES NOT WORK
+    initializer 'spree_cms.action_controller' do |app|
+      ActiveSupport.on_load :action_controller do
+        helper Spree::CmsHelper
+      end
+    end
+
     config.to_prepare &method(:activate).to_proc
   end
 end

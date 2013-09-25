@@ -56,6 +56,29 @@ FactoryGirl.define do
 
   factory :menu_block, class: Spree::MenuBlock do
     name Faker::Lorem.words(2).join(' ').capitalize
+    max_levels 0
+    menu_wrap Spree::MenuBlock.assoc('<ul>').last
+    menu_item_wrap Spree::MenuBlock.assoc('<li>').last
+
+    factory :root_menu_block do
+      menu_block_type Spree::MenuBlock.assoc('Start at root of specified Menu').last
+      menu_wrap Spree::MenuBlock.assoc('- None -').last
+      menu
+    end
+
+    factory :item_menu_block do
+      menu_block_type Spree::MenuBlock.assoc('Start at specified Menu Item').last
+      menu
+      menu_item
+    end
+
+    factory :siblings_menu_block do
+      menu_block_type Spree::MenuBlock.assoc('Show siblings of "current" menu item').last
+    end
+
+    factory :children_menu_block do
+      menu_block_type Spree::MenuBlock.assoc('Show children of "current" menu item').last
+    end
 
     # this, along with lazy name ensures we only create 1 MenuBlock
     initialize_with { Spree::MenuBlock.find_or_create_by_name(name) }
