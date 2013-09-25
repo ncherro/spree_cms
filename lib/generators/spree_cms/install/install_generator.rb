@@ -2,7 +2,7 @@ module SpreeCms
   module Generators
     class InstallGenerator < Rails::Generators::Base
 
-      class_option :auto_run_migrations, :type => :boolean, :default => false
+      class_option :auto_run_migrations, type: :boolean, default: false
 
       def add_javascripts
         append_file 'app/assets/javascripts/store/all.js', "//= require store/spree_cms\n"
@@ -20,19 +20,6 @@ module SpreeCms
 
       def add_seeds
         prepend_file 'db/seeds.rb', "SpreeCms::Engine.load_seed if defined?(SpreeCms)"
-      end
-
-      def copy_templates
-
-        path = File.expand_path("../../../../app/views/spree/cms/static_blocks", __FILE__)
-        rails_path = File.join(Rails.root, 'app', 'views', 'spree', 'cms', 'static_blocks')
-
-        raise "path: #{path}\nrails_path: #{rails_path}"
-
-        directory(
-          File.expand_path("../../../../app/views/spree/cms/static_blocks", __FILE__),
-          File.join(Rails.root, 'app', 'views', 'spree', 'cms', 'static_blocks')
-        )
       end
 
       def run_simple_form_generator

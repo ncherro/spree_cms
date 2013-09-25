@@ -3,13 +3,18 @@ namespace :spree_cms do
     desc 'Generates Spree::StaticBlock instances from template files'
     task static_blocks: :environment do
       # find all static_block templates
-      gem_path = "#{File.expand_path("../../../app/views/spree/cms/static_blocks", __FILE__)}/*"
-      gem_templates = Dir.glob(gem_path).map { |t| t.split('/').last.split('.').first[1..-1] }
+      rails_path = "#{File.join(Rails.root, 'app', 'views', 'spree', 'cms', 'static_blocks')}/*" if File.directory?(rails_path)
+      if File.directory?(rails_path)
+        # pull from the Rails app
+        dir_path = rails_path
+      else
+        # pull from the Gem
+        dir_path = "#{File.expand_path("../../../app/views/spree/cms/static_blocks", __FILE__)}/*"
+      end
 
-      rails_path = "#{File.join(Rails.root, 'app', 'views', 'spree', 'cms', 'static_blocks')}/*"
-      rails_templates = Dir.glob(rails_path).map { |t| t.split('/').last.split('.').first[1..-1] }
+      puts "Creating templates from #{dir_path}"
 
-      templates = gem_templates + rails_templates
+      templates = Dir.glob(dir_path).map { |t| t.split('/').last.split('.').first[1..-1] }
       templates.uniq!
 
       templates.each do |t|
@@ -26,7 +31,7 @@ namespace :spree_cms do
         end
       end
 
-      # now delete any that do not exist
+      # delete any that do not exist
       Spree::StaticBlock.where('template NOT IN(?)', templates).each do |sb|
         puts "Deleting #{sb.name} - there is no template file for it"
         sb.destroy

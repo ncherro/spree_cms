@@ -2,6 +2,9 @@ class Spree::Block < ActiveRecord::Base
 
   attr_accessible :content, :name, :template
 
+  has_many :blocks_regions, class_name: "Spree::BlocksRegion",
+    foreign_key: "spree_block_id", dependent: :destroy
+
   validates :name, presence: true
 
   validates :template, format: { with: /\A\w+\z/ }, allow_blank: true

@@ -4,6 +4,7 @@ class Spree::Region < ActiveRecord::Base
 
   has_many :blocks_regions, class_name: "Spree::BlocksRegion",
     foreign_key: "spree_region_id", dependent: :destroy, order: :position
+
   has_many :blocks, class_name: "Spree::Block", through: :blocks_regions,
     dependent: :destroy
 
