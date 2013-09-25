@@ -5,7 +5,7 @@ when :table_row
 %>
 <tr>
   <td class="align-center"><%= object.title %></td>
-  <td class="align-center"><%= link_to Spree.t(:menu_items), admin_menu_items_url(menu_id: object.id) %></td>
+  <td class="align-center"><%= link_to Spree.t(:items), admin_menu_items_url(menu_id: object.id) %></td>
   <td class="actions" data-hook="admin_<%= controller_name %>_index_row_actions">
     <%= link_to_edit object, no_text: true, class: 'edit' %>
     &nbsp;

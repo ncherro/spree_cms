@@ -14,4 +14,6 @@ class Spree::Region < ActiveRecord::Base
     allow_destroy: true
   validates_associated :blocks_regions
 
+  validates :name, uniqueness: { scope: :spree_layout_id, message: "has already been used in this Layout" }
+
 end

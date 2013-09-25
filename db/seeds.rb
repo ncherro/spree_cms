@@ -6,12 +6,11 @@ reset_cms = true
 if reset_cms
   Spree::Menu.delete_all
   Spree::MenuItem.delete_all
-
-  Spree::Page.delete_all
-
   Spree::Layout.delete_all
   Spree::Region.delete_all
   Spree::Block.delete_all
+  Spree::Page.delete_all
+  Spree::BlocksRegion.delete_all
 end
 
 
@@ -27,7 +26,7 @@ end
 
 
 if Spree::Layout.count.zero?
-  default = FactoryGirl.create(:layout_with_regions, name: 'Default')
+  default = FactoryGirl.create(:default_layout)
 else
   default = Spree::Layout.find_by_name('Default')
 end
@@ -45,9 +44,12 @@ if Spree::MenuItem.count.zero?
     footer_menu_items << FactoryGirl.create(:menu_item_with_page, menu: footer_menu)
   end
 
-  # add 3 levels of children to each menu item
+  # nest
   3.times do
-    FactoryGirl.create(:menu_item_with_page, menu: main_menu, parent: main_menu_items.first)
+    parent = FactoryGirl.create(:menu_item_with_page, menu: main_menu, parent: main_menu_items.first)
+    parent = FactoryGirl.create(:menu_item_with_page, menu: main_menu, parent: parent)
+    FactoryGirl.create(:menu_item_with_page, menu: main_menu, parent: parent)
+
     FactoryGirl.create(:menu_item_with_page, menu: utility_menu, parent: utility_menu_items.first)
     FactoryGirl.create(:menu_item_with_page, menu: footer_menu, parent: footer_menu_items.first)
   end
