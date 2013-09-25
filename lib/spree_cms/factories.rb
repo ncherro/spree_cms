@@ -1,6 +1,84 @@
 FactoryGirl.define do
-  # Define your Spree extensions Factories within this file to enable applications, and other extensions to use and override them.
-  #
-  # Example adding this to your spec_helper will load these Factories for use:
-  # require 'spree_cms/factories'
+
+  factory :menu, class: Spree::Menu do
+    title 'Main menu'
+  end
+
+  factory :menu_item, class: Spree::MenuItem do
+    title { Faker::Lorem.words(2).join(' ').capitalize }
+    parent_id nil
+    position 0
+
+    is_published true
+    is_visible_in_menu true
+
+    factory :menu_item_with_page do
+      association :page
+    end
+  end
+
+  factory :page, class: Spree::Page do
+    meta_keywords { Faker::Lorem.words(10).join(' ') }
+    meta_description { Faker::Lorem.words(10).join(' ') }
+    meta_title { Faker::Lorem.words(2).join(' ').capitalize }
+
+    title { Faker::Lorem.words(5).join(' ').capitalize }
+    body { Faker::Lorem.paragraphs.map { |p| "<p>#{p}</p>" }.join("\n") }
+
+    layout
+  end
+
+
+  factory :layout, class: Spree::Layout do
+    name { Faker::Lorem.words(2).capitalize }
+
+    factory :layout_with_regions do
+      after(:create) do |layout|
+        FactoryGirl.create(:region_with_blocks, name: 'Left sidebar', layout: layout)
+        FactoryGirl.create(:region_with_blocks, name: 'Content', layout: layout)
+        FactoryGirl.create(:region_with_blocks, name: 'Right sidebar', layout: layout)
+      end
+    end
+  end
+
+  factory :menu_block, class: Spree::MenuBlock do
+    name { Faker::Lorem.words(2).capitalize }
+  end
+
+  factory :static_block, class: Spree::StaticBlock do
+    name { Faker::Lorem.words(2).capitalize }
+    sequence :template do |n|
+      "#{Faker::Lorem.word.downcase}_#{n}"
+    end
+  end
+
+  factory :html_block, class: Spree::HtmlBlock do
+    name { Faker::Lorem.words(2).capitalize }
+    content { Faker::Lorem.paragraphs }.map { |p| "<p>#{p}</p>" }.join("\n")
+  end
+
+  factory :blocks_region, class: Spree::BlocksRegion do
+    factory :br_menu_block do
+      menu_block
+    end
+    factory :br_html_block do
+      html_block
+    end
+    factory :br_static_block do
+      static_block
+    end
+  end
+
+  factory :region, class: Spree::Region do
+    name Faker::Lorem.word
+
+    factory :region_with_blocks do
+      after(:create) do |region|
+        FactoryGirl.create(:br_html_block, region: region)
+        FactoryGirl.create(:br_static_block, region: region)
+        #FactoryGirl.create(:br_menu_block, region: region)
+      end
+    end
+  end
+
 end

@@ -18,6 +18,10 @@ module SpreeCms
         run 'bundle exec rake railties:install:migrations FROM=spree_cms'
       end
 
+      def add_seeds
+        prepend_file 'db/seeds.rb', "SpreeCms::Engine.load_seed if defined?(SpreeCms)"
+      end
+
       def run_simple_form_generator
         run 'bundle exec rails g simple_form:install'
         gsub_file 'config/initializers/simple_form.rb', /:class => :hint/, ':class => :info'
