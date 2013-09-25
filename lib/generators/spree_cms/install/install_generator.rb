@@ -35,10 +35,12 @@ module SpreeCms
         run_migrations = options[:auto_run_migrations] || ['', 'y', 'Y'].include?(ask 'Would you like to run the migrations now? [Y/n]')
         if run_migrations
           run 'bundle exec rake db:migrate'
+          run 'bundle exec rake spree_cms:load:static_blocks'
         else
           puts 'Skipping rake db:migrate, don\'t forget to run it!'
         end
       end
+
     end
   end
 end

@@ -1,5 +1,5 @@
 namespace :spree_cms do
-  namespace :build do
+  namespace :load do
     desc 'Generates Spree::StaticBlock instances from template files'
     task static_blocks: :environment do
       # find all static_block templates

@@ -1,5 +1,5 @@
 <% if @page %>
   <%= cms_wrapper(block) do |block| %>
-    <%= render @page.body.html_safe %>
+    <%= @page.body.html_safe %>
   <% end %>
 <% end %>

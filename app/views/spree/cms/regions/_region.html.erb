@@ -3,7 +3,7 @@
   obj.blocks_regions.each do |block_region|
     if block_region.template.present?
       # render the custom thing
-      r << render("spree/cms/blocks/#{block_region.template}", block: block_region.block)
+      r << render("spree/cms/#{block_region.block.class.name.demodulize.tableize}/#{block_region.template}", block: block_region.block)
     else
       r << render("spree/cms/#{block_region.block.class.name.demodulize.tableize}/#{block_region.block.class.name.demodulize.underscore}", block: block_region.block)
     end

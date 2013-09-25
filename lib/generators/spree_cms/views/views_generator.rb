@@ -1,6 +1,6 @@
 module SpreeCms
   module Generators
-    class TemplatesGenerator < Rails::Generators::Base
+    class ViewsGenerator < Rails::Generators::Base
       def copy_templates
         directory(
           File.expand_path("../../../../../app/views/spree/cms", __FILE__),

@@ -62,18 +62,16 @@ FactoryGirl.define do
   end
 
   factory :static_block, class: Spree::StaticBlock do
-    name Faker::Lorem.words(2).join(' ').capitalize
-    sequence :template do |n|
-      "#{Faker::Lorem.word.downcase}_#{n}"
-    end
+    name 'Page body'
+    template 'page_body'
 
     # this, along with lazy name ensures we only create 1 StaticBlock
-    initialize_with { Spree::StaticBlock.find_or_create_by_name(name) }
+    initialize_with { Spree::StaticBlock.find_or_create_by_template(template) }
   end
 
   factory :html_block, class: Spree::HtmlBlock do
     name Faker::Lorem.words(2).join(' ').capitalize
-    content { Faker::Lorem.paragraphs.map { |p| "<p>#{p}</p>" }.join("\n") }
+    content { Faker::Lorem.paragraphs(1).map { |p| "<p>#{p}</p>" }.join("\n") }
 
     # this, along with lazy name ensures we only create 1 HtmlBlock
     initialize_with { Spree::HtmlBlock.find_or_create_by_name(name) }
