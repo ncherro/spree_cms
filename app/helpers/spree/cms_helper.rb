@@ -37,6 +37,7 @@ module Spree
         root_id: nil,
         depth: 0,
         wrapped: false,
+        only_visible: false,
         wrapper_class: "cms-menu",
       }
       options = defaults.merge(args.extract_options!)
@@ -51,6 +52,8 @@ module Spree
       else
         items = menu.menu_items.order(:position).where(ancestry_depth: 0)
       end
+
+      items = items.visible if options[:only_visible]
 
       func = lambda do |nodes|
         return "" if nodes.empty?
@@ -85,7 +88,14 @@ module Spree
     end
 
     def render_menu_block(menu_block)
-      '<li><a href="#">HEY</a></li>'
+      render_menu_tree(
+        menu_block.menu,
+        only_visible: true,
+        follow_current: menu_block.follows_current?,
+        root_id: menu_block.menu_item_id,
+        depth: menu_block.max_levels,
+        wrapped: menu_block.wrapped?
+      )
     end
 
   end

@@ -21,6 +21,8 @@ class Spree::MenuBlock < Spree::Block
     ['<li>', 1],
   ]
 
+  before_save :unset_menu_and_menu_item
+
   belongs_to :menu, class_name: "Spree::Menu"
   belongs_to :menu_item, class_name: "Spree::MenuItem"
 
@@ -44,6 +46,23 @@ class Spree::MenuBlock < Spree::Block
     end
   end
 
+  def follows_current?
+    !TYPES_REQUIRING_MENU.include?(self.menu_block_type)
+  end
 
+  def wrapped?
+    MENU_WRAP_OPTIONS.rassoc(self.menu_wrap).first == '- None -'
+  end
+
+  private
+  def unset_menu_and_menu_item
+    unless TYPES_REQUIRING_MENU_ITEM.include?(self.menu_block_type)
+      self.menu_item_id = nil
+    end
+    unless TYPES_REQUIRING_MENU.include?(self.menu_block_type)
+      self.menu_id = nil
+    end
+    true
+  end
 
 end

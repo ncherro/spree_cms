@@ -44,6 +44,10 @@ class Spree::MenuItem < ActiveRecord::Base
       where(is_published: true)
     end
 
+    def visible
+      published.where(is_visible_in_menu: true)
+    end
+
     def by_cached_slug(cached_slug)
       slug = Cms.remove_spree_mount_point(cached_slug)
       where(cached_slug: slug)

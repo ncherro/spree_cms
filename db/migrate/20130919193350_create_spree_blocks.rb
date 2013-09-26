@@ -16,5 +16,6 @@ class CreateSpreeBlocks < ActiveRecord::Migration
 
       t.timestamps
     end
+    add_index :spree_blocks, :name
   end
 end
