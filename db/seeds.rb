@@ -61,7 +61,6 @@ if Spree::MenuItem.count.zero?
 
 end
 
-
 if Spree::MenuBlock.find_by_name('Main menu').nil?
   FactoryGirl.create(
     :root_menu_block,

@@ -10,24 +10,12 @@ class Spree::MenuBlock < Spree::Block
   TYPES_REQUIRING_MENU = [1, 2,]
   TYPES_REQUIRING_MENU_ITEM = [2,]
 
-  WRAPPER_EL_OPTIONS = [
-    ['- None -', ''],
-    ['<ul>', 'ul'],
-    ['<ol>', 'ol'],
-  ]
-
-  ITEM_WRAPPER_EL_OPTIONS = [
-    ['- None -', ''],
-    ['<li>', 'li'],
-  ]
-
   before_save :unset_menu_and_menu_item
 
   belongs_to :menu, class_name: "Spree::Menu"
   belongs_to :menu_item, class_name: "Spree::MenuItem"
 
-  attr_accessible :menu_block_type, :menu_id, :menu_item_id, :max_levels,
-    :wrapper_el, :submenu_wrapper_el, :item_wrapper_el
+  attr_accessible :menu_block_type, :menu_id, :menu_item_id
 
   validates :menu_block_type, presence: true
   validates :menu_id, presence: true,

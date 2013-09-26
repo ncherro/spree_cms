@@ -3,7 +3,3 @@
 <%= f.input :menu_block_type, label: 'Type', collection: Spree::MenuBlock::TYPES %>
 <%= f.association :menu, required: true %>
 <%= f.association :menu_item, required: true %>
-<%= f.input :max_levels, label: "Levels", required: true, input_html: { min: 0 }, hint: "'0' will display all descendents" %>
-<%= f.input :wrapper_el, required: true, include_blank: false, collection: Spree::MenuBlock::WRAPPER_EL_OPTIONS, hint: "if appending menu items to an existing Spree menu, select '- None -'" %>
-<%= f.input :submenu_wrapper_el, required: true, include_blank: false, collection: Spree::MenuBlock::WRAPPER_EL_OPTIONS, hint: "if appending menu items to an existing Spree menu, select '&lt;ul&gt;'" %>
-<%= f.input :item_wrapper_el, required: true, include_blank: false, collection: Spree::MenuBlock::ITEM_WRAPPER_EL_OPTIONS, hint: "if appending menu items to an existing Spree menu, select '&lt;li&gt;'" %>

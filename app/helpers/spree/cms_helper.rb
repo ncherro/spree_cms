@@ -62,7 +62,6 @@ module Spree
         follow_current: false,
         root_id: nil,
         depth: 0,
-        wrapped: false,
         wrapper_el: 'ul',
         submenu_wrapper_el: 'ul',
         item_wrapper_el: 'li',
@@ -75,7 +74,7 @@ module Spree
       req = request.fullpath
 
       r = ""
-      r << %(<#{options[:wrapper_el]} class="#{options[:wrapper_class]}">) if options[:wrapper_el].present?
+      r << %(<#{options[:wrapper_el]} id="#{options[:wrapper_id]}" class="#{options[:wrapper_class]}">) if options[:wrapper_el].present?
 
       if options[:root_id]
         items = menu.menu_items.order(:position).where(id: options[:root_id])
@@ -108,16 +107,24 @@ module Spree
 
 
     # NOTE: this should be the only front-facing helper method
-    def render_menu_block(menu_block)
+    def render_menu_block(menu_block, *args)
+      defaults = {
+        depth: 0,
+        wrapper_el: 'ul',
+        submenu_wrapper_el: 'ul',
+        item_wrapper_el: 'li',
+        wrapper_class: "cms-menu",
+        wrapper_id: nil,
+      }
+      options = defaults.merge(args.extract_options!)
+
       render_menu_tree(
         menu_block.menu,
-        only_visible: true,
-        follow_current: menu_block.follows_current?,
-        root_id: menu_block.menu_item_id,
-        depth: menu_block.max_levels,
-        wrapper_el: menu_block.wrapper_el,
-        submenu_wrapper_el: menu_block.submenu_wrapper_el,
-        item_wrapper_el: menu_block.item_wrapper_el
+        options.merge({
+          only_visible: true,
+          follow_current: menu_block.follows_current?,
+          root_id: menu_block.menu_item_id,
+        })
       )
     end
 
