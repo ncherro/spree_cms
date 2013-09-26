@@ -55,6 +55,7 @@ module Spree
       if options[:item_wrapper_el].present?
         s << "</#{options[:item_wrapper_el]}>"
       end
+      s
     end
 
     def render_menu_tree(menu, *args, &link_func)
