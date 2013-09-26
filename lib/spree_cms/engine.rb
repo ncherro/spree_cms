@@ -1,11 +1,18 @@
+require 'spree/core'
+require "nested_form"
+require "simple_form"
+require "ancestry"
+
 module SpreeCms
   class Engine < Rails::Engine
-    require 'spree/core'
-    require "nested_form"
-    require "simple_form"
-    require "ancestry"
 
-    isolate_namespace Spree
+    #isolate_namespace Spree
+
+    # if isolated, our helpers won't work unless we add this line to the parent
+    # app's ApplicationController
+    #
+    # helper Spree::CmsHelper
+
     engine_name 'spree_cms'
 
     config.autoload_paths += %W(#{config.root}/lib)
@@ -18,13 +25,6 @@ module SpreeCms
     def self.activate
       Dir.glob(File.join(File.dirname(__FILE__), '../../app/**/*_decorator*.rb')) do |c|
         Rails.configuration.cache_classes ? require(c) : load(c)
-      end
-    end
-
-    # load our helpers - DOES NOT WORK
-    initializer 'spree_cms.action_controller' do |app|
-      ActiveSupport.on_load :action_controller do
-        helper Spree::CmsHelper
       end
     end
 

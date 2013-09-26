@@ -1,5 +1,26 @@
 class Spree::MenuBlock < Spree::Block
 
+  TYPES = [
+    ['Start at root of specified Menu', 1],
+    ['Start at specified Menu Item', 2],
+    ['Show siblings of "current" menu item', 3],
+    ['Show children of "current" menu item', 4],
+  ]
+
+  TYPES_REQUIRING_MENU = [1, 2,]
+  TYPES_REQUIRING_MENU_ITEM = [2,]
+
+  MENU_WRAP_OPTIONS = [
+    ['- None -', 0],
+    ['<ul>', 1],
+    ['<ol>', 2],
+  ]
+
+  MENU_ITEM_WRAP_OPTIONS = [
+    ['- None -', 0],
+    ['<li>', 1],
+  ]
+
   belongs_to :menu, class_name: "Spree::Menu"
   belongs_to :menu_item, class_name: "Spree::MenuItem"
 
@@ -24,25 +45,5 @@ class Spree::MenuBlock < Spree::Block
   end
 
 
-  TYPES = [
-    ['Start at root of specified Menu', 1],
-    ['Start at specified Menu Item', 2],
-    ['Show siblings of "current" menu item', 3],
-    ['Show children of "current" menu item', 4],
-  ]
-
-  TYPES_REQUIRING_MENU = [1, 2,]
-  TYPES_REQUIRING_MENU_ITEM = [2,]
-
-  MENU_WRAP_OPTIONS = [
-    ['- None -', 0],
-    ['<ul>', 1],
-    ['<ol>', 2],
-  ]
-
-  MENU_ITEM_WRAP_OPTIONS = [
-    ['- None -', 0],
-    ['<li>', 1],
-  ]
 
 end
