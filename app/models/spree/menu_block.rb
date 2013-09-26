@@ -10,15 +10,15 @@ class Spree::MenuBlock < Spree::Block
   TYPES_REQUIRING_MENU = [1, 2,]
   TYPES_REQUIRING_MENU_ITEM = [2,]
 
-  MENU_WRAP_OPTIONS = [
-    ['- None -', 0],
-    ['<ul>', 1],
-    ['<ol>', 2],
+  WRAPPER_EL_OPTIONS = [
+    ['- None -', ''],
+    ['<ul>', 'ul'],
+    ['<ol>', 'ol'],
   ]
 
-  MENU_ITEM_WRAP_OPTIONS = [
-    ['- None -', 0],
-    ['<li>', 1],
+  ITEM_WRAPPER_EL_OPTIONS = [
+    ['- None -', ''],
+    ['<li>', 'li'],
   ]
 
   before_save :unset_menu_and_menu_item
@@ -27,9 +27,9 @@ class Spree::MenuBlock < Spree::Block
   belongs_to :menu_item, class_name: "Spree::MenuItem"
 
   attr_accessible :menu_block_type, :menu_id, :menu_item_id, :max_levels,
-    :menu_wrap, :menu_item_wrap
+    :wrapper_el, :submenu_wrapper_el, :item_wrapper_el
 
-  validates :menu_block_type, :menu_wrap, :menu_item_wrap, presence: true
+  validates :menu_block_type, presence: true
   validates :menu_id, presence: true,
     if: Proc.new { |mb| Spree::MenuBlock::TYPES_REQUIRING_MENU.include?(mb.menu_block_type) }
   validates :menu_item_id, presence: true,
@@ -48,15 +48,6 @@ class Spree::MenuBlock < Spree::Block
 
   def follows_current?
     !TYPES_REQUIRING_MENU.include?(self.menu_block_type)
-  end
-
-  def wrapped?
-    wrap = MENU_WRAP_OPTIONS.rassoc(self.menu_wrap).first
-    if wrap == '- None -'
-      false
-    else
-      wrap
-    end
   end
 
   private

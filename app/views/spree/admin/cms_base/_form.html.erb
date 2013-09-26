@@ -6,5 +6,5 @@ singular = object.class.name.underscore.singularize.split('/').last
     <legend align="center"><%= Spree.t("#{params[:action]}_#{singular}".to_s) %></legend>
     <%= render 'fields', object: object, f: f %>
   </fieldset>
-  <%= render 'spree/admin/shared/new_resource_links' %>
+  <%= render 'spree/admin/shared/' + (params[:action] == 'edit' ? 'edit' : 'new') + '_resource_links' %>
 <% end %>

@@ -31,12 +31,37 @@ module Spree
       end
     end
 
+    def render_menu_item(menu_item, children, options)
+      li_classes = []
+      li_classes << 'unpublished' unless menu_item.is_published?
+      li_classes << menu_item.css_class if menu_item.css_class.present?
+      li_id = menu_item.css_id.present? ? %( id="#{menu_item.css_id}") : ''
+      if options[:link_func]
+        link_html = options[:link_func].call(menu_item)
+      else
+        # default
+        link_html = link_to(menu_item.title, menu_item.href)
+      end
+      s = ""
+      if options[:item_wrapper_el].present?
+        s << %(<#{options[:item_wrapper_el]}#{' class="' + li_classes.join(' ') + '"' if li_classes.any?}#{li_id} rel="#{menu_item.id}">)
+      end
+      # recursion
+      s << "#{link_html}#{options[:callback].call(children)}"
+      if options[:item_wrapper_el].present?
+        s << "<#{options[:item_wrapper_el]}>"
+      end
+    end
+
     def render_menu_tree(menu, *args, &link_func)
       defaults = {
         follow_current: false,
         root_id: nil,
         depth: 0,
         wrapped: false,
+        wrapper_el: 'ul',
+        submenu_wrapper_el: 'ul',
+        item_wrapper_el: 'li',
         only_visible: false,
         wrapper_class: "cms-menu",
         override_id: false
@@ -46,7 +71,7 @@ module Spree
       req = request.fullpath
 
       r = ""
-      r << %(<ul class="#{options[:wrapper_class]}">) if options[:wrapped]
+      r << %(<#{options[:wrapper_el]} class="#{options[:wrapper_class]}">) if options[:wrapper_el].present?
 
       if options[:root_id]
         items = menu.menu_items.order(:position).where(id: options[:root_id])
@@ -60,39 +85,25 @@ module Spree
       func = lambda do |nodes|
         cur_depth += 1
         return "" if nodes.empty? || !options[:depth].zero? && cur_depth >= options[:depth]
-        return '<ul>' + nodes.inject("") do |string, (node, children)|
-          if link_func
-            link_html = link_func.call(node)
-          else
-            link_html = link_to(node.title, node.href)
-          end
-          li_classes = []
-          li_classes << 'unpublished' unless node.is_published?
-          # recursion
-          %(#{string}<li#{' class="' + li_classes.join(' ') + '"' if li_classes.any?} rel="#{node.id}">#{link_html}#{func.call(children)}</li>)
-        end + '</ul>'
+        return "<#{options[:submenu_wrapper_el]}>" + nodes.inject("") do |string, (node, children)|
+          string + render_menu_item(node, children, options.merge({ callback: func, link_renderer: link_func }))
+        end + "</#{options[:submenu_wrapper_el]}>"
       end
 
-      # start with the roots
+      # build the roots
       items.each do |item|
-        if link_func
-          link_html = link_func.call(item)
-        else
-          link_html = link_to(item.title, item.href)
-        end
-        li_classes = []
-        li_classes << 'unpublished' unless item.is_published?
-        r << %(<li#{' class="' + li_classes.join(' ') + '"' if li_classes.any?} id="#{item.id}" rel="#{item.id}">#{link_html})
-        # children
-        r << func.call(item.descendants.arrange)
-        r << %(</li>)
+        r << render_menu_item(
+          item,
+          item.descendants.arrange,
+          options.merge({ callback: func, link_renderer: link_func })
+        )
       end
-
-      r << %(</ul>) if options[:wrapped]
-
+      r << %(</#{options[:wrapper_el]}>) if options[:wrapper_el].present?
       r.html_safe
     end
 
+
+    # NOTE: this should be the only front-facing helper method
     def render_menu_block(menu_block)
       render_menu_tree(
         menu_block.menu,
@@ -100,7 +111,9 @@ module Spree
         follow_current: menu_block.follows_current?,
         root_id: menu_block.menu_item_id,
         depth: menu_block.max_levels,
-        wrapped: menu_block.wrapped?
+        wrapper_el: menu_block.wrapper_el,
+        submenu_wrapper_el: menu_block.submenu_wrapper_el,
+        item_wrapper_el: menu_block.item_wrapper_el
       )
     end
 

@@ -57,12 +57,13 @@ FactoryGirl.define do
   factory :menu_block, class: Spree::MenuBlock do
     name Faker::Lorem.words(2).join(' ').capitalize
     max_levels 0
-    menu_wrap Spree::MenuBlock::MENU_WRAP_OPTIONS.assoc('<ul>').last
-    menu_item_wrap Spree::MenuBlock::MENU_ITEM_WRAP_OPTIONS.assoc('<li>').last
+    wrapper_el Spree::MenuBlock::WRAPPER_EL_OPTIONS.assoc('<ul>').last
+    submenu_wrapper_el Spree::MenuBlock::WRAPPER_EL_OPTIONS.assoc('<ul>').last
+    item_wrapper_el Spree::MenuBlock::ITEM_WRAPPER_EL_OPTIONS.assoc('<li>').last
 
     factory :root_menu_block do
       menu_block_type Spree::MenuBlock::TYPES.assoc('Start at root of specified Menu').last
-      menu_wrap Spree::MenuBlock::MENU_WRAP_OPTIONS.assoc('- None -').last
+      wrapper_el Spree::MenuBlock::WRAPPER_EL_OPTIONS.assoc('- None -').last
       menu
     end
 

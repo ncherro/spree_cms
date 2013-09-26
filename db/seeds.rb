@@ -4,6 +4,7 @@ require 'spree_cms/factories'
 reset_cms = true
 
 if reset_cms
+  puts "clearing CMS tables"
   Spree::Menu.delete_all
   Spree::MenuItem.delete_all
   Spree::Layout.delete_all
@@ -15,6 +16,7 @@ end
 
 
 if Spree::Menu.count.zero?
+  puts "creating CMS Menus"
   main_menu = FactoryGirl.create(:menu, title: 'Main menu')
   utility_menu = FactoryGirl.create(:menu, title: 'Utility menu')
   footer_menu = FactoryGirl.create(:menu, title: 'Footer menu')
@@ -26,6 +28,7 @@ end
 
 
 if Spree::Layout.count.zero?
+  puts "creating default CMS Layout"
   default = FactoryGirl.create(:default_layout)
 else
   default = Spree::Layout.find_by_name('Default')
@@ -33,6 +36,7 @@ end
 
 
 if Spree::MenuItem.count.zero?
+  puts "creating CMS Menu Items"
 
   main_menu_items = []
   utility_menu_items = []
@@ -55,4 +59,14 @@ if Spree::MenuItem.count.zero?
     FactoryGirl.create(:menu_item_with_page, menu: footer_menu, parent: footer_menu_items.first)
   end
 
+end
+
+
+if Spree::MenuBlock.find_by_name('Main menu').nil?
+  FactoryGirl.create(
+    :root_menu_block,
+    menu: main_menu,
+    name: 'Main menu',
+    wrapper_el: Spree::MenuBlock::WRAPPER_EL_OPTIONS.assoc('- None -').last
+  )
 end

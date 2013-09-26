@@ -11,8 +11,10 @@ class CreateSpreeBlocks < ActiveRecord::Migration
       t.references :menu
       t.references :menu_item
       t.integer :max_levels, null: false, default: 0
-      t.integer :menu_wrap
-      t.integer :menu_item_wrap
+
+      t.string :wrapper_el, null: false, default: ''
+      t.string :item_wrapper_el, null: false, default: ''
+      t.string :submenu_wrapper_el, null: false, default: ''
 
       t.timestamps
     end
