@@ -20,8 +20,9 @@ bundle exec rails g spree_cms:install
 ```
 
 Pull the CMS templates into your app (optional)
+
 ```shell
-bundle exec rails g spree_cms:install
+bundle exec rails g spree_cms:views
 ```
 
 Run the rake task to pull Static Blocks into your database. Run this any time
