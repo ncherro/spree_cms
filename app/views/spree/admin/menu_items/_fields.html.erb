@@ -18,8 +18,8 @@
   <%= f.input :is_visible_in_menu, label: "Visible in Menu?", hint: "uncheck to hide this from the menu. the content will still be accessible by direct link" %>
 
   <%= field_set_tag "CSS" do %>
-    <%= f.input :css_class %>
-    <%= f.input :css_id %>
+    <%= f.input :css_class, label: "CSS Class" %>
+    <%= f.input :css_id, label: "CSS Id" %>
   <% end %>
 </div>
 

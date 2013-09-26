@@ -51,7 +51,12 @@ class Spree::MenuBlock < Spree::Block
   end
 
   def wrapped?
-    MENU_WRAP_OPTIONS.rassoc(self.menu_wrap).first == '- None -'
+    wrap = MENU_WRAP_OPTIONS.rassoc(self.menu_wrap).first
+    if wrap == '- None -'
+      false
+    else
+      wrap
+    end
   end
 
   private

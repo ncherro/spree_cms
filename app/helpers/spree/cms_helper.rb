@@ -17,7 +17,7 @@ module Spree
     end
 
     def render_admin_menu_tree(menu)
-      render_menu_tree(@menu) do |node|
+      render_menu_tree(@menu, override_id: true) do |node|
         actions = []
         actions << link_to("+ Add child", new_admin_menu_item_url(menu_id: params[:menu_id], parent_id: node.id))
         actions << link_to("/ Edit", edit_admin_menu_item_url(node))
@@ -39,6 +39,7 @@ module Spree
         wrapped: false,
         only_visible: false,
         wrapper_class: "cms-menu",
+        override_id: false
       }
       options = defaults.merge(args.extract_options!)
 
@@ -55,8 +56,10 @@ module Spree
 
       items = items.visible if options[:only_visible]
 
+      cur_depth = 0
       func = lambda do |nodes|
-        return "" if nodes.empty?
+        cur_depth += 1
+        return "" if nodes.empty? || !options[:depth].zero? && cur_depth >= options[:depth]
         return '<ul>' + nodes.inject("") do |string, (node, children)|
           if link_func
             link_html = link_func.call(node)
@@ -65,10 +68,12 @@ module Spree
           end
           li_classes = []
           li_classes << 'unpublished' unless node.is_published?
+          # recursion
           %(#{string}<li#{' class="' + li_classes.join(' ') + '"' if li_classes.any?} rel="#{node.id}">#{link_html}#{func.call(children)}</li>)
         end + '</ul>'
       end
 
+      # start with the roots
       items.each do |item|
         if link_func
           link_html = link_func.call(item)
@@ -78,6 +83,7 @@ module Spree
         li_classes = []
         li_classes << 'unpublished' unless item.is_published?
         r << %(<li#{' class="' + li_classes.join(' ') + '"' if li_classes.any?} id="#{item.id}" rel="#{item.id}">#{link_html})
+        # children
         r << func.call(item.descendants.arrange)
         r << %(</li>)
       end
