@@ -17,7 +17,7 @@ module Spree
     end
 
     def render_admin_menu_tree(menu)
-      render_menu_tree(@menu, override_id: true) do |node|
+      render_menu_tree(@menu, override_id: true, wrapper_el: nil) do |node|
         actions = []
         actions << link_to("+ Add child", new_admin_menu_item_url(menu_id: params[:menu_id], parent_id: node.id))
         actions << link_to("/ Edit", edit_admin_menu_item_url(node))
@@ -35,9 +35,13 @@ module Spree
       li_classes = []
       li_classes << 'unpublished' unless menu_item.is_published?
       li_classes << menu_item.css_class if menu_item.css_class.present?
-      li_id = menu_item.css_id.present? ? %( id="#{menu_item.css_id}") : ''
-      if options[:link_func]
-        link_html = options[:link_func].call(menu_item)
+      if options[:override_id]
+        li_id = %( id="#{menu_item.id}")
+      else
+        li_id = menu_item.css_id.present? ? %( id="#{menu_item.css_id}") : ''
+      end
+      if options[:link_renderer]
+        link_html = options[:link_renderer].call(menu_item)
       else
         # default
         link_html = link_to(menu_item.title, menu_item.href)
@@ -49,7 +53,7 @@ module Spree
       # recursion
       s << "#{link_html}#{options[:callback].call(children)}"
       if options[:item_wrapper_el].present?
-        s << "<#{options[:item_wrapper_el]}>"
+        s << "</#{options[:item_wrapper_el]}>"
       end
     end
 
