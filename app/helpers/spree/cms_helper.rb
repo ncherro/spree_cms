@@ -67,12 +67,10 @@ module Spree
         item_wrapper_el: 'li',
         only_visible: false,
         wrapper_class: "cms-menu",
-        override_id: false
+        override_id: false,
+        cache: true,
       }
       options = defaults.merge(args.extract_options!)
-
-      # NOTE: could we cache this like this?
-      # Rails.cache.fetch(options.merge({menu_id: menu.id, link_func: link_func}) do
 
       r = ""
       r << %(<#{options[:wrapper_el]} id="#{options[:wrapper_id]}" class="#{options[:wrapper_class]}">) if options[:wrapper_el].present?
@@ -107,6 +105,22 @@ module Spree
       r.html_safe
     end
 
+    # NOTE: this method exists in Rails 4
+    # https://github.com/rails/rails/blob/4-0-stable/actionpack/lib/action_view/helpers/cache_helper.rb
+    #
+    # but not Rails 3.2
+    # https://github.com/rails/rails/blob/3-2-stable/actionpack/lib/action_view/helpers/cache_helper.rb
+    def cache_if(condition, name = {}, options = nil, &block)
+      if condition
+        cache(name, options, &block)
+      else
+        yield
+      end
+
+      nil
+    end
+
+
 
     # NOTE: this should be the only front-facing helper method
     def render_menu_block(menu_block, *args)
@@ -117,31 +131,36 @@ module Spree
         item_wrapper_el: 'li',
         wrapper_class: "cms-menu",
         wrapper_id: nil,
+        cache: true,
       }
       options = defaults.merge(args.extract_options!)
 
-      if menu_block.follows_current?
-        # attempt to find the current menu
-        mi = Spree::MenuItem.find(
-          Spree::MenuItem.id_from_cached_slug(Spree::CmsRoutes.remove_spree_mount_point(request.fullpath))
-        )
-        if mi
-          render_menu_tree(
-            mi.menu,
+      # NOTE: the menu_block should be touched anytime related menu is touched
+      # need to touch follows_current? blocks anytime any menu is touched
+      cache_if options.delete(:cache), [menu_block, menu_block.fragment_cache_options(request.fullpath, options)] do
+        if menu_block.follows_current?
+          # attempt to find the current menu
+          mi = Spree::MenuItem.find(
+            Spree::MenuItem.id_from_cached_slug(Spree::CmsRoutes.remove_spree_mount_point(request.fullpath))
+          )
+          if mi
+            safe_concat(render_menu_tree(
+              mi.menu,
+              options.merge({
+                only_visible: true,
+                root_id: (menu_block.shows_children? ? mi.id : mi.parent_id),
+              })
+            ))
+          end
+        else
+          safe_concat(render_menu_tree(
+            menu_block.menu,
             options.merge({
               only_visible: true,
-              root_id: (menu_block.shows_children? ? mi.id : mi.parent_id),
+              root_id: menu_block.menu_item_id,
             })
-          )
+          ))
         end
-      else
-        render_menu_tree(
-          menu_block.menu,
-          options.merge({
-            only_visible: true,
-            root_id: menu_block.menu_item_id,
-          })
-        )
       end
 
     end

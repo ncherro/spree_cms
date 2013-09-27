@@ -34,6 +34,13 @@ class Spree::MenuBlock < Spree::Block
     end
   end
 
+  def fragment_cache_options(path, options={})
+    # return a hash used by the fragment cacher
+    # if this follows the current menu item, then the path is relevant
+    options.merge({ path: Spree::CmsRoutes.remove_spree_mount_point(path) }) if self.follows_current?
+    options
+  end
+
   def follows_current?
     !TYPES_REQUIRING_MENU.include?(self.menu_block_type)
   end
