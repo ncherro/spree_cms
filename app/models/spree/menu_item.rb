@@ -49,11 +49,14 @@ class Spree::MenuItem < ActiveRecord::Base
     end
 
     def by_cached_slug(cached_slug)
-      slug = Cms.remove_spree_mount_point(cached_slug)
-      where(cached_slug: slug)
+      where(cached_slug: Spree::CmsRoutes.remove_spree_mount_point(cached_slug))
     end
 
     def id_from_cached_slug(cached_slug)
+      # returns the id of a published menu_item by cached slug
+      #
+      # doing this b/c it doesn't seem like a good idea to store an instance in
+      # the cache
       Rails.cache.fetch("#{CACHE_PREFIX}#{cached_slug}") do
         menu_item = published.by_cached_slug(cached_slug).first
         return menu_item ? menu_item.id : nil
@@ -75,7 +78,7 @@ class Spree::MenuItem < ActiveRecord::Base
     if self.url.present?
       self.url
     else
-      self.cached_slug
+      Spree::CmsRoutes.add_spree_mount_point(self.cached_slug)
     end
   end
 

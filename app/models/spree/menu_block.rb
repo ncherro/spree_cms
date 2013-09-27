@@ -38,6 +38,10 @@ class Spree::MenuBlock < Spree::Block
     !TYPES_REQUIRING_MENU.include?(self.menu_block_type)
   end
 
+  def shows_children?
+    self.menu_block_type == TYPES.assoc('Show children of "current" menu item').last
+  end
+
   private
   def unset_menu_and_menu_item
     unless TYPES_REQUIRING_MENU_ITEM.include?(self.menu_block_type)

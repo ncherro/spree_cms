@@ -15,7 +15,7 @@ module SpreeCms
 
     engine_name 'spree_cms'
 
-    config.autoload_paths += %W(#{config.root}/lib)
+    config.autoload_paths += %W(#{config.root}/lib #{config.root}/lib/spree)
 
     # use rspec for tests
     config.generators do |g|

@@ -60,7 +60,6 @@ module Spree
 
     def render_menu_tree(menu, *args, &link_func)
       defaults = {
-        follow_current: false,
         root_id: nil,
         depth: 0,
         wrapper_el: 'ul',
@@ -72,12 +71,14 @@ module Spree
       }
       options = defaults.merge(args.extract_options!)
 
-      req = request.fullpath
+      # NOTE: could we cache this like this?
+      # Rails.cache.fetch(options.merge({menu_id: menu.id, link_func: link_func}) do
 
       r = ""
       r << %(<#{options[:wrapper_el]} id="#{options[:wrapper_id]}" class="#{options[:wrapper_class]}">) if options[:wrapper_el].present?
 
       if options[:root_id]
+        # INCORRECT - not where(id: options[:root_id])
         items = menu.menu_items.order(:position).where(id: options[:root_id])
       else
         items = menu.menu_items.order(:position).where(ancestry_depth: 0)
@@ -119,14 +120,30 @@ module Spree
       }
       options = defaults.merge(args.extract_options!)
 
-      render_menu_tree(
-        menu_block.menu,
-        options.merge({
-          only_visible: true,
-          follow_current: menu_block.follows_current?,
-          root_id: menu_block.menu_item_id,
-        })
-      )
+      if menu_block.follows_current?
+        # attempt to find the current menu
+        mi = Spree::MenuItem.find(
+          Spree::MenuItem.id_from_cached_slug(Spree::CmsRoutes.remove_spree_mount_point(request.fullpath))
+        )
+        if mi
+          render_menu_tree(
+            mi.menu,
+            options.merge({
+              only_visible: true,
+              root_id: (menu_block.shows_children? ? mi.id : mi.parent_id),
+            })
+          )
+        end
+      else
+        render_menu_tree(
+          menu_block.menu,
+          options.merge({
+            only_visible: true,
+            root_id: menu_block.menu_item_id,
+          })
+        )
+      end
+
     end
 
   end
