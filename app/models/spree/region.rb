@@ -17,4 +17,7 @@ class Spree::Region < ActiveRecord::Base
 
   validates :name, uniqueness: { scope: :spree_layout_id, message: "has already been used in this Layout" }
 
+  def overridden_blocks_regions
+  end
+
 end

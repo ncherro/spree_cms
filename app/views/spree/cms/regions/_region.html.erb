@@ -1,11 +1,14 @@
+<% page ||= nil %>
 <%= cms_wrapper(region) do |obj|
   r = ""
   obj.blocks_regions.each do |block_region|
-    if block_region.template.present?
+    br = block_region.override(page)
+    next if br.nil?
+    if br.template.present?
       # render the custom thing
-      r << render("spree/cms/#{block_region.block.class.name.demodulize.tableize}/#{block_region.template}", block: block_region.block)
+      r << render("spree/cms/#{br.block.class.name.demodulize.tableize}/#{br.template}", block: br.block)
     else
-      r << render("spree/cms/#{block_region.block.class.name.demodulize.tableize}/#{block_region.block.class.name.demodulize.underscore}", block: block_region.block)
+      r << render("spree/cms/#{br.block.class.name.demodulize.tableize}/#{br.block.class.name.demodulize.underscore}", block: br.block)
     end
   end
   r.html_safe

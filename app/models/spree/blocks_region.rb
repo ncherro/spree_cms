@@ -25,4 +25,17 @@ class Spree::BlocksRegion < ActiveRecord::Base
     end
   end
 
+  def override(page)
+    if bro = Spree::BlocksRegionOverride.where(spree_page_id: page.id, spree_blocks_region_id: self.id).first
+      if bro.spree_block_id.nil?
+        # return nothing (we are hiding the block)
+        nil
+      else
+        # override this
+        self.spree_block_id = bro.spree_block_id
+        self.template_override = bro.template_override
+      end
+    end
+  end
+
 end
