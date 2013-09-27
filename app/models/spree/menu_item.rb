@@ -56,9 +56,7 @@ class Spree::MenuItem < ActiveRecord::Base
 
     def id_from_cached_slug(cached_slug)
       # returns the id of a published menu_item by cached slug
-      #
-      # doing this b/c it doesn't seem like a good idea to store an instance in
-      # the cache
+      cached_slug ||= ''
       Rails.cache.fetch("#{CACHE_PREFIX}#{cached_slug}") do
         menu_item = published.by_cached_slug(cached_slug).first
         return menu_item ? menu_item.id : nil
@@ -126,7 +124,7 @@ class Spree::MenuItem < ActiveRecord::Base
     logger.info "drop_cached_slug for #{self.id}\n\n"
 
     if self.cached_slug_changed? || self.ancestry_changed? || self.is_published_changed?
-
+      # necessary?
       self.reload
 
       # loop through the entire tree and do the same thing, skipping callbacks

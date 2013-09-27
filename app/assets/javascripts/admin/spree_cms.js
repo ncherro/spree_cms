@@ -88,16 +88,16 @@
   }
 
   function init() {
-    $menu = $('#menu_block_menu_id');
+    $menu = $('#menu_block_spree_menu_id');
     $menu_wrap = $menu.parent();
-    $menu_item = $('#menu_block_menu_item_id');
+    $menu_item = $('#menu_block_spree_menu_item_id');
     $menu_item_wrap = $menu_item.parent();
     $menu_block_type = $('#menu_block_menu_block_type');
 
     $menu_block_type.change(menuBlockTypeChanged).trigger('change');
 
     $menu.cmsMenuSelect({
-      menu_item_sel: '#menu_block_menu_item_id',
+      menu_item_sel: '#menu_block_spree_menu_item_id',
       show_none: false,
       toggle_visibility: false // handled by the menu block type toggler
     });

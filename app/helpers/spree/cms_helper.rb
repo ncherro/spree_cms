@@ -147,10 +147,13 @@ module Spree
       # using a fragment cache here
       cache_if options.delete(:cache), [menu_block, menu_block.fragment_cache_options(request.fullpath, options)] do
         path = Spree::CmsRoutes.remove_spree_mount_point(request.fullpath)
+
         mi = nil
         if menu_block.sets_active_tree? || menu_block.follows_current?
-          mi = Spree::MenuItem.find(Spree::MenuItem.id_from_cached_slug(path))
+          # find_by_id to avoid ActiveRecord error
+          mi = Spree::MenuItem.find_by_id(Spree::MenuItem.id_from_cached_slug(path))
         end
+
         if menu_block.follows_current?
           # attempt to find the current menu
           if mi
@@ -168,7 +171,7 @@ module Spree
             menu_block.menu,
             options.merge({
               only_visible: true,
-              root_id: menu_block.menu_item_id,
+              root_id: menu_block.spree_menu_item_id,
               path_ids: (mi ? mi.path_ids : []),
             })
           ))
