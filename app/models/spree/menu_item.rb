@@ -11,7 +11,8 @@ class Spree::MenuItem < ActiveRecord::Base
   has_many :menu_blocks, class_name: "Spree::MenuBlock", dependent: :destroy
 
   has_one :page, class_name: "Spree::Page", foreign_key: "spree_menu_item_id"
-  belongs_to :menu, class_name: "Spree::Menu", foreign_key: "spree_menu_id"
+  belongs_to :menu, class_name: "Spree::Menu", foreign_key: "spree_menu_id",
+    touch: true
 
   delegate :template, to: :page, allow_nil: true
 

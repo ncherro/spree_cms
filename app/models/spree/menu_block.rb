@@ -37,8 +37,13 @@ class Spree::MenuBlock < Spree::Block
   def fragment_cache_options(path, options={})
     # return a hash used by the fragment cacher
     # if this follows the current menu item, then the path is relevant
-    options.merge({ path: Spree::CmsRoutes.remove_spree_mount_point(path) }) if self.follows_current?
+    options.merge!({ path: Spree::CmsRoutes.remove_spree_mount_point(path) }) if self.sets_active_tree? || self.follows_current?
     options
+  end
+
+  def sets_active_tree?
+    # TODO: make this configurable
+    true
   end
 
   def follows_current?
@@ -47,6 +52,12 @@ class Spree::MenuBlock < Spree::Block
 
   def shows_children?
     self.menu_block_type == TYPES.assoc('Show children of "current" menu item').last
+  end
+
+  class << self
+    def follow_current
+      where('menu_block_type NOT IN (?)', TYPES_REQUIRING_MENU)
+    end
   end
 
   private
