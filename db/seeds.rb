@@ -66,6 +66,5 @@ if Spree::MenuBlock.find_by_name('Main menu').nil?
     :root_menu_block,
     menu: main_menu,
     name: 'Main menu',
-    wrapper_el: Spree::MenuBlock::WRAPPER_EL_OPTIONS.assoc('- None -').last
   )
 end
