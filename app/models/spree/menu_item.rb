@@ -8,7 +8,8 @@ class Spree::MenuItem < ActiveRecord::Base
   before_validation :cache_ancestry, unless: Proc.new { |item| item.skip_ancestry_callbacks }
   after_save :drop_cached_slug, unless: Proc.new { |item| item.skip_ancestry_callbacks }
 
-  has_many :menu_blocks, class_name: "Spree::MenuBlock", dependent: :destroy
+  has_many :menu_blocks, class_name: "Spree::MenuBlock",
+    foreign_key: "spree_menu_item_id", dependent: :destroy
 
   has_one :page, class_name: "Spree::Page", foreign_key: "spree_menu_item_id"
   belongs_to :menu, class_name: "Spree::Menu", foreign_key: "spree_menu_id",

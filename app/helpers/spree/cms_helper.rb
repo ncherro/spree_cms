@@ -35,11 +35,8 @@ module Spree
       item_classes = []
       item_classes << 'unpublished' unless menu_item.is_published?
       item_classes << menu_item.css_class if menu_item.css_class.present?
-      item_classes << 'active' if options[:path_ids].include?(menu_item.id)
-      item_classes << 'on' if options[:path_ids].last == menu_item.id
-
-      logger.debug item_classes.to_yaml
-
+      item_classes << 'cms-active' if options[:path_ids].include?(menu_item.id)
+      item_classes << 'cms-on' if options[:path_ids].last == menu_item.id
       if options[:override_id]
         item_id = %( id="#{menu_item.id}")
       else

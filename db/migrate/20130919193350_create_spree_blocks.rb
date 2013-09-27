@@ -8,11 +8,13 @@ class CreateSpreeBlocks < ActiveRecord::Migration
 
       # stuff specific to menu blocks
       t.integer :menu_block_type
-      t.references :menu
-      t.references :menu_item
+      t.belongs_to :spree_menu
+      t.belongs_to :spree_menu_item
 
       t.timestamps
     end
     add_index :spree_blocks, :name
+    add_index :spree_blocks, :spree_menu_id
+    add_index :spree_blocks, :spree_menu_item_id
   end
 end
