@@ -26,7 +26,7 @@ class Spree::BlocksRegion < ActiveRecord::Base
   end
 
   def override(page)
-    # NOTE: this is very inefficient. think of a better way
+    # NOTE: this seems very inefficient. think of a better way
     if bro = Spree::BlocksRegionOverride.where(spree_page_id: page.id, spree_blocks_region_id: self.id).first
       if bro.spree_block_id.nil?
         # return nothing (we are hiding the block)
@@ -37,6 +37,7 @@ class Spree::BlocksRegion < ActiveRecord::Base
         self.template_override = bro.template
       end
     else
+      # there is no override
       self
     end
   end
