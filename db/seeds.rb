@@ -12,6 +12,7 @@ if reset_cms
   Spree::Block.delete_all
   Spree::Page.delete_all
   Spree::BlocksRegion.delete_all
+  Spree::CmsImage.delete_all
 end
 
 
@@ -32,6 +33,14 @@ if Spree::Layout.count.zero?
   default = FactoryGirl.create(:default_layout)
 else
   default = Spree::Layout.find_by_name('Default')
+end
+
+
+if Spree::CmsImage.count.zero?
+  puts "creating CMS Images"
+  Spree::CmsImage.create!(
+    file_url: 'http://upload.wikimedia.org/wikipedia/commons/2/26/YellowLabradorLooking_new.jpg'
+  )
 end
 
 

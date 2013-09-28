@@ -6,6 +6,7 @@ class CreateSpreePages < ActiveRecord::Migration
 
       t.string :title
       t.text :body
+      t.text :body_cached
 
       t.string :partial_override
 

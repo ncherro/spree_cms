@@ -18,6 +18,7 @@ Spree::Core::Engine.routes.prepend do
     resources :menus do
       get 'menu_item_options', on: :member
     end
+    resources :cms_images
   end
 
   constraints(Spree::CmsRoutes) do

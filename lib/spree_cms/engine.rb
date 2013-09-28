@@ -1,7 +1,9 @@
-require 'spree/core'
+require "spree/core"
 require "nested_form"
 require "simple_form"
 require "ancestry"
+require "rack/cache"
+require "dragonfly"
 
 module SpreeCms
   class Engine < Rails::Engine

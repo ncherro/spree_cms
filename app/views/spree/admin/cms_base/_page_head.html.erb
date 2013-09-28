@@ -4,5 +4,6 @@
     <li><%= tab 'Content', route: 'admin_menus', css_class: ('selected' if /#{spree.root_path.gsub("/", "\/")}admin\/(menus|menu_items)/ === request.fullpath) %></li>
     <li><%= tab :layouts, route: 'admin_layouts', match_path: '/layouts' %></li>
     <li><%= tab :blocks, route: 'admin_blocks', css_class: ('selected' if /#{spree.root_path.gsub("/", "\/")}admin\/[\w-]*blocks/ === request.fullpath) %></li>
+    <li><%= tab 'Images', route: 'admin_cms_images', match_path: '/cms_images' %></li>
   </ul>
 <% end %>

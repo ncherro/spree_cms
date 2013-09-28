@@ -1,5 +1,8 @@
 class Spree::Page < ActiveRecord::Base
 
+  before_save :reset_body_cache
+
+
   belongs_to :layout, class_name: "Spree::Layout",
     foreign_key: "spree_layout_id"
 
@@ -28,8 +31,26 @@ class Spree::Page < ActiveRecord::Base
   validates :title, presence: true
 
 
+  # override the body reader
+  def body
+    if self.body_cached.nil?
+      cached = Spree::CmsImage.replace_tokens(read_attribute(:body))
+      self.update_column('body_cached', cached)
+      cached
+    else
+      # return the cached body
+      self.body_cached
+    end
+  end
+
   def partial
     self.partial_override.present? ? self.partial_override : self.template_partial
+  end
+
+  private
+  def reset_body_cache
+    self.body_cached = nil if self.body_changed?
+    true
   end
 
 end
