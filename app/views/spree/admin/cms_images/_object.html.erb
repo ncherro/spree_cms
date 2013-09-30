@@ -16,7 +16,7 @@ when :table_row
 <%
 when :find_or_create
 %>
-<li>
+<li class="clearfix<%= ' with-image' if object.file_uid? %> <%= cycle 'even', 'odd' %>">
   <%= image_tag(object.file.thumb('120x120').url, alt: object.alt) if object.file_uid? %>
   <div>
     <%= object.name %> - original size: <%= object.file.width %>x<%= object.file.height %>px

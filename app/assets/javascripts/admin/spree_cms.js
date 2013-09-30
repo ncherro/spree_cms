@@ -2,6 +2,8 @@
 //= require jquery_nested_form
 //= require admin/libs/jquery.mjs.nestedSortable
 //= require admin/plugins/jquery.cmsMenuSelect
+//= require admin/libs/tinymce/jquery.tinymce.min
+//= require admin/libs/tinymce/tinymce.min
 
 // MENUS / MENU ITEM TREES
 (function($, window, document, undefined) {
@@ -109,79 +111,77 @@
 
 
 
-// CMS IMAGE SELECTOR
+/*
+window.CMS_IMAGE = {
+  submitted: function(data) {
+    // remove the iframe overlay
+    $('#iframe-overlay').remove();
+
+    var vals = {},
+        val = $('#menu_item_page_attributes_body').val(),
+        pos = window.CMS_IMAGE.text_position,
+        token = '',
+        attrs = []
+
+    for (var i=0, len=data.length; i<len; i++) {
+      vals[data[i].name] = data[i].value;
+    }
+
+    if (vals.css_id) attrs.push('id:"' + vals.css_id + '"');
+    if (vals.css_class) attrs.push('class:"' + vals.css_class + '"');
+    if (attrs.length) {
+      attrs = ' ' + attrs.join(' ');
+    } else {
+      attrs = '';
+    }
+
+    token = '[image:' + vals.cms_image_id + ' ' + (vals.w || 0) + 'x' + (vals.h || 0) + vals.style + attrs + ']';
+
+    $('#menu_item_page_attributes_body').val(val.slice(0, pos) + ' ' + token + ' ' + val.slice(pos));
+  }
+};
+*/
+
+
+
+
 (function($, window, document, undefined) {
-  var $find_wrap,
-      $find,
-      $create_wrap,
-      $create_form,
-      $form_wrap,
-      $form,
-      $cancel_form,
-      $img_wrap;
-
-  function handleSelect(e) {
-  }
-
-  function handleCreate(e) {
-    // cannot upload files - need to use something else...
-
-    e.preventDefault();
-
-    // reset form errors
-    $create_form.find('.input').removeClass('withError').find('.formError').remove();
-
-    $.ajax({
-      url: $create_form.attr('action') + '.json',
-      data: $create_form.serialize(),
-      type: 'POST'
-    }).success(function(a, b, c) {
-      console.log('success', a, b, c)
-    }).error(function(data) {
-      var key, i, len, error_text;
-      for (key in data.responseJSON.errors) {
-        $('.input.cms_image_' + key)
-          .addClass('withError')
-          .append('<span class="formError">' + data.responseJSON.errors[key].join('<br />') + '</span>');
-      }
-    });
-  }
-
-  function showSelect(e) {
-    e.preventDefault();
-    $('#cms-image-id').val($(this).attr('rel'));
-    $img_wrap.html('').append($(this).parent().prev().clone());
-    $form_wrap.show();
-    $form.find('input[type="text"]').val('');
-    $form.find('select option').removeAttr('selected').first().attr('selected', 'selected');
-    $find_wrap.hide();
-  }
-
-  function showCreate(e) {
-    e.preventDefault()
-    $create_wrap.show();
-  }
-
-  function cancelSelect() {
-    $form_wrap.hide();
-    $find_wrap.show();
-  }
 
   function init() {
-    $find_wrap = $('#cms-image-find');
-    $create_wrap = $('#cms-image-create');
-    $create_form = $create_wrap.find('form');
-    $form_wrap = $('#cms-image-select');
-    $form = $form_wrap.find('form');
-    $img_wrap = $form_wrap.find('.img-wrap');
 
-    $find_wrap.find('h3 a').click(showCreate);
-    $find_wrap.find('li a').click(showSelect);
-    $form_wrap.find('.icon-remove').click(cancelSelect);
+    tinymce.PluginManager.add('cms_image', function(editor, url) {
+      // Adds a menu item to the tools menu
+      editor.addMenuItem('cms_image', {
+        text: 'CMS Image',
+        context: 'insert',
+        onclick: function() {
+          // Open window with a specific url
+          editor.windowManager.open({
+            title: 'CMS Image',
+            url: '/admin/cms_images/find_or_create',
+            width: 600,
+            height: 600,
+            buttons: [{
+              text: 'Close',
+              onclick: 'close'
+            }]
+          });
+        }
+      });
+    });
 
-//    $create_form.submit(handleCreate);
+
+    $('textarea.tinymce').each(function() {
+      // TODO: look into global CSS settings
+      path = $(this).data('mce');
+      $(this).tinymce({
+        //script_url: path,
+        theme : "modern",
+        plugins: "cms_image",
+        image_advtab: true
+      });
+    });
   }
-
-  $(init); // on document.ready
+  $(init);
 
 }(jQuery, window, document));
