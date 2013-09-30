@@ -4,7 +4,7 @@ case context
 when :table_row
 %>
 <tr>
-  <td class="align-center"><%= image_tag(object.file.thumb('120x120').url, object.alt) if object.file_uid? %></td>
+  <td class="align-center"><%= image_tag(object.file.thumb('120x120').url, alt: object.alt) if object.file_uid? %></td>
   <td class="align-center"><%= object.name %></td>
   <td class="align-center"><%= object.alt %></td>
   <td class="actions" data-hook="admin_<%= controller_name %>_index_row_actions">

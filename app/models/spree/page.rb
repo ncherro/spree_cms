@@ -20,7 +20,7 @@ class Spree::Page < ActiveRecord::Base
 
   attr_accessible :title, :body, :meta_description, :partial_override,
     :meta_title, :meta_keywords, :spree_layout_id,
-    :blocks_region_overrides_attributes
+    :blocks_region_overrides_attributes, :body_cached
 
 
   delegate :template, :regions, to: :layout, allow_nil: true
@@ -34,7 +34,7 @@ class Spree::Page < ActiveRecord::Base
   # override the body reader
   def body
     if self.body_cached.nil?
-      cached = Spree::CmsImage.replace_tokens(read_attribute(:body))
+      cached = Spree::CmsImage.replace_tokens(self.read_attribute(:body))
       self.update_column('body_cached', cached)
       cached
     else
