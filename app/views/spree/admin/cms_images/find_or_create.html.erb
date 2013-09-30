@@ -1,0 +1,68 @@
+<div id="cms-image-find-or-create">
+
+  <div id="cms-image-select" class="hide-on-load">
+    <form action="">
+      <input type="hidden" id="cms-image-id" name="cms_image_id" value="">
+      <div class="img-wrap"></div>
+      <fieldset>
+        <legend>Size</legend>
+        <div class="input">
+          <label for="style">Resize style</label>
+          <select name="style" id="style">
+            <option selected="selected" value="">Resize to fit</value>
+            <option value=">">Resize to fill</value>
+            <option value="#">Crop</value>
+            <option value="none">No resize (show original)</value>
+          </select>
+        </div>
+        <div class="input">
+          <label for="w">Width</label>
+          <input type="text" name="w" id="w">
+          <span class="info">set to '0' or leave blank for variable width</span>
+        </div>
+        <div class="input">
+          <label for="h">Height</label>
+          <input type="text" name="h" id="h">
+          <span class="info">set to '0' or leave blank for variable height</span>
+        </div>
+      </fieldset>
+      <div class="input">
+        <label for="class">Position</label>
+        <select name="class" id="class">
+          <option selected="selected" value="">Inline</value>
+          <option value="block">Block</value>
+          <option value="float-left">Float left</value>
+          <option value="float-right">Float right</value>
+        </select>
+      </div>
+      <div class="input">
+        <label for="id">CSS Id</label>
+        <input type="text" name="id" id="id">
+        <span class="info">leave blank unless you'd like this image to have a specific CSS Id</span>
+      </div>
+      <div class="form-buttons filter-actions actions">
+        <button class="icon-ok button" name="button" type="submit">Insert</button>
+        <span class="or">or</span>
+        <a href="#" class="button icon_link with-tip icon-remove"><span class="text">Cancel</span></a>
+      </div>
+    </form>
+  </div>
+
+  <div id="cms-image-create" <% unless params[:action] == 'submit_find_or_create' %> class="hide-on-load"<% end %>>
+    <h3>Upload an Image</h3>
+    <%= simple_form_for @object, url: url_for(submit_find_or_create_admin_cms_images_path), html: { multipart: true } do |f| %>
+      <fieldset>
+        <legend align="center">Image</legend>
+        <%= render 'fields', object: @object, f: f %>
+      </fieldset>
+      <%= render 'spree/admin/shared/new_resource_links' %>
+    <% end %>
+  </div>
+
+  <div id="cms-image-find">
+    <h3>Find or <a href="#">Upload</a> an Image</h3>
+    <ul>
+      <%= render partial: "spree/admin/cms_images/object", collection: @collection, as: :object, locals: { context: :find_or_create } %>
+    </ul>
+  </div>
+</div>

@@ -14,5 +14,15 @@ when :table_row
   </td>
 </tr>
 <%
+when :find_or_create
+%>
+<li>
+  <%= image_tag(object.file.thumb('120x120').url, alt: object.alt) if object.file_uid? %>
+  <div>
+    <%= object.name %> - original size: <%= object.file.width %>x<%= object.file.height %>px
+    <%= link_to "Select", "#", rel: object.id %>
+  </div>
+</li>
+<%
 end
 %>

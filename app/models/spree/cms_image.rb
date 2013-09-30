@@ -5,7 +5,7 @@ class Spree::CmsImage < ActiveRecord::Base
   # dragonfly
   image_accessor :file
 
-  attr_accessible :retained_file, :file_url, :remove_file, :alt, :name
+  attr_accessible :retained_file, :file_url, :remove_file, :alt, :name, :file
 
   validates :name, :file, presence: true
   validates_size_of :file, maximum: 3.megabytes

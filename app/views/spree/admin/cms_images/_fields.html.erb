@@ -1,4 +1,11 @@
 <%= f.input :name %>
 <%= f.input :alt %>
-<%= f.input :file, as: :file %>
+<%
+  file_label = 'File'
+  if f.object.file_uid?
+    file_label = 'Overwrite'
+    safe_concat image_tag f.object.file.thumb('120x120').url
+  end
+%>
+<%= f.input :file, label: file_label, as: :file %>
 <%= f.input :retained_file, as: :hidden %>
