@@ -7,6 +7,7 @@ class CreateSpreeCmsImages < ActiveRecord::Migration
       t.string :file_name
 
       t.string :alt
+      t.string :name
 
       t.timestamps
     end

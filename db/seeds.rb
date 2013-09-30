@@ -39,6 +39,8 @@ end
 if Spree::CmsImage.count.zero?
   puts "creating CMS Images"
   Spree::CmsImage.create!(
+    name: 'Dog',
+    alt: 'Dog',
     file_url: 'http://upload.wikimedia.org/wikipedia/commons/2/26/YellowLabradorLooking_new.jpg'
   )
 end
