@@ -18,11 +18,30 @@
       alert("This must be called from within an iFrame");
     } else {
       var data = $form.serializeArray(),
-          vals = {}, i, len, token, attrs = [];
+          vals = {},
+          i,
+          len;
 
       for (i=0, len=data.length; i<len; i++) {
         vals[data[i].name] = data[i].value;
       }
+
+      $.ajax({
+        type: 'GET',
+        url: '/admin/cms_images/' + vals.cms_image_id + '.js',
+        data: $form.serialize(),
+        dataType: 'json',
+        success: function(data) {
+          window.top.tinymce.activeEditor.execCommand('mceInsertContent', false, data.html);
+          window.top.tinymce.activeEditor.windowManager.close();
+        },
+        error: function(a, b, c) {
+          console.log('error', a, b, c);
+        }
+      });
+
+
+      return;
 
       if (vals.css_id) attrs.push('id:"' + vals.css_id + '"');
       if (vals.css_class) attrs.push('class:"' + vals.css_class + '"');

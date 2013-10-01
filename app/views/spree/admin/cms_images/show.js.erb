@@ -1,0 +1,13 @@
+<%
+params[:css_class] = nil if params[:css_class].blank?
+params[:css_id] = nil if params[:css_id].blank?
+if params[:style] == 'none'
+  thumb = @object.file.url
+else
+  w = params[:w].blank? ? 0 : params[:w]
+  h = params[:h].blank? ? 0 : params[:h]
+  thumb = @object.file.thumb("#{w}x#{h}#{params[:style]}")
+end
+%>{
+  "html": "<%= j(image_tag(thumb.url, alt: @object.alt, width: thumb.width, height: thumb.height, class: params[:css_class], id: params[:css_id] ).html_safe) %>"
+}
