@@ -1,5 +1,7 @@
 <div id="cms-image-find-or-create">
 
+  <h3><a href="#" class="find<%= ' on' unless params[:action] == 'submit_find_or_create' %>">Find</a> or <a href="#" class="upload<% ' on' if params[:action] == 'submit_find_or_create' %>">Upload</a> an Image</h3>
+
   <div id="cms-image-select" class="hide-on-load">
     <form action="">
       <input type="hidden" id="cms-image-id" name="cms_image_id" value="">
@@ -34,8 +36,7 @@
     </form>
   </div>
 
-  <div id="cms-image-create" <% unless params[:action] == 'submit_find_or_create' %> class="hide-on-load"<% end %>>
-    <h3>Upload an Image</h3>
+  <div id="cms-image-create"<% unless params[:action] == 'submit_find_or_create' %> class="hide-on-load"<% end %>>
     <%= simple_form_for @object, url: url_for(submit_find_or_create_admin_cms_images_path), html: { multipart: true } do |f| %>
       <fieldset>
         <legend align="center">Image</legend>
@@ -45,10 +46,7 @@
     <% end %>
   </div>
 
-  <div id="cms-image-find">
-    <h3>Find or <a href="#">Upload</a> an Image</h3>
-    <ul>
-      <%= render partial: "spree/admin/cms_images/object", collection: @collection, as: :object, locals: { context: :find_or_create } %>
-    </ul>
+  <div id="cms-image-find"<% if params[:action] == 'submit_find_or_create' %> class="hide-on-load"<% end %>>
+    <%= render partial: "spree/admin/cms_images/find" %>
   </div>
 </div>

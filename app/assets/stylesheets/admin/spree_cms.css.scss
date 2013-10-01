@@ -52,6 +52,12 @@
 /* find or select image styles */
 #cms-image-find-or-create {
   margin: 20px;
+  h3 {
+    margin: 8px 0;
+    a.on {
+      color: #9fc820;
+    }
+  }
   .hide-on-load {
     display: none;
   }
@@ -61,6 +67,24 @@
   li {
     list-style: none;
     padding: 10px;
+    position: relative;
+    height: 70px;
+    line-height: 50px;
+    img {
+      max-width: 50px;
+      max-height: 50px;
+    }
+    &:hover img {
+      max-height: none;
+      max-width: none;
+      position: absolute;
+      top: 10px;
+      z-index: 100;
+      border: 3px solid #fff;
+    }
+    &.even {
+      background: #f8f8f8;
+    }
     &.odd {
       background: #ddd;
     }
@@ -69,8 +93,11 @@
         float: left;
       }
       div {
-        margin-left: 130px;
+        float: right;
       }
+    }
+    .button {
+      line-height: 1.2;
     }
   }
 }

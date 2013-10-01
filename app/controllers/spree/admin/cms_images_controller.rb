@@ -2,8 +2,13 @@ class Spree::Admin::CmsImagesController < Spree::Admin::CmsBaseController
 
   def find_or_create
     @object = Spree::CmsImage.new
-    @collection = Spree::CmsImage.order('updated_at DESC').limit(10)
-    render layout: 'spree/admin/layouts/iframe'
+    @collection = Spree::CmsImage.order('updated_at DESC')
+    @search = @collection.ransack(params[:q])
+    @collection = @search.result.page(params[:page]).per(6)
+    respond_to do |format|
+      format.html { render layout: 'spree/admin/layouts/iframe' }
+      format.js { render layout: false }
+    end
   end
 
   def submit_find_or_create

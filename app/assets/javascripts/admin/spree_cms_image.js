@@ -67,9 +67,20 @@
     $find_wrap.hide();
   }
 
+  function showFind(e) {
+    e.preventDefault()
+    $('h3 a').removeClass('on');
+    $(this).addClass('on');
+    $create_wrap.hide();
+    $find_wrap.show();
+  }
+
   function showCreate(e) {
     e.preventDefault()
+    $('h3 a').removeClass('on');
+    $(this).addClass('on');
     $create_wrap.show();
+    $find_wrap.hide();
   }
 
   function cancelSelect(e) {
@@ -85,9 +96,19 @@
     $form = $form_wrap.find('form');
     $img_wrap = $form_wrap.find('.img-wrap');
 
-    $find_wrap.find('h3 a').click(showCreate);
-    $find_wrap.find('li a').click(showSelect);
+    $('h3 a.find').click(showFind);
+    $('h3 a.upload').click(showCreate);
+
     $form_wrap.find('.icon-remove').click(cancelSelect);
+
+    // 'live' functionality since find_wrap will be replaced by ajax requests
+    $find_wrap.on('click', 'li a', showSelect);
+    $find_wrap.on('click', '.pagination a', function(e) {
+      e.preventDefault();
+      var url = $(this).attr('href').split('?');
+      if (url[0].indexOf('.js') === -1) url[0] = url[0] + '.js';
+      $.get(url.join('?'));
+    });
 
     $form.submit(handleSelect);
   }
