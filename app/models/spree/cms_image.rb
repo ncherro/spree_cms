@@ -17,7 +17,8 @@ class Spree::CmsImage < ActiveRecord::Base
       # 1. check body text for any image tags containing 'data-cms-image=""'
       # 2. process the files
       # 2. cache the results
-      matches = str.scan(/(<img(.*)?data-cms-image="(\d+)\|([\d+x\d+[>|#]?]+)?"(.*)?>)/)
+      matches = str.scan(/(<img(.*?)data-cms-image="(\d+)\|([\d+x\d+].*?+)?"(.*?)>)/)
+
       cached = str
       if matches.any?
         matches.each do |token|
@@ -25,18 +26,25 @@ class Spree::CmsImage < ActiveRecord::Base
 
           pre_data = token[1]
           img_id = token[2].to_i
-          resize_str = token[3]
+          resize_str = (token[3] || '').gsub('&gt;', '>')
           post_data = token[4]
 
-          # strip out the original src="...", leaving all other attributes in there
-          reg = / src=".*?"/
+          # strip out the original src="..." width="..." and height="...",
+          # leaving all other attributes in there
+          reg = / src=".*?"| width=".*?"| height=".*?"/
           pre_data.gsub!(reg, '')
           post_data.gsub!(reg, '')
 
           # and recreate the tag
           if thumb = Spree::CmsImage.find_by_id(img_id)
-            processed = thumb.file.thumb(resize_str)
-            cached.gsub!(tok, %(<img#{pre_data} src="#{processed.url}"#{post_data} >))
+            if resize_str.present?
+              # thumbnail
+              processed = thumb.file.thumb(resize_str)
+            else
+              # original
+              processed = thumb.file
+            end
+            cached.gsub!(tok, %(<img#{pre_data} src="#{processed.url}" width="#{processed.width}" height="#{processed.height}"#{post_data}>))
           else
             # TODO: display a 'missing' image or something?
             # log an error?
