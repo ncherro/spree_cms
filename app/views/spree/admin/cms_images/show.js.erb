@@ -1,11 +1,13 @@
 <%
 if params[:style] == 'none'
+  config = ""
   thumb = @object.file
 else
   w = params[:w].blank? ? 0 : params[:w]
   h = params[:h].blank? ? 0 : params[:h]
-  thumb = @object.file.thumb("#{w}x#{h}#{params[:style]}")
+  config = "#{w}x#{h}#{params[:style]}"
+  thumb = @object.file.thumb(config)
 end
 %>{
-  "html": "<%= j(image_tag(thumb.url, alt: @object.alt, width: thumb.width, height: thumb.height)) %>"
+  "html": "<%= j(image_tag(thumb.url, alt: @object.alt, width: thumb.width, height: thumb.height, data: { cms_image: "#{@object.id}|#{config}" })) %>"
 }
