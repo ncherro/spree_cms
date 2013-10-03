@@ -48,6 +48,7 @@ class Spree::CmsImage < ActiveRecord::Base
           else
             # TODO: display a 'missing' image or something?
             # log an error?
+            cached.gsub!(tok, '')
           end
         end
       end
