@@ -5,6 +5,8 @@ class CreateSpreeBlocksRegions < ActiveRecord::Migration
       t.belongs_to :spree_region
 
       t.string :template_override
+      t.string :css_id
+      t.string :css_class
 
       t.integer :position
 

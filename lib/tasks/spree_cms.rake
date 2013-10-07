@@ -3,10 +3,10 @@ namespace :spree_cms do
     desc 'Generates Spree::StaticBlock instances from template files'
     task static_blocks: :environment do
       # find all static_block templates
-      rails_path = "#{File.join(Rails.root, 'app', 'views', 'spree', 'cms', 'static_blocks')}/*"
+      rails_path = "#{File.join(Rails.root, 'app', 'views', 'spree', 'cms', 'static_blocks')}"
       if File.directory?(rails_path)
         # pull from the Rails app
-        dir_path = rails_path
+        dir_path = "#{rails_path}/*"
       else
         # pull from the Gem
         dir_path = "#{File.expand_path("../../../app/views/spree/cms/static_blocks", __FILE__)}/*"

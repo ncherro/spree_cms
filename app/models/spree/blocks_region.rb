@@ -14,7 +14,7 @@ class Spree::BlocksRegion < ActiveRecord::Base
     foreign_key: "spree_blocks_region_id", dependent: :destroy
 
   attr_accessible :position, :spree_block_id, :spree_region_id,
-    :template_override
+    :template_override, :css_class, :css_id
 
   def template
     if self.template_override.present?

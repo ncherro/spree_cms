@@ -16,10 +16,26 @@ class Spree::BlocksRegionOverride < ActiveRecord::Base
 
 
   attr_accessible :spree_blocks_region_id, :spree_block_id, :spree_page_id,
-    :template_override
+    :template_override, :css_id_override, :css_class_override
 
   validates :spree_blocks_region_id, uniqueness: { scope: :spree_page_id }
   validates :spree_blocks_region_id, presence: true
+
+  def css_id
+    if self.css_id_override.present?
+      self.css_id_override == '<none>' ? nil : self.css_id_override
+    else
+      self.blocks_region.css_id
+    end
+  end
+
+  def css_class
+    if self.css_class_override.present?
+      self.css_class_override == '<none>' ? nil : self.css_class_override
+    else
+      self.blocks_region.css_class
+    end
+  end
 
   def template
     if self.template_override.present?

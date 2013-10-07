@@ -2,6 +2,8 @@
   <%= f.association :blocks_region, label: 'Block', collection: @page.layout.blocks_regions %>
   <%= f.association :block, label: 'Override with', collection: Spree::BlocksRegionOverride.available_blocks, include_blank: "- Nothing (remove from this Page) -" %>
   <%= f.input :template_override %>
+  <%= f.input :css_class_override, hint: 'set to <strong>&lt;none&gt;</strong> to override with a blank value' %>
+  <%= f.input :css_id_override, hint: 'set to <strong>&lt;none&gt;</strong> override with a blank value' %>
   <p><%= f.link_to_remove "Remove", class: "button icon-remove" %></p>
 <% end %>
 

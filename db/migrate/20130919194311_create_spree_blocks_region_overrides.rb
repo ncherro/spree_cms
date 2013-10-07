@@ -6,6 +6,8 @@ class CreateSpreeBlocksRegionOverrides < ActiveRecord::Migration
       t.belongs_to :spree_page
 
       t.string :template_override
+      t.string :css_id
+      t.string :css_class
 
       t.timestamps
     end
