@@ -109,46 +109,9 @@
 }(jQuery, window, document));
 
 
-
-
-/*
-window.CMS_IMAGE = {
-  submitted: function(data) {
-    // remove the iframe overlay
-    $('#iframe-overlay').remove();
-
-    var vals = {},
-        val = $('#menu_item_page_attributes_body').val(),
-        pos = window.CMS_IMAGE.text_position,
-        token = '',
-        attrs = []
-
-    for (var i=0, len=data.length; i<len; i++) {
-      vals[data[i].name] = data[i].value;
-    }
-
-    if (vals.css_id) attrs.push('id:"' + vals.css_id + '"');
-    if (vals.css_class) attrs.push('class:"' + vals.css_class + '"');
-    if (attrs.length) {
-      attrs = ' ' + attrs.join(' ');
-    } else {
-      attrs = '';
-    }
-
-    token = '[image:' + vals.cms_image_id + ' ' + (vals.w || 0) + 'x' + (vals.h || 0) + vals.style + attrs + ']';
-
-    $('#menu_item_page_attributes_body').val(val.slice(0, pos) + ' ' + token + ' ' + val.slice(pos));
-  }
-};
-*/
-
-
-
-
 (function($, window, document, undefined) {
 
   function init() {
-
     tinymce.PluginManager.add('cms_image', function(editor, url) {
       // Adds a menu item to the tools menu
       editor.addMenuItem('cms_image', {
@@ -170,12 +133,10 @@ window.CMS_IMAGE = {
       });
     });
 
-
     $('textarea.tinymce').each(function() {
       // TODO: look into global CSS settings
       path = $(this).data('mce');
       $(this).tinymce({
-        //script_url: path,
         theme : "modern",
         plugins: "cms_image",
         image_advtab: true

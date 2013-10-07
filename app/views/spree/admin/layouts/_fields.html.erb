@@ -4,5 +4,5 @@
 
 <%= field_set_tag "Regions" do %>
   <%= f.fields_for :regions %>
-  <p><%= f.link_to_add "Add a Region", :regions %></p>
+  <p><%= f.link_to_add "Add a Region", :regions, class: "button icon-plus" %></p>
 <% end %>

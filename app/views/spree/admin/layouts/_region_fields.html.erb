@@ -9,8 +9,8 @@
 
   <%= field_set_tag "Blocks" do %>
     <%= f.fields_for :blocks_regions %>
-    <p><%= f.link_to_add "Add a block", :blocks_regions %></p>
+    <p><%= f.link_to_add "Add a block", :blocks_regions, class: "button icon-add" %></p>
   <% end %>
 
-  <p><%= f.link_to_remove "Remove this region" %></p>
+  <p><%= f.link_to_remove "Remove this region", class: "button icon-remove" %></p>
 <% end %>

@@ -18,6 +18,6 @@
   <% else %>
     <% @page = f.object %>
     <%= f.fields_for :blocks_region_overrides %>
-    <p><%= f.link_to_add "New Override", :blocks_region_overrides %></p>
+    <p><%= f.link_to_add "New Override", :blocks_region_overrides, class: "button icon-plus" %></p>
   <% end %>
 <% end %>

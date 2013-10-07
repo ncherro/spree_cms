@@ -27,7 +27,7 @@
   <%= field_set_tag "Page content", id: "page-fields" do %>
     <%= f.fields_for :page %>
     <% if f.object.page.nil? %>
-      <p><%= f.link_to_add "Create a Page", :page %></p>
+      <p><%= f.link_to_add "Create a Page", :page, class: "button icon-plus" %></p>
     <% end %>
   <% end %>
 </div>
