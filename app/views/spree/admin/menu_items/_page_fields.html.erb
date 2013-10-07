@@ -9,7 +9,6 @@
 
 <%= f.input :title %>
 
-<%= link_to "Upload image", '#', id: "upload-image" %>
 <%= f.input :body, input_html: { class: 'tinymce', data: { mce: asset_path('admin/libs/tinymce/tinymce.min.js') } } %>
 
 <%= field_set_tag 'Block overrides', id: "block-override-fields" do %>
