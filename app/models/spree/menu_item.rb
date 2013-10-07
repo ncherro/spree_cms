@@ -57,6 +57,7 @@ class Spree::MenuItem < ActiveRecord::Base
     def id_from_cached_slug(cached_slug)
       # returns the id of a published menu_item by cached slug
       cached_slug ||= ''
+      cached_slug = Spree::CmsRoutes.remove_spree_mount_point(cached_slug)
       Rails.cache.fetch("#{CACHE_PREFIX}#{cached_slug}") do
         menu_item = published.by_cached_slug(cached_slug).first
         return menu_item ? menu_item.id : nil

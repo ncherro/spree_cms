@@ -1,12 +1,15 @@
 module Spree
   class CmsRoutes
     def self.add_spree_mount_point(path)
+      path = '' if path == '-'
       Rails.application.routes.url_helpers.spree_path + path
     end
 
     def self.remove_spree_mount_point(path)
       regex = Regexp.new '\A' + Rails.application.routes.url_helpers.spree_path
-      path.sub(regex, '').split('?')[0]
+      path = path.sub(regex, '').split('?')[0]
+      path = '-' if path.blank?
+      path
     end
 
     def self.matches?(request)

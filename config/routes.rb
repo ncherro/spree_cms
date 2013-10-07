@@ -25,7 +25,7 @@ Spree::Core::Engine.routes.prepend do
   end
 
   constraints(Spree::CmsRoutes) do
-    get '/*path', to: 'cms#show', as: 'cms'
+    get '/(*path)', to: 'cms#show', as: 'cms'
   end
 
 end
