@@ -6,6 +6,10 @@
   display: block;
 }
 
+input.file {
+  margin-bottom: 10px;
+}
+
 .input.withError input {
   border-color: #fabcbd;
 }

@@ -1,10 +1,10 @@
-<% f.object.build_image unless f.object.image %>
 <%= field_set_tag "Slide" do %>
+  <% f.object.build_image if f.object.image.nil? %>
   <%= field_set_tag "Image" do %>
     <%= f.fields_for :image %>
   <% end %>
   <%= f.input :title %>
   <%= f.input :position %>
-  <%= f.input :copy %>
-  <%= f.input :url %>
+  <%= f.input :copy, input_html: { class: 'tinymce', data: { mce: asset_path('admin/libs/tinymce/tinymce.min.js') } } %>
+  <%= f.input :url, hint: "if set, the entire slide will link to the URL provided" %>
 <% end %>

@@ -10,8 +10,7 @@ Spree::Core::Engine.routes.prepend do
     get '/static_blocks', to: redirect('/admin/blocks'), as: 'static_blocks'
 
     resources :blocks, only: [:index]
-    resources :menu_blocks, :static_blocks, :html_blocks, :slideshow_blocks,
-      except: [:index]
+    resources :menu_blocks, :static_blocks, :html_blocks, :slideshow_blocks, except: [:index]
     resources :layouts
     resources :menu_items do
       post 'update_positions', on: :collection

@@ -2,6 +2,13 @@
 css_class ||= nil
 css_id ||= nil
 %>
-<%= cms_wrapper(block, css_class: css_class, css_id: css_id) do %>
-  <%= render "spree/cms/slides/slide", collection: block.slides %>
-<% end %>
+<%= cms_wrapper(block, css_class: css_class, css_id: css_id) do |obj|
+  r = %(<section class="slides">)
+  obj.slides.each_with_index do |slide, i|
+    r << render("spree/cms/slides/slide", slide: slide, size: '643x320', left: "#{i * 100}%")
+  end
+  r << %(</section>)
+  r << %(<div class="slide-controls"></div>)
+  r.html_safe
+end
+%>

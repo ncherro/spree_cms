@@ -1,4 +1,7 @@
-<%= debug local_variables %>
-<article>
-  <%= image_tag slide.image.file.thumb('800x800') %>
+<article class="slide" style="left: <%= left %>">
+  <%= cms_image_tag slide.image, size %>
+  <section class="inner">
+    <h2><%= slide.title %></h2>
+    <%= slide.copy.html_safe %>
+  </section>
 </article>

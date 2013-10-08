@@ -111,11 +111,27 @@
 
 (function($, window, document, undefined) {
 
+  function addTinyMce() {
+    $('textarea.tinymce:visible').each(function() {
+      // TODO: look into global CSS settings
+      path = $(this).data('mce');
+      $(this).tinymce({
+        theme : "modern",
+        plugins: "autolink link code cms_image image",
+        toolbar1: "styleselect insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
+        image_advtab: true,
+        style_formats: [
+          {title : 'Button', selector : 'a', classes: 'button' }
+        ]
+      });
+    });
+  }
+
   function init() {
     tinymce.PluginManager.add('cms_image', function(editor, url) {
       // Adds a menu item to the tools menu
       editor.addMenuItem('cms_image', {
-        text: 'CMS Image',
+        text: 'Insert CMS Image',
         context: 'insert',
         onclick: function() {
           // Open window with a specific url
@@ -133,15 +149,9 @@
       });
     });
 
-    $('textarea.tinymce').each(function() {
-      // TODO: look into global CSS settings
-      path = $(this).data('mce');
-      $(this).tinymce({
-        theme : "modern",
-        plugins: "cms_image",
-        image_advtab: true
-      });
-    });
+    addTinyMce();
+    $(document).on('nested:fieldAdded', addTinyMce);
+
   }
   $(init);
 

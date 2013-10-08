@@ -1,11 +1,17 @@
 module Spree
   module CmsHelper
 
+    def cms_image_tag(image, style)
+      processed = image.file.thumb(style)
+      image_tag processed.url, alt: image.alt, width: processed.width, height: processed.height
+    end
+
     def cms_wrapper(obj, *args, &renderer)
       defaults = {
         content_method: 'content',
         css_class: nil,
-        css_id: nil
+        css_id: nil,
+        wrapper_el: :div
       }
       options = defaults.merge(args.extract_options!)
 
@@ -20,7 +26,7 @@ module Spree
         id = obj.css_id if obj.respond_to?('css_id') && obj.css_id.present?
       end
 
-      content_tag(:div, renderer.call(obj), class: classes.join(' '), id: id)
+      content_tag(options[:wrapper_el], renderer.call(obj), class: classes.join(' '), id: id)
     end
 
     def render_admin_menu_tree(menu)

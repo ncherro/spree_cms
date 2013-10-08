@@ -13,6 +13,8 @@ class Spree::BlocksRegionOverride < ActiveRecord::Base
     foreign_key: "spree_block_id"
   belongs_to :static_block, class_name: "Spree::Block",
     foreign_key: "spree_block_id"
+  belongs_to :slideshow_block, class_name: "Spree::Block",
+    foreign_key: "spree_block_id"
 
 
   attr_accessible :spree_blocks_region_id, :spree_block_id, :spree_page_id,
