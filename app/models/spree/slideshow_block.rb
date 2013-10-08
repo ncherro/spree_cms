@@ -1,5 +1,12 @@
-class Spree::StaticBlock < Spree::Block
+class Spree::SlideshowBlock < Spree::Block
 
-  validates :template, presence: true, uniqueness: true
+  has_many :slides, class_name: "Spree::Slide",
+    foreign_key: "spree_block_id", dependent: :destroy
+
+  attr_accessible :slides_attributes
+
+  accepts_nested_attributes_for :slides, reject_if: :all_blank,
+    allow_destroy: true
+  validates_associated :slides
 
 end
