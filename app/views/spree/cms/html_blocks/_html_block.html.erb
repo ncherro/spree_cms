@@ -1,1 +1,5 @@
-<%= cms_wrapper(block) { |obj| obj.content.html_safe } %>
+<%
+css_class ||= nil
+css_id ||= nil
+safe_concat(cms_wrapper(block, css_class: css_class, css_id: css_id) { |obj| obj.content.html_safe })
+%>

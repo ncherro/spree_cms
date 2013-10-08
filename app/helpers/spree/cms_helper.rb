@@ -4,14 +4,21 @@ module Spree
     def cms_wrapper(obj, *args, &renderer)
       defaults = {
         content_method: 'content',
+        css_class: nil,
+        css_id: nil
       }
       options = defaults.merge(args.extract_options!)
 
       classes = []
       classes << 'cms-' + obj.class.name.demodulize.underscore.dasherize
+      classes << options[:css_class] if options[:css_class].present?
       classes << obj.css_class if obj.respond_to?('css_class') && obj.css_class.present?
 
-      id = obj.css_id if obj.respond_to?('css_id') && obj.css_id.present?
+      if options[:css_id].present?
+        id = options[:css_id]
+      else
+        id = obj.css_id if obj.respond_to?('css_id') && obj.css_id.present?
+      end
 
       content_tag(:div, renderer.call(obj), class: classes.join(' '), id: id)
     end

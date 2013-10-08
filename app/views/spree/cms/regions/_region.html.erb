@@ -4,11 +4,16 @@
   obj.blocks_regions.each do |block_region|
     br = block_region.override(page)
     next if br.nil?
+    opts = {
+      block: br.block,
+      css_class: br.css_class,
+      css_id: br.css_id,
+    }
     if br.template.present?
       # render the custom thing
-      r << render("spree/cms/#{br.block.class.name.demodulize.tableize}/#{br.template}", block: br.block)
+      r << render("spree/cms/#{br.block.class.name.demodulize.tableize}/#{br.template}", opts)
     else
-      r << render("spree/cms/#{br.block.class.name.demodulize.tableize}/#{br.block.class.name.demodulize.underscore}", block: br.block)
+      r << render("spree/cms/#{br.block.class.name.demodulize.tableize}/#{br.block.class.name.demodulize.underscore}", opts)
     end
   end
   r.html_safe

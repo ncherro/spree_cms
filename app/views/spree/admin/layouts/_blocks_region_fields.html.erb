@@ -3,6 +3,6 @@
   <%= f.input :template_override, hint: "leave blank to use the <strong>Block</strong>'s default template" %>
   <%= f.input :position %>
   <%= f.input :css_class %>
-  <%= f.input :css_id %>
+  <%= f.input :css_id, label: "CSS Id" %>
   <p><%= f.link_to_remove "Remove this block", class: "button icon-remove" %></p>
 <% end %>

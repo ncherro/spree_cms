@@ -1,1 +1,4 @@
-<%= render_menu_block block %>
+<% 
+css_class ||= nil
+css_id ||= nil
+%><%= render_menu_block(block, wrapper_class: css_class, wrapper_id: css_id) %>
