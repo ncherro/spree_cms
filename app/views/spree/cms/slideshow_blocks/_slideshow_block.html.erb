@@ -1,5 +1,7 @@
 <%
 css_class ||= nil
 css_id ||= nil
-safe_concat(cms_wrapper(block, css_class: css_class, css_id: css_id) { |obj| obj.content.html_safe })
 %>
+<%= cms_wrapper(block, css_class: css_class, css_id: css_id) do %>
+  <%= render "spree/cms/slides/slide", collection: block.slides %>
+<% end %>
