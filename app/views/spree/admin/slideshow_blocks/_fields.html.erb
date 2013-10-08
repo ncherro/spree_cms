@@ -1,0 +1,7 @@
+<%= f.input :name %>
+<%= f.input :template, hint: "leave blank to use the default template: <strong>app/views/spree/cms/_html_block</strong>" %>
+
+<%= field_set_tag "Slides" do %>
+  <%= f.fields_for :slides %>
+  <p><%= f.link_to_add "Add a Slide", :slides, class: "button icon-plus" %></p>
+<% end %>

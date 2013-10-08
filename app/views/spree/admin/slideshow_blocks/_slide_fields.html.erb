@@ -1,0 +1,10 @@
+<% f.object.build_image unless f.object.image %>
+<%= field_set_tag "Slide" do %>
+  <%= field_set_tag "Image" do %>
+    <%= f.fields_for :image %>
+  <% end %>
+  <%= f.input :title %>
+  <%= f.input :position %>
+  <%= f.input :copy %>
+  <%= f.input :url %>
+<% end %>

@@ -40,7 +40,7 @@
     <%= simple_form_for @object, url: url_for(submit_find_or_create_admin_cms_images_path), html: { multipart: true } do |f| %>
       <fieldset>
         <legend align="center">Image</legend>
-        <%= render 'fields', object: @object, f: f %>
+        <%= render 'image_fields', object: @object, f: f %>
       </fieldset>
       <%= render 'spree/admin/shared/new_resource_links' %>
     <% end %>
