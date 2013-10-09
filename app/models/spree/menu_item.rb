@@ -50,8 +50,12 @@ class Spree::MenuItem < ActiveRecord::Base
       published.where(is_visible_in_menu: true)
     end
 
+    def with_empty_url
+      where("url IS NULL OR url = ''")
+    end
+
     def by_cached_slug(cached_slug)
-      where(cached_slug: Spree::CmsRoutes.remove_spree_mount_point(cached_slug))
+      with_empty_url.where(cached_slug: Spree::CmsRoutes.remove_spree_mount_point(cached_slug))
     end
 
     def id_from_cached_slug(cached_slug)
