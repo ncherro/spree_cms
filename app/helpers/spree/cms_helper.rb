@@ -75,7 +75,7 @@ module Spree
       end
       s = ""
       if options[:item_wrapper_el].present?
-        s << %(<#{options[:item_wrapper_el]}#{' class="' + item_classes.join(' ') + '"' if item_classes.any?}#{item_id} rel="#{menu_item.id}">)
+        s += %(<#{options[:item_wrapper_el]}#{' class="' + item_classes.join(' ') + '"' if item_classes.any?}#{item_id} rel="#{menu_item.id}">)
       end
       # recursion
       s << "#{link_html}#{options[:callback].call(children)}"
@@ -96,6 +96,7 @@ module Spree
         wrapper_class: "cms-menu",
         override_id: false,
         cache: true,
+        show_root: true,
         path_ids: [],
       }
       options = defaults.merge(args.extract_options!)
@@ -105,12 +106,14 @@ module Spree
 
       if options[:root_id]
         items = menu.menu_items.order(:position).where(id: options[:root_id])
+        items = items.visible if options[:only_visible]
+        items = items.first.children unless options[:show_root]
       else
         # start at the root
         items = menu.menu_items.order(:position).where(ancestry_depth: 0)
+        items = items.visible if options[:only_visible]
       end
 
-      items = items.visible if options[:only_visible]
 
       cur_depth = 0
       func = lambda do |nodes|
@@ -149,7 +152,7 @@ module Spree
 
 
     # NOTE: this should be the only front-facing helper method
-    def render_menu_block(menu_block, *args)
+    def render_menu_block(menu_block, *args, &link_func)
       defaults = {
         depth: 0,
         wrapper_el: 'ul',
@@ -178,20 +181,25 @@ module Spree
               mi.menu,
               options.merge({
                 only_visible: true,
-                root_id: (menu_block.shows_children? ? mi.id : mi.parent_id),
+                root_id: (menu_block.shows_children? ? mi.id : mi.parent_id), # children : siblings
+                show_root: false,
                 path_ids: mi.path_ids,
-              })
+              }),
+              &link_func
             ))
           end
         else
-          safe_concat(render_menu_tree(
-            menu_block.menu,
-            options.merge({
-              only_visible: true,
-              root_id: menu_block.spree_menu_item_id,
-              path_ids: (mi ? mi.path_ids : []),
-            })
-          ))
+          safe_concat(
+            render_menu_tree(
+              menu_block.menu,
+              options.merge({
+                only_visible: true,
+                root_id: menu_block.spree_menu_item_id,
+                path_ids: (mi ? mi.path_ids : []),
+              }),
+              &link_func
+            )
+          )
         end
       end
 
