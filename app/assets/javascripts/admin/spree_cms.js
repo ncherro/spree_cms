@@ -28,9 +28,10 @@
           });
         });
 
+        // console.log(positions); return;
+
         // update positions
         $.post('/admin/menu_items/update_positions', { positions: positions }, function(a, b, c) {
-          console.log(a, b, c);
           // update the parent of the thing that moved
           $.post('/admin/menu_items/' + id + '/update_parent', { parent_id: parent_id }, function(data, b, c) {
             $list.html(data.items_html);

@@ -46,6 +46,10 @@ class Spree::MenuItem < ActiveRecord::Base
       where(is_published: true)
     end
 
+    def ordered
+      order(:position)
+    end
+
     def visible
       published.where(is_visible_in_menu: true)
     end

@@ -1,8 +1,8 @@
 module Spree
   module CmsHelper
 
-    def cms_image_tag(image, style)
-      processed = image.file.thumb(style)
+    def cms_image_tag(image, style=nil)
+      processed = style ? image.file.thumb(style) : image.file
       image_tag processed.url, alt: image.alt, width: processed.width, height: processed.height
     end
 
@@ -36,7 +36,7 @@ module Spree
         actions << link_to("/ Edit", edit_admin_menu_item_url(node))
         actions << link_to("x Delete", admin_menu_item_url(node), method: "delete")
         r = %(<div class="wrap">#{link_to(node.title, node.href)})
-        r << " id = #{node.id}, pos = #{node.position}, ancestry = #{node.ancestry} " if params[:debug]
+        r << " id = #{node.id}, pos = #{node.position}, ancestry = #{node.ancestry} "# if params[:debug]
         r << " - #{node.href}#{' - unpublished' unless node.is_published?}#{' - not visible' unless node.is_visible_in_menu?}"
         r << %(<div class="actions">)
         r << actions.join(' | ')
@@ -96,7 +96,6 @@ module Spree
         wrapper_class: "cms-menu",
         override_id: false,
         cache: true,
-        show_root: true,
         path_ids: [],
       }
       options = defaults.merge(args.extract_options!)
@@ -105,12 +104,12 @@ module Spree
       r << %(<#{options[:wrapper_el]} id="#{options[:wrapper_id]}" class="#{options[:wrapper_class]}">) if options[:wrapper_el].present?
 
       if options[:root_id]
-        items = menu.menu_items.order(:position).where(id: options[:root_id])
+        items = menu.menu_items.where(id: options[:root_id])
         items = items.visible if options[:only_visible]
-        items = items.first.children unless options[:show_root]
+        items = items.first.children.ordered if items.any?
       else
-        # start at the root
-        items = menu.menu_items.order(:position).where(ancestry_depth: 0)
+        # start at root
+        items = menu.menu_items.ordered.where(ancestry_depth: 0)
         items = items.visible if options[:only_visible]
       end
 
@@ -128,7 +127,7 @@ module Spree
       items.each do |item|
         r << render_menu_item(
           item,
-          item.descendants.arrange,
+          item.descendants.arrange(order: :position),
           options.merge({ callback: func, link_renderer: link_func })
         )
       end
@@ -182,7 +181,6 @@ module Spree
               options.merge({
                 only_visible: true,
                 root_id: (menu_block.shows_children? ? mi.id : mi.parent_id), # children : siblings
-                show_root: false,
                 path_ids: mi.path_ids,
               }),
               &link_func
