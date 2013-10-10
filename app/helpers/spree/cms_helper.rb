@@ -95,6 +95,7 @@ module Spree
         only_visible: false,
         wrapper_class: "cms-menu",
         override_id: false,
+        show_parent: false,
         cache: true,
         path_ids: [],
       }
@@ -102,6 +103,18 @@ module Spree
 
       r = ""
       r << %(<#{options[:wrapper_el]} id="#{options[:wrapper_id]}" class="#{options[:wrapper_class]}">) if options[:wrapper_el].present?
+
+      if options[:show_parent]
+        parent = Spree::MenuItem.find_by_id(options[:root_id])
+        if parent
+          # TODO: clean this up
+          r << %(<#{options[:item_wrapper_el]} class="cms-parent">) if options[:item_wrapper_el]
+          r << link_to(parent.title, parent.href)
+          r << %(</#{options[:item_wrapper_el]}>) if options[:item_wrapper_el]
+        end
+        # never again
+        options[:show_parent] = false
+      end
 
       if options[:root_id]
         items = menu.menu_items.where(id: options[:root_id])
@@ -159,6 +172,7 @@ module Spree
         item_wrapper_el: 'li',
         wrapper_class: "cms-menu",
         wrapper_id: nil,
+        show_parent: false,
         cache: true,
       }
       options = defaults.merge(args.extract_options!)
