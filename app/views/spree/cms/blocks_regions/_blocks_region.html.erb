@@ -1,0 +1,13 @@
+<%= 
+opts = {
+  block: blocks_region.block,
+  css_class: blocks_region.css_class,
+  css_id: blocks_region.css_id,
+}
+if blocks_region.template.present?
+  # replace the partial path basename with our custom template
+  render (blocks_region.block.to_partial_path.split('/')[0..-2] + [blocks_region.template]).join('/'), opts
+else
+  render blocks_region.block.to_partial_path, opts
+end
+%>

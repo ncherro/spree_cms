@@ -114,17 +114,22 @@
 
   function addTinyMce() {
     $('textarea.tinymce:visible').each(function() {
-      // TODO: look into global CSS settings
       path = $(this).data('mce');
-      $(this).tinymce({
+      // NOTE: CMS_TINYMCE_OPTIONS can be set by the parent app
+      opts = CMS_TINYMCE_OPTIONS || {
         theme : "modern",
         plugins: "autolink link code cms_image image",
-        toolbar1: "styleselect insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
+        toolbar1: "insertfile undo redo | formatselect | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
         image_advtab: true,
         style_formats: [
-          {title : 'Button', selector : 'a', classes: 'button' }
+          {
+            title : 'Button',
+            selector : 'a',
+            classes: 'button'
+          }
         ]
-      });
+      };
+      $(this).tinymce(CMS_TINYMCE_OPTIONS);
     });
   }
 

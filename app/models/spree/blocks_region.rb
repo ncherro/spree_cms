@@ -1,13 +1,19 @@
 class Spree::BlocksRegion < ActiveRecord::Base
+  include CmsConcerns::PartialPathFix
 
   validates :spree_block_id, presence: true
 
   belongs_to :block, class_name: "Spree::Block", foreign_key: "spree_block_id"
+
   # not sure why we need to do this...
-  belongs_to :menu_block, class_name: "Spree::Block", foreign_key: "spree_block_id"
-  belongs_to :html_block, class_name: "Spree::Block", foreign_key: "spree_block_id"
-  belongs_to :static_block, class_name: "Spree::Block", foreign_key: "spree_block_id"
-  belongs_to :slideshow_block, class_name: "Spree::Block", foreign_key: "spree_block_id"
+  belongs_to :menu_block, class_name: "Spree::MenuBlock",
+    foreign_key: "spree_block_id"
+  belongs_to :html_block, class_name: "Spree::HtmlBlock",
+    foreign_key: "spree_block_id"
+  belongs_to :static_block, class_name: "Spree::StaticBlock",
+    foreign_key: "spree_block_id"
+  belongs_to :slideshow_block, class_name: "Spree::SlideshowBlock",
+    foreign_key: "spree_block_id"
 
   belongs_to :region, class_name: "Spree::Region", foreign_key: "spree_region_id"
 
@@ -27,13 +33,15 @@ class Spree::BlocksRegion < ActiveRecord::Base
   end
 
   def override(page)
-    # NOTE: this seems very inefficient. think of a better way
-    if bro = Spree::BlocksRegionOverride.where(spree_page_id: page.id, spree_blocks_region_id: self.id).first
+    # TODO: think of a better way
+    if bro = Spree::BlocksRegionOverride.where(
+      spree_page_id: page.id,
+      spree_blocks_region_id: self.id
+    ).first
       if bro.spree_block_id.nil?
-        # return nothing (we are hiding the block)
-        nil
+        nil # return nothing (we are hiding the block)
       else
-        # override this
+        # override
         self.spree_block_id = bro.spree_block_id
         self.template_override = bro.template
       end
