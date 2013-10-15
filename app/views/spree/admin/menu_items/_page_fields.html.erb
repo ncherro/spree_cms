@@ -21,3 +21,14 @@
     <p class="clearfix"><%= f.link_to_add "New Override", :blocks_region_overrides, class: "button icon-plus" %></p>
   <% end %>
 <% end %>
+
+<%= field_set_tag 'Page-specific blocks', id: "page-block-fields" do %>
+  <% if f.object.new_record? %>
+    <span class="hint">you must save the <strong>Page</strong>, setting the <strong>Layout</strong> field before overrides can be set</span>
+  <% else %>
+    <span class="hint">add page-specific blocks here</span>
+    <% @page = f.object %>
+    <%= f.fields_for :blocks_regions %>
+    <p class="clearfix"><%= f.link_to_add "New Block", :blocks_regions, class: "button icon-plus" %></p>
+  <% end %>
+<% end %>

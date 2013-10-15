@@ -1,2 +1,2 @@
 <% page ||= nil %>
-<%= cms_wrapper(region) { |region| render region.overridden_blocks(page) } %>
+<%= cms_wrapper(region) { |region| render region.page_blocks(page) } %>
