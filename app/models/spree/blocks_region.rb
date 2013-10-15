@@ -3,9 +3,9 @@ class Spree::BlocksRegion < ActiveRecord::Base
 
   validates :spree_block_id, presence: true
 
-  belongs_to :block, class_name: "Spree::Block", foreign_key: "spree_block_id"
+  belongs_to :region, class_name: "Spree::Region", foreign_key: "spree_region_id"
 
-  # not sure why we need to do this...
+  belongs_to :block, class_name: "Spree::Block", foreign_key: "spree_block_id"
   belongs_to :menu_block, class_name: "Spree::MenuBlock",
     foreign_key: "spree_block_id"
   belongs_to :html_block, class_name: "Spree::HtmlBlock",
@@ -14,8 +14,6 @@ class Spree::BlocksRegion < ActiveRecord::Base
     foreign_key: "spree_block_id"
   belongs_to :slideshow_block, class_name: "Spree::SlideshowBlock",
     foreign_key: "spree_block_id"
-
-  belongs_to :region, class_name: "Spree::Region", foreign_key: "spree_region_id"
 
   has_many :overrides, class_name: "Spree::BlocksRegionOverride",
     foreign_key: "spree_blocks_region_id", dependent: :destroy
