@@ -1,5 +1,5 @@
 class Spree::BlocksRegion < ActiveRecord::Base
-  include CmsConcerns::PartialPathFix
+  include Spree::CmsConcerns::PartialPathFix
 
   validates :spree_block_id, presence: true
 
@@ -23,27 +23,17 @@ class Spree::BlocksRegion < ActiveRecord::Base
   attr_accessible :position, :spree_block_id, :spree_region_id,
     :template_override, :css_class, :css_id
 
-  def template
-    if self.template_override.present?
-      self.template_override
-    else
-      # delegate doesn't seem to work - I assume b/c of STI
-      self.block.template
-    end
-  end
-
   def override(page)
-    # TODO: think of a better way
-    if bro = Spree::BlocksRegionOverride.where(
-      spree_page_id: page.id,
-      spree_blocks_region_id: self.id
-    ).first
+    self.block.template = self.template_override if self.template_override.present?
+    if bro = Spree::BlocksRegionOverride.where(spree_page_id: page.id, spree_blocks_region_id: self.id).first
       if bro.spree_block_id.nil?
         nil # return nothing (we are hiding the block)
       else
         # override
         self.spree_block_id = bro.spree_block_id
-        self.template_override = bro.template
+        if bro.template.present? && !self.template_override.present?
+          self.block.template = bro.template
+        end
       end
     else
       # there is no override

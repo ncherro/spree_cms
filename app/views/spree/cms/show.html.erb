@@ -1,5 +1,5 @@
 <% @page.regions.each do |region| %>
   <% content_for region.name.parameterize.split('-').join('_').to_sym do %>
-    <%= render "spree/cms/regions/#{region.template.present? ? region.template : 'region'}", region: region, page: @page %>
+    <%= render region, page: @page %>
   <% end %>
 <% end %>

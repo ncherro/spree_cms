@@ -1,4 +1,5 @@
 class Spree::Region < ActiveRecord::Base
+  include Spree::CmsConcerns::PartialPathFix
 
   belongs_to :layout, class_name: "Spree::Layout", foreign_key: "spree_layout_id"
 
@@ -7,6 +8,14 @@ class Spree::Region < ActiveRecord::Base
 
   has_many :blocks, class_name: "Spree::Block", through: :blocks_regions,
     dependent: :destroy
+  has_many :html_blocks, class_name: "Spree::HtmlBlock",
+    through: :blocks_regions, dependent: :destroy
+  has_many :menu_blocks, class_name: "Spree::MenuBlock",
+    through: :blocks_regions, dependent: :destroy
+  has_many :slideshow_blocks, class_name: "Spree::SlideshowBlock",
+    through: :blocks_regions, dependent: :destroy
+  has_many :static_blocks, class_name: "Spree::StaticBlock",
+    through: :blocks_regions, dependent: :destroy
 
   attr_accessible :name, :template, :partial, :blocks_regions_attributes,
     :css_class, :css_id
@@ -15,7 +24,10 @@ class Spree::Region < ActiveRecord::Base
     allow_destroy: true
   validates_associated :blocks_regions
 
-  validates :name, uniqueness: { scope: :spree_layout_id, message: "has already been used in this Layout" }
+  validates :name, uniqueness: {
+    scope: :spree_layout_id,
+    message: "has already been used in this Layout"
+  }
 
   def overridden_blocks(page)
     self.blocks_regions.map { |blocks_region| blocks_region.override(page) }.compact
