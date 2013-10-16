@@ -4,13 +4,13 @@ require "simple_form"
 require "ancestry"
 require "rack/cache"
 require "dragonfly"
+require "tinymce-rails"
 
 module SpreeCms
   class Engine < Rails::Engine
 
     #isolate_namespace Spree
-
-    # if isolated, our helpers won't work unless we add this line to the parent
+    # * if isolated, helpers won't work unless we add this line to the parent
     # app's ApplicationController
     #
     # helper Spree::CmsHelper

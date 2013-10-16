@@ -2,8 +2,7 @@
 //= require jquery_nested_form
 //= require admin/libs/jquery.mjs.nestedSortable
 //= require admin/plugins/jquery.cmsMenuSelect
-//= require admin/libs/tinymce/jquery.tinymce.min
-//= require admin/libs/tinymce/tinymce.min
+//= require tinymce
 
 // MENUS / MENU ITEM TREES
 (function($, window, document, undefined) {

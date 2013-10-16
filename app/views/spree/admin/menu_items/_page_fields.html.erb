@@ -9,7 +9,7 @@
 
 <%= f.input :title %>
 
-<%= f.input :body, input_html: { class: 'tinymce', data: { mce: asset_path('admin/libs/tinymce/tinymce.min.js') } } %>
+<%= f.input :body, input_html: { class: 'tinymce' } %>
 
 <%= field_set_tag 'Block overrides', id: "block-override-fields" do %>
   <% if f.object.new_record? %>
