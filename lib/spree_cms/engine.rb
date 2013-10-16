@@ -21,6 +21,7 @@ module SpreeCms
 
     initializer "precompile", :group => :all do |app|
       app.config.assets.precompile << "tinymce/plugins/cms_image/plugin.js"
+      app.config.assets.precompile << "admin/spree_cms_image.js"
     end
 
     # use rspec for tests
