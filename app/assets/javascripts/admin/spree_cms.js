@@ -111,52 +111,31 @@
 
 (function($, window, document, undefined) {
 
-  function addTinyMce() {
-    $('textarea.tinymce:visible').each(function() {
-      path = $(this).data('mce');
-      // NOTE: CMS_TINYMCE_OPTIONS can be set by the parent app
-      opts = CMS_TINYMCE_OPTIONS || {
-        theme : "modern",
-        plugins: "autolink link code cms_image image",
-        toolbar1: "insertfile undo redo | formatselect | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
-        image_advtab: true,
-        style_formats: [
-          {
-            title : 'Button',
-            selector : 'a',
-            classes: 'button'
-          }
-        ]
-      };
-      $(this).tinymce(CMS_TINYMCE_OPTIONS);
-    });
+  if (typeof CMS_TINYMCE_OPTIONS == 'object') {
+    var mce_opts = CMS_TINYMCE_OPTIONS;
+  } else {
+    var mce_opts = {
+      theme : "modern",
+      plugins: "autolink link code cms_image image",
+      toolbar1: "insertfile undo redo | formatselect | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
+      image_advtab: true,
+      style_formats: [
+        {
+          title : 'Button',
+          selector : 'a',
+          classes: 'button'
+        }
+      ]
+    };
+  }
+
+  function initTinyMce() {
+    $('textarea.tinymce:visible, #product_description').tinymce(mce_opts);
   }
 
   function init() {
-    tinymce.PluginManager.add('cms_image', function(editor, url) {
-      // Adds a menu item to the tools menu
-      editor.addMenuItem('cms_image', {
-        text: 'Insert CMS Image',
-        context: 'insert',
-        onclick: function() {
-          // Open window with a specific url
-          editor.windowManager.open({
-            title: 'CMS Image',
-            url: '/admin/cms_images/find_or_create',
-            width: 600,
-            height: 600,
-            buttons: [{
-              text: 'Close',
-              onclick: 'close'
-            }]
-          });
-        }
-      });
-    });
-
-    addTinyMce();
-    $(document).on('nested:fieldAdded', addTinyMce);
-
+    initTinyMce();
+    $(document).on('nested:fieldAdded', initTinyMce);
   }
   $(init);
 
