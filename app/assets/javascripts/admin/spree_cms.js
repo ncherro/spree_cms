@@ -27,8 +27,6 @@
           });
         });
 
-        // console.log(positions); return;
-
         // update positions
         $.post('/admin/menu_items/update_positions', { positions: positions }, function(a, b, c) {
           // update the parent of the thing that moved
@@ -110,27 +108,25 @@
 
 
 (function($, window, document, undefined) {
+  var mce_opts = {
+    theme : "modern",
+    plugins: "autolink link code cms_image image",
+    toolbar1: "insertfile undo redo | formatselect | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
+    image_advtab: true,
+    style_formats: [
+      {
+      title : 'Button',
+      selector : 'a',
+      classes: 'button'
+    }
+    ]
+  };
 
-  if (typeof CMS_TINYMCE_OPTIONS == 'object') {
-    var mce_opts = CMS_TINYMCE_OPTIONS;
-  } else {
-    var mce_opts = {
-      theme : "modern",
-      plugins: "autolink link code cms_image image",
-      toolbar1: "insertfile undo redo | formatselect | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
-      image_advtab: true,
-      style_formats: [
-        {
-          title : 'Button',
-          selector : 'a',
-          classes: 'button'
-        }
-      ]
-    };
-  }
+  // to override, set CMS_TINYMCE_OPTIONS in the global scope
+  if (typeof CMS_TINYMCE_OPTIONS === 'object') mce_opts = CMS_TINYMCE_OPTIONS;
 
   function initTinyMce() {
-    $('textarea.tinymce:visible, #product_description').tinymce(mce_opts);
+    $('textarea.tinymce:visible').tinymce(mce_opts);
   }
 
   function init() {
