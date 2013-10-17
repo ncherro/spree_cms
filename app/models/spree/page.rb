@@ -34,7 +34,7 @@ class Spree::Page < ActiveRecord::Base
 
   delegate :template, :regions, to: :layout, allow_nil: true
   delegate :partial, :name, to: :layout, prefix: true, allow_nil: true
-  delegate :slug, to: :menu_item, allow_nil: true
+  delegate :slug, :is_published, :href, to: :menu_item, allow_nil: true
 
 
   validates :title, presence: true
