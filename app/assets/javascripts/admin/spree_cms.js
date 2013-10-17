@@ -41,7 +41,9 @@
     $update_positions = $('.update-mi-positions');
 
     if ($update_positions.length) {
-      $update_positions.click(function() {
+      $update_positions.click(function(e) {
+        e.preventDefault();
+
         var $el = $(this);
 
         var $list = $el.data('list'),
