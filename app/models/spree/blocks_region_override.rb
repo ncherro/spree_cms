@@ -5,20 +5,22 @@ class Spree::BlocksRegionOverride < ActiveRecord::Base
 
   belongs_to :page, class_name: "Spree::Page", foreign_key: "spree_page_id"
 
+  # only if we're adding a new block
+  belongs_to :region, class_name: "Spree::Region", foreign_key: "spree_region_id"
 
   belongs_to :block, class_name: "Spree::Block", foreign_key: "spree_block_id"
-  belongs_to :menu_block, class_name: "Spree::Block",
+  belongs_to :menu_block, class_name: "Spree::MenuBlock",
     foreign_key: "spree_block_id"
-  belongs_to :html_block, class_name: "Spree::Block",
+  belongs_to :html_block, class_name: "Spree::HtmlBlock",
     foreign_key: "spree_block_id"
-  belongs_to :static_block, class_name: "Spree::Block",
+  belongs_to :static_block, class_name: "Spree::StaticBlock",
     foreign_key: "spree_block_id"
-  belongs_to :slideshow_block, class_name: "Spree::Block",
+  belongs_to :slideshow_block, class_name: "Spree::SlideshowBlock",
     foreign_key: "spree_block_id"
-
 
   attr_accessible :spree_blocks_region_id, :spree_block_id, :spree_page_id,
-    :template_override, :css_id_override, :css_class_override
+    :template_override, :css_id_override, :css_class_override, :position,
+    :spree_region_id
 
   validates :spree_blocks_region_id, uniqueness: { scope: :spree_page_id }
   validates :spree_blocks_region_id, presence: true

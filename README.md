@@ -1,10 +1,14 @@
-Spree CMS
-=========
+# Spree CMS
 
 ## Under development. Do not install!
 
-Installation
-------------
+
+## Compatibility
+
+Tested on Spree 2.0.x
+
+
+## Installation
 
 Add spree_cms to your Gemfile:
 
@@ -33,8 +37,20 @@ bundle exec rake spree_cms:build:static_blocks
 ```
 
 
-Testing
--------
+## About
+
+This extension adds a Content Management System to your Spree site. Complete with:
+
+- Layouts > Regions > Blocks
+- Menus with nestable Menu Items
+- Pages, belonging to Menu Items, are editable using a WYSIWYG editor
+- WYSIWYG image uploader
+- Slideshow, Menu, Custom HTML, and Static blocks
+
+See the wiki for more info.
+
+
+## Testing
 
 Be sure to bundle your dependencies and then create a dummy test app for the specs to run against.
 
@@ -50,5 +66,11 @@ Simply add this require statement to your spec_helper:
 ```ruby
 require 'spree_cms/factories'
 ```
+
+
+## Contributing
+
+
+## License
 
 Copyright (c) 2013 ncherro, released under the New BSD License

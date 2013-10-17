@@ -2,8 +2,7 @@
 //= require jquery_nested_form
 //= require admin/libs/jquery.mjs.nestedSortable
 //= require admin/plugins/jquery.cmsMenuSelect
-//= require admin/libs/tinymce/jquery.tinymce.min
-//= require admin/libs/tinymce/tinymce.min
+//= require tinymce
 
 // MENUS / MENU ITEM TREES
 (function($, window, document, undefined) {
@@ -30,7 +29,6 @@
 
         // update positions
         $.post('/admin/menu_items/update_positions', { positions: positions }, function(a, b, c) {
-          console.log(a, b, c);
           // update the parent of the thing that moved
           $.post('/admin/menu_items/' + id + '/update_parent', { parent_id: parent_id }, function(data, b, c) {
             $list.html(data.items_html);
@@ -110,48 +108,30 @@
 
 
 (function($, window, document, undefined) {
+  var mce_opts = {
+    theme : "modern",
+    plugins: "autolink link code cms_image image",
+    toolbar1: "insertfile undo redo | formatselect | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
+    image_advtab: true,
+    style_formats: [
+      {
+      title : 'Button',
+      selector : 'a',
+      classes: 'button'
+    }
+    ]
+  };
 
-  function addTinyMce() {
-    $('textarea.tinymce:visible').each(function() {
-      // TODO: look into global CSS settings
-      path = $(this).data('mce');
-      $(this).tinymce({
-        theme : "modern",
-        plugins: "autolink link code cms_image image",
-        toolbar1: "styleselect insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
-        image_advtab: true,
-        style_formats: [
-          {title : 'Button', selector : 'a', classes: 'button' }
-        ]
-      });
-    });
+  // to override, set CMS_TINYMCE_OPTIONS in the global scope
+  if (typeof CMS_TINYMCE_OPTIONS === 'object') mce_opts = CMS_TINYMCE_OPTIONS;
+
+  function initTinyMce() {
+    $('textarea.tinymce:visible').tinymce(mce_opts);
   }
 
   function init() {
-    tinymce.PluginManager.add('cms_image', function(editor, url) {
-      // Adds a menu item to the tools menu
-      editor.addMenuItem('cms_image', {
-        text: 'Insert CMS Image',
-        context: 'insert',
-        onclick: function() {
-          // Open window with a specific url
-          editor.windowManager.open({
-            title: 'CMS Image',
-            url: '/admin/cms_images/find_or_create',
-            width: 600,
-            height: 600,
-            buttons: [{
-              text: 'Close',
-              onclick: 'close'
-            }]
-          });
-        }
-      });
-    });
-
-    addTinyMce();
-    $(document).on('nested:fieldAdded', addTinyMce);
-
+    initTinyMce();
+    $(document).on('nested:fieldAdded', initTinyMce);
   }
   $(init);
 

@@ -21,13 +21,13 @@ class Spree::MenuBlock < Spree::Block
   validates :menu_block_type, presence: true
   validates :spree_menu_id, presence: true,
     if: Proc.new { |mb| Spree::MenuBlock::TYPES_REQUIRING_MENU.include?(mb.menu_block_type) }
-  validates :menu_item_id, presence: true,
+  validates :spree_menu_item_id, presence: true,
     if: Proc.new { |mb| Spree::MenuBlock::TYPES_REQUIRING_MENU_ITEM.include?(mb.menu_block_type) }
   validate :menu_item_belongs_to_menu,
     if: Proc.new { |mb| Spree::MenuBlock::TYPES_REQUIRING_MENU_ITEM.include?(mb.menu_block_type) }
 
   def menu_item_belongs_to_menu
-    if self.spree_menu_id.present? && self.menu_item_id.present?
+    if self.spree_menu_id.present? && self.spree_menu_item_id.present?
       mi = Spree::MenuItem.select('spree_menu_id, id').find(self.spree_menu_item_id)
       if mi.spree_menu_id != self.spree_menu_id
         errors.add(:spree_menu_item_id, "must belong to the selected Menu")

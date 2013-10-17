@@ -22,6 +22,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'simple_form', '~> 2.1.0'
   s.add_dependency 'rack-cache'
   s.add_dependency 'dragonfly', '~> 0.9.15'
+  s.add_dependency 'tinymce-rails', '~> 4.0'
 
   s.add_development_dependency 'capybara', '~> 2.1'
   s.add_development_dependency 'coffee-rails'

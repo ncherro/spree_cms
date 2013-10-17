@@ -9,9 +9,17 @@ class Spree::Page < ActiveRecord::Base
   belongs_to :menu_item, class_name: "Spree::MenuItem",
     foreign_key: "spree_menu_item_id"
 
+  has_many :blocks_regions, class_name: "Spree::BlocksRegion",
+    foreign_key: "spree_page_id", dependent: :destroy
+
   has_many :blocks_region_overrides, class_name: "Spree::BlocksRegionOverride",
     foreign_key: "spree_page_id", dependent: :destroy
 
+
+  accepts_nested_attributes_for :blocks_regions,
+    reject_if: proc { |attrs| attrs[:spree_page_id] == 0 },
+    allow_destroy: true
+  validates_associated :blocks_regions
 
   accepts_nested_attributes_for :blocks_region_overrides, reject_if:
     :all_blank, allow_destroy: true
@@ -20,11 +28,12 @@ class Spree::Page < ActiveRecord::Base
 
   attr_accessible :title, :body, :meta_description, :partial_override,
     :meta_title, :meta_keywords, :spree_layout_id,
-    :blocks_region_overrides_attributes, :body_cached
+    :blocks_region_overrides_attributes, :blocks_regions_attributes,
+    :body_cached
 
 
   delegate :template, :regions, to: :layout, allow_nil: true
-  delegate :partial, to: :layout, prefix: true, allow_nil: true
+  delegate :partial, :name, to: :layout, prefix: true, allow_nil: true
   delegate :slug, :is_published, :href, to: :menu_item, allow_nil: true
 
 

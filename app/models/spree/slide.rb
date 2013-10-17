@@ -1,4 +1,5 @@
 class Spree::Slide < ActiveRecord::Base
+  include Spree::CmsConcerns::PartialPathFix
 
   belongs_to :slideshow_block, class_name: "Spree::SlideshowBlock",
     foreign_key: "spree_block_id"

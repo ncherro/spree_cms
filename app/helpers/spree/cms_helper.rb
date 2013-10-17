@@ -1,8 +1,8 @@
 module Spree
   module CmsHelper
 
-    def cms_image_tag(image, style)
-      processed = image.file.thumb(style)
+    def cms_image_tag(image, style=nil)
+      processed = style ? image.file.thumb(style) : image.file
       image_tag processed.url, alt: image.alt, width: processed.width, height: processed.height
     end
 
@@ -48,8 +48,12 @@ module Spree
       item_classes = []
       item_classes << 'unpublished' unless menu_item.is_published?
       item_classes << menu_item.css_class if menu_item.css_class.present?
-      item_classes << 'cms-active' if options[:path_ids].include?(menu_item.id)
-      item_classes << 'cms-on' if options[:path_ids].last == menu_item.id
+      # if this is in the current tree
+      # OR this is a menu item with a URL and the current path begins with the URL
+      item_classes << 'cms-active' if options[:path_ids].include?(menu_item.id) || menu_item.url.present? && request.fullpath.split('?').first.starts_with?(menu_item.url)
+      # if this is at the bottom of the current tree
+      # OR this is a menu item with a URL, and the current path equals the URL
+      item_classes << 'cms-on' if options[:path_ids].last == menu_item.id || menu_item.url.present? && menu_item.url == request.fullpath.split('?').first
       if options[:override_id]
         item_id = %( id="#{menu_item.id}")
       else
@@ -71,7 +75,7 @@ module Spree
       end
       s = ""
       if options[:item_wrapper_el].present?
-        s << %(<#{options[:item_wrapper_el]}#{' class="' + item_classes.join(' ') + '"' if item_classes.any?}#{item_id} rel="#{menu_item.id}">)
+        s += %(<#{options[:item_wrapper_el]}#{' class="' + item_classes.join(' ') + '"' if item_classes.any?}#{item_id} rel="#{menu_item.id}">)
       end
       # recursion
       s << "#{link_html}#{options[:callback].call(children)}"
@@ -91,6 +95,7 @@ module Spree
         only_visible: false,
         wrapper_class: "cms-menu",
         override_id: false,
+        show_parent: false,
         cache: true,
         path_ids: [],
       }
@@ -99,14 +104,28 @@ module Spree
       r = ""
       r << %(<#{options[:wrapper_el]} id="#{options[:wrapper_id]}" class="#{options[:wrapper_class]}">) if options[:wrapper_el].present?
 
-      if options[:root_id]
-        items = menu.menu_items.order(:position).where(id: options[:root_id])
-      else
-        # start at the root
-        items = menu.menu_items.order(:position).where(ancestry_depth: 0)
+      if options[:show_parent]
+        parent = Spree::MenuItem.find_by_id(options[:root_id])
+        if parent
+          # TODO: clean this up
+          r << %(<#{options[:item_wrapper_el]} class="cms-parent">) if options[:item_wrapper_el]
+          r << link_to(parent.title, parent.href)
+          r << %(</#{options[:item_wrapper_el]}>) if options[:item_wrapper_el]
+        end
+        # never again
+        options[:show_parent] = false
       end
 
-      items = items.visible if options[:only_visible]
+      if options[:root_id]
+        items = menu.menu_items.where(id: options[:root_id])
+        items = items.visible if options[:only_visible]
+        items = items.first.children.ordered if items.any?
+      else
+        # start at root
+        items = menu.menu_items.ordered.where(ancestry_depth: 0)
+        items = items.visible if options[:only_visible]
+      end
+
 
       cur_depth = 0
       func = lambda do |nodes|
@@ -121,7 +140,7 @@ module Spree
       items.each do |item|
         r << render_menu_item(
           item,
-          item.descendants.arrange,
+          item.descendants.arrange(order: :position),
           options.merge({ callback: func, link_renderer: link_func })
         )
       end
@@ -145,7 +164,7 @@ module Spree
 
 
     # NOTE: this should be the only front-facing helper method
-    def render_menu_block(menu_block, *args)
+    def render_menu_block(menu_block, *args, &link_func)
       defaults = {
         depth: 0,
         wrapper_el: 'ul',
@@ -153,6 +172,7 @@ module Spree
         item_wrapper_el: 'li',
         wrapper_class: "cms-menu",
         wrapper_id: nil,
+        show_parent: false,
         cache: true,
       }
       options = defaults.merge(args.extract_options!)
@@ -174,20 +194,24 @@ module Spree
               mi.menu,
               options.merge({
                 only_visible: true,
-                root_id: (menu_block.shows_children? ? mi.id : mi.parent_id),
+                root_id: (menu_block.shows_children? ? mi.id : mi.parent_id), # children : siblings
                 path_ids: mi.path_ids,
-              })
+              }),
+              &link_func
             ))
           end
         else
-          safe_concat(render_menu_tree(
-            menu_block.menu,
-            options.merge({
-              only_visible: true,
-              root_id: menu_block.spree_menu_item_id,
-              path_ids: (mi ? mi.path_ids : []),
-            })
-          ))
+          safe_concat(
+            render_menu_tree(
+              menu_block.menu,
+              options.merge({
+                only_visible: true,
+                root_id: menu_block.spree_menu_item_id,
+                path_ids: (mi ? mi.path_ids : []),
+              }),
+              &link_func
+            )
+          )
         end
       end
 
