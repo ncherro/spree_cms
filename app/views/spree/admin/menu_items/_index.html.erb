@@ -1,7 +1,11 @@
 <% content_for :page_title do %>
-  <%= "for &ldquo;#{@menu.title}&rdquo;".html_safe if @menu %>
+  <%= %(for &ldquo;#{@menu.title}&rdquo;).html_safe if @menu %>
 <% end %>
+
+<a class="update-mi-positions button" href="#">Save changes</a>
 
 <ul class="cms-menu">
   <%= render_admin_menu_tree(@menu) %>
 </ul>
+
+<a class="update-mi-positions button" href="#">Save changes</a>

@@ -7,6 +7,10 @@
 // MENUS / MENU ITEM TREES
 (function($, window, document, undefined) {
 
+  var updated = false,
+      positions = [],
+      $update_positions;
+
   function init() {
 
     $('.cms-menu').nestedSortable({
@@ -15,10 +19,10 @@
       items: 'li',
       toleranceElement: '> div',
       update: function(event, obj) {
-        var $list = $(event.target), $item = $(obj.item), id = $item.attr('rel'),
-        parent_id = ($item.parent().parent().attr('rel') || null), positions = [];
+        var $list = $(event.target);
 
-        $list.nestedSortable('disable');
+        positions = [];
+        updated = true;
 
         $list.find('li').each(function(idx) {
           positions.push({
@@ -27,17 +31,49 @@
           });
         });
 
-        // update positions
+        $update_positions.data({
+          list: $list,
+          item: $(obj.item)
+        }).removeAttr('disabled').addClass('on');
+      }
+    });
+
+    $update_positions = $('.update-mi-positions');
+
+    if ($update_positions.length) {
+      $update_positions.click(function() {
+        var $el = $(this);
+
+        var $list = $el.data('list'),
+            $item = $el.data('item'),
+            id = $item.attr('rel'),
+            parent_id = ($item.parent().parent().attr('rel') || null);
+
+        // disable stuff
+        $el.attr('disabled', 'disabled');
+        $list.nestedSortable('disable');
+
+        // POST and wait
         $.post('/admin/menu_items/update_positions', { positions: positions }, function(a, b, c) {
           // update the parent of the thing that moved
           $.post('/admin/menu_items/' + id + '/update_parent', { parent_id: parent_id }, function(data, b, c) {
             $list.html(data.items_html);
             // re-enable
             $list.nestedSortable('enable');
+            // disable the window warning
+            updated = false;
+            // and hide our button
+            $el.removeClass('on');
           }, 'json')
         }, 'json');
+      });
+      function checkForUpdates() {
+        if (updated) {
+          return 'You have unsaved changes.';
+        }
       }
-    });
+      window.onbeforeunload = checkForUpdates;
+    }
 
     $('select[name$="[spree_menu_id]"]:visible').cmsMenuSelect({
       menu_item_sel: function() {

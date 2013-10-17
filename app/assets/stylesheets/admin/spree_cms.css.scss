@@ -62,6 +62,16 @@ input.boolean {
 }
 
 
+.update-mi-positions {
+  visibility: hidden;
+  display: inline-block;
+  margin-bottom: 10px;
+  &.on {
+    visibility: visible;
+  }
+}
+
+
 /* find or select image styles */
 #cms-image-find-or-create {
   margin: 20px;
