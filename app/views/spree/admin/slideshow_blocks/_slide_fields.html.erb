@@ -5,6 +5,6 @@
   <% end %>
   <%= f.input :title %>
   <%= f.input :position %>
-  <%= f.input :copy, input_html: { class: 'tinymce', data: { mce: asset_path('admin/libs/tinymce/tinymce.min.js') } } %>
+  <%= f.input :copy, input_html: { class: 'tinymce' } %>
   <%= f.input :url, hint: "if set, the entire slide will link to the URL provided" %>
 <% end %>
