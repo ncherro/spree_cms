@@ -44,9 +44,8 @@
       $update_positions.click(function(e) {
         e.preventDefault();
 
-        var $el = $(this);
-
-        var $list = $el.data('list'),
+        var $el = $(this),
+            $list = $el.data('list'),
             $item = $el.data('item'),
             id = $item.attr('rel'),
             parent_id = ($item.parent().parent().attr('rel') || null);
