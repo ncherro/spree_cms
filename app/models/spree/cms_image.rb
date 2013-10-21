@@ -8,6 +8,7 @@ class Spree::CmsImage < ActiveRecord::Base
   attr_accessible :retained_file, :file_url, :remove_file, :alt, :name, :file
 
   validates :name, :file, presence: true
+  validates :name, uniqueness: true
   validates_size_of :file, maximum: 3.megabytes
   validates_property :format, of: :file, in: [:jpeg, :jpg, :png, :gif]
 
