@@ -19,7 +19,7 @@ Spree::Core::Engine.routes.prepend do
     resources :menus do
       get 'menu_item_options', on: :member
     end
-    resources :cms_images do
+    resources :cms_images, :cms_files do
       get 'find_or_create', on: :collection
       post 'submit_find_or_create', on: :collection
     end

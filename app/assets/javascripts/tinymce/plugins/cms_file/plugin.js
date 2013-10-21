@@ -1,14 +1,14 @@
 (function() {
-  tinymce.PluginManager.add('cms_image', function(editor, url) {
+  tinymce.PluginManager.add('cms_file', function(editor, url) {
     // Adds a menu item to the tools menu
-    editor.addMenuItem('cms_image', {
-      text: 'Insert CMS Image',
+    editor.addMenuItem('cms_file', {
+      text: 'Insert CMS File',
       context: 'insert',
       onclick: function() {
         // Open window with a specific url
         editor.windowManager.open({
-          title: 'CMS Image',
-          url: '/admin/cms_images/find_or_create',
+          title: 'CMS File',
+          url: '/admin/cms_files/find_or_create',
           width: 600,
           height: 600,
           buttons: [{

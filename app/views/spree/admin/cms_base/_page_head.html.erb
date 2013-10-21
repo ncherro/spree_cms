@@ -5,5 +5,6 @@
     <li><%= tab :layouts, route: 'admin_layouts', match_path: '/layouts' %></li>
     <li><%= tab :blocks, route: 'admin_blocks', css_class: ('selected' if /#{spree.root_path.gsub("/", "\/")}admin\/[\w-]*blocks/ === request.fullpath) %></li>
     <li><%= tab 'Images', route: 'admin_cms_images', match_path: '/cms_images' %></li>
+    <li><%= tab 'Files', route: 'admin_cms_files', match_path: '/cms_files' %></li>
   </ul>
 <% end %>

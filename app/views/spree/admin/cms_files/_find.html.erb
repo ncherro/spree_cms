@@ -1,0 +1,14 @@
+<%= search_form_for @search, url: url_for(find_or_create_admin_cms_files_path), remote: true do |f| %>
+  <%- locals = {:f => f} %>
+  <div class="field">
+  <%= f.label :name_cont, Spree.t(:name) %>
+  <%= f.text_field :name_cont, size: 30 %>
+  <%= button Spree.t(:search), 'icon-search' %>
+  </div>
+<% end %>
+
+<ul>
+  <%= render partial: "spree/admin/cms_files/object", collection: @collection, as: :object, locals: { context: :find_or_create } %>
+</ul>
+
+<%= paginate @collection %>

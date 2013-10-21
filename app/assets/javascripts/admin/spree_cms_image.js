@@ -11,7 +11,7 @@
   function handleSelect(e) {
     e.preventDefault();
 
-    // TODO: validate
+    // TODO: validate(?)
 
     // insert the stuff
     if (window == window.top) {
@@ -39,21 +39,6 @@
           console.log('error', a, b, c);
         }
       });
-
-
-      return;
-
-      if (vals.css_id) attrs.push('id:"' + vals.css_id + '"');
-      if (vals.css_class) attrs.push('class:"' + vals.css_class + '"');
-      if (attrs.length) {
-        attrs = ' ' + attrs.join(' ');
-      } else {
-        attrs = '';
-      }
-      token = '[image:' + vals.cms_image_id + ' ' + (vals.w || 0) + 'x' + (vals.h || 0) + vals.style + attrs + ']';
-
-      window.top.tinymce.activeEditor.execCommand('mceInsertContent', false, token);
-      window.top.tinymce.activeEditor.windowManager.close();
     }
   }
 

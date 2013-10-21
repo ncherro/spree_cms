@@ -1,9 +1,9 @@
 class Spree::CmsImage < ActiveRecord::Base
 
-  belongs_to :imageable, polymorphic: true
-
   # dragonfly
   image_accessor :file
+
+  belongs_to :imageable, polymorphic: true
 
   attr_accessible :retained_file, :file_url, :remove_file, :alt, :name, :file
 

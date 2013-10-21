@@ -1,0 +1,10 @@
+<%= f.input :name %>
+<%= f.input :title %>
+<%
+  file_label = 'File'
+  if f.object.file_uid?
+    file_label = 'Overwrite'
+  end
+%>
+<%= f.input :file, label: file_label, as: :file %>
+<%= f.input :retained_file, as: :hidden %>

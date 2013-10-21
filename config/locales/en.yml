@@ -9,6 +9,8 @@ en:
       layout: Layout
       block: Block
       page: Page
+      cms_image: New Image
+      cms_file: New File
       menus: Menus
       menu_items: Menu Items
       layouts: Layouts

@@ -1,0 +1,18 @@
+<div id="cms-file-find-or-create">
+
+  <h3><a href="#" class="find<%= ' on' unless params[:action] == 'submit_find_or_create' %>">Find</a> or <a href="#" class="upload<% ' on' if params[:action] == 'submit_find_or_create' %>">Upload</a> a File</h3>
+
+  <div id="cms-file-create"<% unless params[:action] == 'submit_find_or_create' %> class="hide-on-load"<% end %>>
+    <%= simple_form_for @object, url: url_for(submit_find_or_create_admin_cms_files_path), html: { multipart: true } do |f| %>
+      <fieldset>
+        <legend align="center">File</legend>
+        <%= render 'file_fields', object: @object, f: f %>
+      </fieldset>
+      <%= render 'spree/admin/shared/new_resource_links' %>
+    <% end %>
+  </div>
+
+  <div id="cms-file-find"<% if params[:action] == 'submit_find_or_create' %> class="hide-on-load"<% end %>>
+    <%= render partial: "spree/admin/cms_files/find" %>
+  </div>
+</div>

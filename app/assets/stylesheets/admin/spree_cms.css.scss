@@ -73,7 +73,7 @@ input.boolean {
 
 
 /* find or select image styles */
-#cms-image-find-or-create {
+#cms-image-find-or-create, #cms-file-find-or-create {
   margin: 20px;
   h3 {
     margin: 8px 0;
@@ -86,7 +86,7 @@ input.boolean {
   }
 }
 
-#cms-image-find {
+#cms-image-find, #cms-file-find {
   li {
     list-style: none;
     padding: 10px;
