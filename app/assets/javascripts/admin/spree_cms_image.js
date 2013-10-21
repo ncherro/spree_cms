@@ -11,7 +11,7 @@
   function handleSelect(e) {
     e.preventDefault();
 
-    // TODO: validate(?)
+    // TODO: validate
 
     // insert the stuff
     if (window == window.top) {
