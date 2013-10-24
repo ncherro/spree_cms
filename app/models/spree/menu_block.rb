@@ -5,6 +5,7 @@ class Spree::MenuBlock < Spree::Block
     ['Start at specified Menu Item', 2],
     ['Show siblings of "current" menu item', 3],
     ['Show children of "current" menu item', 4],
+    ['Show children or siblings of "current" menu item', 5],
   ]
 
   TYPES_REQUIRING_MENU = [1, 2,]
@@ -49,10 +50,6 @@ class Spree::MenuBlock < Spree::Block
 
   def follows_current?
     !TYPES_REQUIRING_MENU.include?(self.menu_block_type)
-  end
-
-  def shows_children?
-    self.menu_block_type == TYPES.assoc('Show children of "current" menu item').last
   end
 
   class << self

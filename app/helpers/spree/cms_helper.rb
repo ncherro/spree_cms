@@ -190,11 +190,24 @@ module Spree
         if menu_block.follows_current?
           # attempt to find the current menu
           if mi
+            # set the root id
+            root_id = case menu_block.menu_block_type
+                      when MenuBlock::TYPES.assoc('Show children of "current" menu item').last
+                        mi.id # children
+                      when MenuBlock::TYPES.assoc('Show children or siblings of "current" menu item').last
+                        if mi.has_children?
+                          mi.id # children
+                        else
+                          mi.parent_id # siblings
+                        end
+                      else
+                        mi.parent_id # siblings
+                      end
             safe_concat(render_menu_tree(
               mi.menu,
               options.merge({
                 only_visible: true,
-                root_id: (menu_block.shows_children? ? mi.id : mi.parent_id), # children : siblings
+                root_id: root_id,
                 path_ids: mi.path_ids,
               }),
               &link_func
