@@ -47,7 +47,8 @@ module Spree
     def render_menu_item(menu_item, children, options)
       item_classes = []
       item_classes << 'unpublished' unless menu_item.is_published?
-      item_classes << menu_item.css_class if menu_item.css_class.present?
+      item_classes << menu_item.css_class unless menu_item.css_class.blank?
+      item_classes << options[:item_wrapper_class] unless options[:item_wrapper_class].blank?
       # if this is in the current tree
       # OR this is a menu item with a URL and the current path begins with the URL
       item_classes << 'cms-active' if options[:path_ids].include?(menu_item.id) || menu_item.url.present? && request.fullpath.split('?').first.starts_with?(menu_item.url)
@@ -94,6 +95,7 @@ module Spree
         item_wrapper_el: 'li',
         only_visible: false,
         wrapper_class: "cms-menu",
+        item_wrapper_class: nil,
         override_id: false,
         show_parent: false,
         cache: true,
@@ -171,14 +173,17 @@ module Spree
         submenu_wrapper_el: 'ul',
         item_wrapper_el: 'li',
         wrapper_class: "cms-menu",
+        item_wrapper_class: nil,
         wrapper_id: nil,
         show_parent: false,
         cache: true,
       }
       options = defaults.merge(args.extract_options!)
 
-      # using a fragment cache here
-      cache_if options.delete(:cache), [menu_block, menu_block.fragment_cache_options(request.fullpath, options)] do
+      cache_if options.delete(:cache), [
+        menu_block,
+        menu_block.fragment_cache_options(request.fullpath, options)
+      ] do
         path = Spree::CmsRoutes.remove_spree_mount_point(request.fullpath)
 
         mi = nil
