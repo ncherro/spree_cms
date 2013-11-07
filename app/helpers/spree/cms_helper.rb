@@ -120,12 +120,12 @@ module Spree
 
       if options[:root_id]
         items = menu.menu_items.where(id: options[:root_id])
-        items = items.visible if options[:only_visible]
-        items = items.first.children.ordered if items.any?
+        items = items.only_visible_if(options[:only_visible])
+        items = items.first.children.only_visible_if(options[:only_visible]).ordered if items.any?
       else
         # start at root
         items = menu.menu_items.ordered.where(ancestry_depth: 0)
-        items = items.visible if options[:only_visible]
+        items = items.only_visible_if(options[:only_visible])
       end
 
 
@@ -134,7 +134,16 @@ module Spree
         cur_depth += 1
         return "" if nodes.empty? || !options[:depth].zero? && cur_depth >= options[:depth]
         return "<#{options[:submenu_wrapper_el]}>" + nodes.inject("") do |string, (node, children)|
-          string + render_menu_item(node, children, options.merge({ callback: func, link_renderer: link_func }))
+          children = children.visible if options[:only_visible]
+          string + render_menu_item(
+            node,
+            children,
+            options.merge(
+              { callback: func,
+                link_renderer: link_func,
+              }
+            )
+          )
         end + "</#{options[:submenu_wrapper_el]}>"
       end
 

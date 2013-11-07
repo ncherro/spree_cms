@@ -54,6 +54,16 @@ class Spree::MenuItem < ActiveRecord::Base
       published.where(is_visible_in_menu: true)
     end
 
+    def only_visible_if(toggle)
+      if toggle
+        # limit to published and visible menu items
+        visible
+      else
+        # do nothing
+        scoped
+      end
+    end
+
     def with_empty_url
       where("url IS NULL OR url = ''")
     end
