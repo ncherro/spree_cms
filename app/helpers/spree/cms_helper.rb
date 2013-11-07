@@ -128,18 +128,17 @@ module Spree
         items = items.only_visible_if(options[:only_visible])
       end
 
-
       cur_depth = 0
       func = lambda do |nodes|
         cur_depth += 1
         return "" if nodes.empty? || !options[:depth].zero? && cur_depth >= options[:depth]
         return "<#{options[:submenu_wrapper_el]}>" + nodes.inject("") do |string, (node, children)|
-          children = children.visible if children.any? && options[:only_visible]
           string + render_menu_item(
             node,
             children,
             options.merge(
-              { callback: func,
+              {
+                callback: func,
                 link_renderer: link_func,
               }
             )
@@ -149,10 +148,14 @@ module Spree
 
       # build the roots
       items.each do |item|
+        children = item.descendants.only_visible_if(options[:only_visible])
         r << render_menu_item(
           item,
-          item.descendants.arrange(order: :position),
-          options.merge({ callback: func, link_renderer: link_func })
+          children.arrange(order: :position),
+          options.merge({
+            callback: func,
+            link_renderer: link_func
+          })
         )
       end
       r << %(</#{options[:wrapper_el]}>) if options[:wrapper_el].present?

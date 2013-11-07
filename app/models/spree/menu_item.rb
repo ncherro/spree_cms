@@ -40,6 +40,10 @@ class Spree::MenuItem < ActiveRecord::Base
     end
   end
 
+  def is_visible?
+    self.is_published? && self.is_visible_in_menu?
+  end
+
   class << self
 
     def published
