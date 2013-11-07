@@ -134,7 +134,7 @@ module Spree
         cur_depth += 1
         return "" if nodes.empty? || !options[:depth].zero? && cur_depth >= options[:depth]
         return "<#{options[:submenu_wrapper_el]}>" + nodes.inject("") do |string, (node, children)|
-          children = children.visible if options[:only_visible]
+          children = children.visible if children.any? && options[:only_visible]
           string + render_menu_item(
             node,
             children,
