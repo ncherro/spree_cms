@@ -4,6 +4,12 @@ class Spree::CmsController < Spree::StoreController
 
   layout :determine_layout
 
+  # override so meta description / keywords work (they'll look for the @page
+  # instance variable)
+  def controller_name
+    'pages'
+  end
+
   def show
     path = case params[:path]
            when Array
@@ -31,6 +37,10 @@ class Spree::CmsController < Spree::StoreController
   def determine_layout
     return "spree/cms/layouts/#{@menu_item.template}" if @menu_item && @menu_item.template.present?
     Spree::Config.layout
+  end
+
+  def accurate_title
+    @page ? (@page.meta_title.present? ? @page.meta_title : @page.title) : nil
   end
 
 end
