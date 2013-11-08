@@ -1,4 +1,4 @@
-<%= f.association :layout, hint: ("changing the layout will delete any <strong>Block Overrides</strong> below" unless f.object.new_record?) %>
+<%= f.association :layout, hint: ("changing the layout will delete any <strong>Block Overrides</strong> below" unless f.object.new_record?), include_blank: false %>
 <%= f.input :partial_override, hint: "enter the name of the partial template here to override the <strong>Layout</strong>'s <strong>partial</strong> property" %>
 
 <%= field_set_tag 'Meta Tags' do %>

@@ -37,7 +37,7 @@ class Spree::Page < ActiveRecord::Base
   delegate :slug, :is_published, :href, to: :menu_item, allow_nil: true
 
 
-  validates :title, presence: true
+  validates :title, :spree_layout_id, presence: true
 
 
   # override the body reader
