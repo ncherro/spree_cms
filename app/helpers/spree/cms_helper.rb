@@ -179,6 +179,13 @@ module Spree
 
     # NOTE: this should be the only front-facing helper method
     def render_menu_block(menu_block, *args, &link_func)
+      if menu_block.is_a?(String)
+        menu_block = Spree::MenuBlock.find_by_name(menu_block)
+      end
+
+      # TODO: log an error
+      return if menu_block.nil?
+
       defaults = {
         depth: 0,
         wrapper_el: 'ul',
