@@ -1,0 +1,20 @@
+<%
+singular = object.class.name.underscore.singularize.split('/').last
+%>
+<%= simple_nested_form_for [:admin, object], html: { multipart: true } do |f| %>
+  <fieldset data-hook="<%= params[:action] %>_<%= singular %>">
+    <legend align="center"><%= Spree.t("#{params[:action]}_#{singular}".to_s) %></legend>
+    <%= render 'fields', object: object, f: f %>
+  </fieldset>
+  <div class="form-buttons filter-actions actions" data-hook="buttons">
+  <% if params[:action] == 'edit' %>
+    <%= button Spree.t('actions.update'), 'icon-refresh' %>
+    <span class="or"><%= Spree.t(:or) %></span>
+    <%= button_link_to Spree.t('actions.cancel'), collection_url(menu_id: object.spree_menu_id), :icon => 'icon-remove' %>
+  <% else %>
+    <%= button Spree.t('actions.create'), 'icon-ok' %>
+    <span class="or"><%= Spree.t(:or) %></span>
+    <%= link_to_with_icon 'icon-remove', Spree.t('actions.cancel'), collection_url(menu_id: object.spree_menu_id), :class => 'button' %>
+  <% end %>
+  </div>
+<% end %>
