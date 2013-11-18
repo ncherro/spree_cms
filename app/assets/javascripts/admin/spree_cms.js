@@ -147,15 +147,15 @@
 (function($, window, document, undefined) {
   var mce_opts = {
     theme : "modern",
-    plugins: "autolink link code cms_image cms_file image",
+    plugins: "autolink link code cms_image cms_file image lists",
     toolbar1: "insertfile undo redo | formatselect | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
     image_advtab: true,
     style_formats: [
       {
-      title : 'Button',
-      selector : 'a',
-      classes: 'button'
-    }
+        title : 'Button',
+        selector : 'a',
+        classes: 'button'
+      }
     ]
   };
 
