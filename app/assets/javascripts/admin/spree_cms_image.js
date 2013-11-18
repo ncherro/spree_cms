@@ -6,12 +6,15 @@
       $form_wrap,
       $form,
       $cancel_form,
-      $img_wrap;
+      $img_wrap,
+
+      $resize_style,
+      $resize_info,
+      $resize_w,
+      $resize_h;
 
   function handleSelect(e) {
     e.preventDefault();
-
-    // TODO: validate
 
     // insert the stuff
     if (window == window.top) {
@@ -24,6 +27,23 @@
 
       for (i=0, len=data.length; i<len; i++) {
         vals[data[i].name] = data[i].value;
+      }
+
+      console.log(vals);
+
+      // validate
+      if (vals.style !== 'none') {
+        var errors = [];
+        if (vals.w === '' || isNaN(vals.w) || parseInt(vals.w, 10) < 1) {
+          errors.push('Please enter a valid width.');
+        }
+        if (vals.h === '' || isNaN(vals.h) || parseInt(vals.h, 10) < 1) {
+          errors.push('Please enter a valid height.');
+        }
+        if (errors.length) {
+          alert(errors.join("\n"));
+          return false;
+        }
       }
 
       $.ajax({
@@ -44,11 +64,50 @@
 
   function showSelect(e) {
     e.preventDefault();
+
     $('#cms-image-id').val($(this).attr('rel'));
     $img_wrap.html('').append($(this).parent().prev().clone());
     $form_wrap.show();
     $form.find('input[type="text"]').val('');
-    $form.find('select option').removeAttr('selected').first().attr('selected', 'selected');
+
+    if (typeof($resize_style) === 'undefined') {
+      $resize_style = $form.find('select')
+      $resize_info = $resize_style.next();
+      $resize_w = $('#w');
+      $resize_h = $('#h');
+      $resize_style.change(function() {
+        var show_dims = true;
+        switch($(this).val()) {
+          case '':
+            // resize to fit
+            $resize_info.text('Image will be resized to fit within the "box" defined by the width and height.');
+            break;
+          case '>':
+            // resize to fill
+            $resize_info.text('Image will be resized to fill the "box" defined by the width and height.');
+            break;
+          case '#':
+            // crop
+            $resize_info.text('Image will be resized to fill the "box" defined by the width and height, then cropped.');
+            break;
+          case 'none':
+            show_dims = false;
+            // no resize
+            $resize_info.text('Image will be displayed as-is.');
+            break;
+        }
+        if (show_dims) {
+          $resize_w.parent().show();
+          $resize_h.parent().show();
+        } else {
+          $resize_w.parent().hide();
+          $resize_h.parent().hide();
+        }
+      });
+    }
+
+    $resize_style.find('option').removeAttr('selected').first().attr('selected', 'selected').end().trigger('change');
+
     $find_wrap.hide();
   }
 
