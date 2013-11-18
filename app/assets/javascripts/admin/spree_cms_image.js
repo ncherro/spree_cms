@@ -29,8 +29,6 @@
         vals[data[i].name] = data[i].value;
       }
 
-      console.log(vals);
-
       // validate
       if (vals.style !== 'none') {
         var errors = [];
