@@ -37,7 +37,11 @@ class Spree::Admin::MenuItemsController < Spree::Admin::CmsBaseController
   def location_after_save
     collection_url(menu_id: @object.spree_menu_id)
   end
-
+  
+  def location_after_destroy
+    collection_url(menu_id: @object.spree_menu_id)
+  end
+  
   def collection
     return @collection if @collection.present?
     # no pagination (!)
