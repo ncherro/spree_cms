@@ -38,14 +38,15 @@ class Spree::CmsImage < ActiveRecord::Base
 
           # and recreate the tag
           if thumb = Spree::CmsImage.find_by_id(img_id)
+            original = thumb.file
             if resize_str.present?
               # thumbnail
               processed = thumb.file.thumb(resize_str)
             else
               # original
-              processed = thumb.file
+              processed = original
             end
-            cached.gsub!(tok, %(<img#{pre_data} src="#{processed.url}" width="#{processed.width}" height="#{processed.height}"#{post_data}>))
+            cached.gsub!(tok, %(<img#{pre_data} data-orig-src="#{original.url}" src="#{processed.url}" width="#{processed.width}" height="#{processed.height}"#{post_data}>))
           else
             # TODO: display a 'missing' image or something?
             # log an error?
