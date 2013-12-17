@@ -9,7 +9,7 @@ class Spree::CmsFile < ActiveRecord::Base
 
   validates :name, :file, presence: true
   validates :name, uniqueness: true
-  validates_size_of :file, maximum: 5.megabytes
+  validates_size_of :file, maximum: 10.megabytes
   validates_property :format, of: :file, in: [:pdf, :zip, :doc,]
 
 end
