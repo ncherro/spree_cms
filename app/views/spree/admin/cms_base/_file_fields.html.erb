@@ -1,5 +1,11 @@
 <%= f.input :name %>
-<%= f.input :alt, label: "Title" %>
+
+<% if f.object.is_a?(Spree::CmsImage) %>
+  <%= f.input :alt, label: "Title" %>
+<% else %>
+  <%= f.input :title %>
+<% end %>
+
 <%
   file_label = 'File'
   if f.object.file_uid?
