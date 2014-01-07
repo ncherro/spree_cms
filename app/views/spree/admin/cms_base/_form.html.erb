@@ -4,7 +4,7 @@ singular = object.class.name.underscore.singularize.split('/').last
 <%= simple_nested_form_for [:admin, object], html: { multipart: true } do |f| %>
   <fieldset data-hook="<%= params[:action] %>_<%= singular %>">
     <legend align="center"><%= Spree.t("#{params[:action]}_#{singular}".to_s) %></legend>
-    <%= render 'file_fields', object: object, f: f %>
+    <%= render 'fields', object: object, f: f %>
   </fieldset>
   <%= render 'spree/admin/shared/' + (params[:action] == 'edit' ? 'edit' : 'new') + '_resource_links' %>
 <% end %>
