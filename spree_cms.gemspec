@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
   s.require_path = 'lib'
   s.requirements << 'none'
 
-  s.add_dependency 'spree_core', '~> 2.0.4'
+  s.add_dependency 'spree_core', '~> 2.0'
   s.add_dependency 'ancestry', '~> 2.0.0'
   s.add_dependency 'nested_form', '~> 0.3.2'
   s.add_dependency 'simple_form', '~> 2.1.0'
