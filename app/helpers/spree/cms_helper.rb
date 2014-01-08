@@ -220,7 +220,7 @@ module Spree
                         mi.id # children
                       when MenuBlock::TYPES.assoc('Show children or siblings of "current" menu item').last
                         if mi.has_children?
-                          mi.id # children
+                          mi.parent_id # show siblings for children who have children
                         else
                           mi.parent_id # siblings
                         end
