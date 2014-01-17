@@ -219,7 +219,13 @@ module Spree
                       when MenuBlock::TYPES.assoc('Show children of "current" menu item').last
                         mi.id # children
                       when MenuBlock::TYPES.assoc('Show children or siblings of "current" menu item').last
-                        mi.parent_id # show siblings for children who have children
+                        if mi.children.where(is_published: true, is_visible_in_menu: true).any?
+                          mi.id # children
+                        else
+                          mi.parent_id # siblings
+                        end
+                      else
+                        mi.parent_id # siblings
                       end
             safe_concat(render_menu_tree(
               mi.menu,
