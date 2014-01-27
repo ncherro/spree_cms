@@ -7,4 +7,5 @@
   <%= f.input :position %>
   <%= f.input :copy, input_html: { class: 'tinymce' } %>
   <%= f.input :url, hint: "if set, the entire slide will link to the URL provided" %>
+  <p><%= f.link_to_remove "Remove this slide", class: "button icon-remove" %></p>
 <% end %>
