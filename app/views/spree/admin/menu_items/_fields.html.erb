@@ -9,13 +9,20 @@
   %>
 
   <%= f.input :title %>
-  <%= f.input :slug, hint: 'leave blank to auto-populate from title' %>
-  <%= f.input :url, hint: 'to link out, add text beginning with "http://" or "https://"<br />for an internal link, begin with "/"<br />if set, <strong>Page</strong> content will not be displayed' %>
+  <%= f.input :slug,
+    hint: 'leave blank to auto-populate from title' %>
+  <%= f.input :url,
+    as: :string,
+    hint: 'to link out, add text beginning with "http://" or "https://"<br />for an internal link, begin with "/"<br />if set, <strong>Page</strong> content will not be displayed' %>
 </div>
 
 <div class="columns four omega">
-  <%= f.input :is_published, label: "Published?", hint: "uncheck to prevent users from seeing this content" %>
-  <%= f.input :is_visible_in_menu, label: "Visible in Menu?", hint: "uncheck to hide this from the menu. the content will still be accessible by direct link" %>
+  <%= f.input :is_published,
+    label: "Published?",
+    hint: "uncheck to prevent users from seeing this content" %>
+  <%= f.input :is_visible_in_menu,
+    label: "Visible in Menu?",
+    hint: "uncheck to hide this from the menu. the content will still be accessible by direct link" %>
 
   <%= field_set_tag "CSS" do %>
     <%= f.input :css_class, label: "CSS Class" %>
