@@ -1,7 +1,7 @@
 class Spree::Block < ActiveRecord::Base
   include Spree::CmsConcerns::PartialPathFix
 
-  attr_accessible :content, :name, :template
+  attr_accessible :content, :name, :template, :subheader
 
   has_many :blocks_regions, class_name: "Spree::BlocksRegion",
     foreign_key: "spree_block_id", dependent: :destroy
